@@ -32,11 +32,10 @@ class Home {
      */
     public function index($Me, $Router) {
         //(new \UserManager)->switchSchema('hotel');
-        if ($Me->auth('admin'))
-            $Router->redirect('Student/index');
+        
 
         //if ($Me->auth('user'))
-          //  return new Response([], 'Home/indexSchool');
+        //  return new Response([], 'Home/indexSchool');
 
         return array("salesPage" => !$Router->getSubdomain());
     }
@@ -54,14 +53,28 @@ class Home {
      * Pokoje
      * @param \User\Me $Me
      * @param \Core\Router $Router
+     * @Route(/account)
+     */
+    public function account($Me, $Router) {
+        if (!$Me->auth('user'))
+            $Router->redirect('Home/index');
+        
+        if (isset($_POST['username'])) 
+            $msg = $this->homeUtil->updateForm($_POST);
+        return array("salesPage" => true);
+    }
+
+    /**
+     * Pokoje
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
      * @Route(/signin)
      */
     public function signin() {
         $msg = null;
         if (isset($_POST['username']))
             $msg = $this->homeUtil->loginForm($_POST);
-        
-        
+
         return array("salesPage" => true, 'msg' => $msg);
     }
 
@@ -122,19 +135,6 @@ class Home {
         return array("info" => "brak");
     }
 
-    /**
-     * Login site
-     * @Route(/admin)
-     * @param \User\Me $Me
-     * @param \Core\Router $Router
-     */
-    public function admin($Me, $Router) {
-        $msg = null;
-        if (isset($_POST['username']))
-            $msg = $this->homeUtil->loginForm($_POST);
-
-        return array("salesPage" => !$Router->getSubdomain(), 'msg' => $msg);
-    }
 
     /**
      * Logout

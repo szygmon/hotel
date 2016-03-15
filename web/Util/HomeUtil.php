@@ -16,7 +16,7 @@ class HomeUtil {
     }
 
     public function registerForm($post) {
-        
+
         $user = new \Model\User();
         $user->setGivenName($_POST['givenName']);
         $user->setFamilyName($_POST['familyName']);
@@ -28,8 +28,22 @@ class HomeUtil {
 
         return \Notify::success('Zarejestrowano pomyślnie');
     }
-    
-     public function registerFormAdmin($post) {
+
+    public function updateForm($post) {
+
+        $user = $this->em->getRepository('Model\\User')->findOneBy(array('username' => $_POST['username']));
+        $user->setGivenName($_POST['givenName']);
+        $user->setFamilyName($_POST['familyName']);
+        $user->setEmail($_POST['email']);
+        if (isset($_POST['pass']) && $_POST['pass'] != '' && $_POST['pass'] == $_POST['passconfirm'])
+            $user->setPassword($_POST['pass']);
+        //$this->em->persist($user);
+        $this->em->flush();
+
+        return \Notify::success('Dane zaktualizowano');
+    }
+
+    public function registerFormAdmin($post) {
         // Role
         $adminRole = new \Model\Role;
         $adminRole->setName('admin');
@@ -52,8 +66,11 @@ class HomeUtil {
         if ($login) {
             $this->Me->getModel()->setLastLogin(new DateTime);
             Di::get('em')->flush();
-            Di::get('Router')->redirect('Home/index');
-        } 
+            if ($this->Me->auth('admin'))
+                Di::get('Router')->redirect('Admin/index');
+            else
+                Di::get('Router')->redirect('Home/index');
+        }
         return false;
     }
 

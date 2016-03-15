@@ -1,0 +1,54 @@
+{% extends './baseSP.html.twig' %}
+
+{% block title %}Hotel JM{% endblock %}
+
+{% block body %}
+    <script type="text/javascript">
+        $("#n-signin").addClass("active");
+        $(".banner").toggleClass("banner1");
+    </script>
+</div>		
+<!-- banner -->
+<!-- registration -->
+<div class="main-1">
+    <div class="container">
+        <div class="register">
+            {{ Notify.r }}
+            <form method="post"> 
+                <div class="register-top-grid login-right">
+                    <h3>DANE UŻYTKOWNIKA</h3>
+                    <div class="wow fadeInLeft" data-wow-delay="0.4s">
+                        <span>Imię<label>*</label></span>
+                        <input type="text" name="givenName" value="{{ Me.getModel.givenName }}"> 
+                    </div>
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <span>Nazwisko<label>*</label></span>
+                        <input type="text" name="familyName" value="{{ Me.getModel.familyName }}"> 
+                    </div>
+                    <div class="wow fadeInLeft" data-wow-delay="0.4s">
+                        <span>Nazwa użytkownika<label>*</label></span>
+                        <input type="text" value="{{ Me.getModel.username }}" disabled> 
+                    </div>
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <span>E-mail<label>*</label></span>
+                        <input type="text" name="email" value="{{ Me.getModel.email }}" required> 
+                    </div>
+                    <div class="wow fadeInLeft" data-wow-delay="0.4s">
+                        <span>Nowe hasło<label>*</label></span>
+                        <input type="password" name="pass">
+                    </div>
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <span>Potwierdź nowe hasło<label>*</label></span>
+                        <input type="password" name="passconfirm">
+                    </div>
+              
+                <div class="clearfix"> </div>
+                <input type="hidden" name="username" value="{{ Me.getModel.username }}" /> 
+                <input type="submit" value="Zapisz" />
+                <div class="clearfix"> </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
