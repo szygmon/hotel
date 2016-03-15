@@ -3,6 +3,9 @@
 {% block title %}Hotel JM{% endblock %}
 
 {% block body %}
+    <script type="text/javascript">
+        $("#n-index").addClass("active");
+    </script> 
     <div class="banner-info">
         <div class="container">
             <div class="details-1">
@@ -16,9 +19,9 @@
                     <link rel="stylesheet" href="{{ url('template') }}/css/jquery-ui.css" />
                     <script src="{{ url('template') }}/js/jquery-ui.js"></script>
                     <script>
-                        $(function () {
-                            $("#datepicker,#datepicker1").datepicker();
-                        });
+            $(function () {
+                $("#datepicker,#datepicker1").datepicker();
+            });
                     </script>
                     <!---/End-date-piker---->
 
@@ -26,8 +29,8 @@
                         <div class="book_date">
                             <form>
                                 <input class="date" id="datepicker" type="text" value="Od dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                                                    this.value = 'Od dnia';
-                                                                                }">
+                                            this.value = 'Od dnia';
+                                        }">
                             </form>
                         </div>		
                     </div>
@@ -35,8 +38,8 @@
                         <div class="book_date">
                             <form>
                                 <input class="date1" id="datepicker1" type="text" value="Do dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                                                    this.value = 'Do dnia';
-                                                                                }">
+                                            this.value = 'Do dnia';
+                                        }">
                             </form>
                         </div>		
                     </div>
@@ -53,7 +56,7 @@
                     <div class="clearfix"> </div>
                 </div> 
                 <div class="col-md-2 submit_button"> 
-                    <form action="details.html">
+                    <form action="{{ url('Home/details') }}">
                         <input type="submit" value="Szukaj">
                     </form>
                 </div>
@@ -70,10 +73,10 @@
             <img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt="">
         </div>
         <div class="col-md-6 hod-right">
-            <h2>Publishing packages and web page</h2>
-            <p>The point of using as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' </p>
-            <p>Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',</p>
-            <a class="hvr-shutter-in-horizontal" href="details.html">Book Now</a>
+            <h2>Pokoje wysokich standardów za niską cenę</h2>
+            <p>Nasz hotel oferuje wszystkim gościom pokoje bardzo wysokiej klasy w bardzo przystępnych cenach. Dzięki temu poczujesz się jak gwiazda!</p>
+            <p>Dodatkowo organizujemy wiele atrakcyjnych wydarzeń, nie czekaj i już dziś rezerwuj miejsce!</p>
+            <a class="hvr-shutter-in-horizontal" href="{{ url('Home/details') }}">Rezerwuj</a>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -83,22 +86,22 @@
 <div class="tels">
     <div class="container">
         <div class="col-md-4 tels-left">
-            <h4>Single room <span>110$</span></h4>
+            <h4>Pokój 1 os. <span>110 zł</span></h4>
             <img src="{{ url('template') }}/images/4.jpg" class="img-responsive" alt="">
             <p>Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',</p>
-            <a class="hvr-shutter-in-horizontal" href="details.html">Book Now</a>
+            <a class="hvr-shutter-in-horizontal" href="details.html">Rezerwuj</a>
         </div>
         <div class="col-md-4 tels-left">
-            <h4>Double room <span>150$</span></h4>
+            <h4>Pokój 2 os. <span>150 zł</span></h4>
             <img src="{{ url('template') }}/images/9.jpg" class="img-responsive" alt="">
             <p>Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',</p>
-            <a class="hvr-shutter-in-horizontal" href="details.html">Book Now</a>
+            <a class="hvr-shutter-in-horizontal" href="details.html">Rezerwuj</a>
         </div>
         <div class="col-md-4 tels-left">
-            <h4>Private room <span>200$</span></h4>
+            <h4>Pokój z widokiem <span>200 zł</span></h4>
             <img src="{{ url('template') }}/images/3.jpg" class="img-responsive" alt="">
             <p>Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here',</p>
-            <a class="hvr-shutter-in-horizontal" href="details.html">Book Now</a>
+            <a class="hvr-shutter-in-horizontal" href="details.html">Rezerwuj</a>
         </div>
         <div class="clearfix"></div>
     </div>
@@ -108,8 +111,8 @@
 <div class="special">
     <div class="container">
         <div class="spe-info">
-            <h3>Special Offer</h3>
-            <p>Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</p>
+            <h3>Specialna oferta</h3>
+            <p>Rezerwując pokoje do konca kwietnia na okres powyżej 5 dni otrzymasz 20% zniżki! Nie zwlekaj i rezerwuj pokoje najlepszej klasy ze zniżką!</p>
         </div>
     </div>
 </div>
@@ -118,48 +121,48 @@
 <div class="quick">
     <div class="container">
         <div class="col-md-4 quick-left">
-            <h3>Most Popular</h3>
+            <h3>Znani goście</h3>
             <ul>
-                <li><a href="#">Distribution of letters, as opposed</a></li>
-                <li><a href="#">Distribution of letters, as opposed</a></li>
-                <li><a href="#">Distribution of letters, as opposed</a></li>
-                <li><a href="#">Distribution of letters, as opposed</a></li>
-                <li><a href="#">Distribution of letters, as opposed</a></li>
+                <li><a href="#">Doda</a></li>
+                <li><a href="#">Zenek Martyniuk</a></li>
+                <li><a href="#">Andrzej Duda</a></li>
+                <li><a href="#">Tomasz Lis</a></li>
+                <li><a href="#">Zespół U2</a></li>
             </ul>
         </div>
         <div class="col-md-4 quick-left">
-            <h3>News & Events</h3>
+            <h3>Wydarzenia</h3>
             <div class="new">
                 <div class="n-lft">
                     <h5>10</h5>
-                    <h6>Sep</h6>
+                    <h6>Mar</h6>
                 </div>
                 <div class="n-rgt">
-                    <p>Lorem Ipsum is that it has a more-or-less normal<a href="#">More</a></p>
+                    <p>Koncert zespołu U2 z 20% zniżka dla gości hotelu<a href="#">Więcej</a></p>
                 </div>
                 <div class="clearfix"></div>
             </div>
             <div class="new-1">
                 <div class="n-lft">
                     <h5>15</h5>
-                    <h6>Sep</h6>
+                    <h6>Kwi</h6>
                 </div>
                 <div class="n-rgt">
-                    <p>That it has a more-or-less normal distribution<a href="#">More</a></p>
+                    <p>Koncert Ich Troje z 20% zniżka dla gości hotelu<a href="#">Więcej</a></p>
                 </div>
                 <div class="clearfix"></div>
             </div>
         </div>
         <div class="col-md-4 quick-left">
-            <h3>Quick Message</h3>
+            <h3>Szybki kontakt</h3>
             <form>
-                <input type="text" class="textbox" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                            this.value = 'Email';
-                                                        }">
+                <input type="text" class="textbox" value="E-mail" onfocus="this.value = '';" onblur="if (this.value == '') {
+                            this.value = 'E-mail';
+                        }">
                 <textarea placeholder="" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                            this.value = 'Message';
-                                                        }">Message</textarea>
-                <input type="submit" value="Submit">
+                            this.value = 'Wiadomość';
+                        }">Wiadomość</textarea>
+                <input type="submit" value="Wyślij">
             </form>
         </div>
         <div class="clearfix"></div>

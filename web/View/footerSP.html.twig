@@ -1,14 +1,14 @@
 <div class="footer">
 		<div class="container">
 			<div class="col-md-2 deco">
-				<h4>Navigation</h4>
-				<li><a href="index.html">Home</a></li>
-				<li><a href="shortcodes.html">Short Codes </a></li>
-				<li><a href="sigin.html">Sign in</a></li> 
-				<li><a href="contact.html">Contact</a></li>
+				<h4>Nawigacja</h4>
+				<li><a href="{{ url('Home/index') }}">Home</a></li>
+				<li><a href="{{ url('Home/rooms') }}">Pokoje</a></li>
+				<li><a href="{{ url('Home/signin') }}">Zaloguj się</a></li> 
+				<li><a href="{{ url('Home/contact') }}">Kontakt</a></li>
 			</div>
 			<div class="col-md-2 deco">
-				<h4>Links</h4> 
+				<h4>Linki</h4> 
 				<li><a href="#">Qui Sommes-Nous ?</a></li>
 				<li><a href="#">Mentions Légales </a></li>
 				<li><a href="#">Conditions D'Utilisation </a></li>
@@ -22,7 +22,7 @@
 				</div>
 			</div>
 			<div class="col-md-3 cardss">
-				<h4>Payment Sécure</h4>
+				<h4>Płatności</h4>
 				<li><i class="visa"></i></li>
 				<li><i class="ma"></i></li>
 				<li><i class="paypal"></i></li>
@@ -31,9 +31,9 @@
 			<div class="col-md-3 pos">
 			<h4>NewsLetter</h4>
 					   <form method="post">
-						 <input type="text" class="textbox" value="Email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email';}">
+						 <input type="text" class="textbox" value="E-mail" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'E-mail';}">
 						 <div class="smt">
-							<input type="submit" value="Subscribe">
+							<input type="submit" value="Zapisz się">
 						 </div>
 					   </form>
 			</div>
@@ -42,7 +42,7 @@
 	</div>
 	<div class="footer-bottom">
 			<div class="container">
-				<p>© 2015 Motel. All Rights Reserved | Design by  <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
+				<p>© 2016 Motel JM. All Rights Reserved | Design by  <a href="http://w3layouts.com/" target="_blank">W3layouts</a> </p>
 			</div>
 		</div>
 	<!-- footer -->

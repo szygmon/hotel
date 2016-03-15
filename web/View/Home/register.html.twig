@@ -1,47 +1,58 @@
 {% extends './baseSP.html.twig' %}
 
-{% block title %}eDziennik AMN{% endblock %}
+{% block title %}Hotel JM{% endblock %}
 
-{% block content %}
-	<div class="row" style="margin-top:60px;margin-bottom: 20px;">
-		<div class="col-md-12">
-			{{ Notify.r }}
-			<div class="jumbotron">
-				<form method="post" class="form-signin">
-					<fieldset>
-						<label class="panel-login">
-							<div class="login_result"></div>
-						</label>
-						<div class="col-md-6">
-							<h4>Dane szkoły</h4>
-							<div class="form-group">
-								<input class="form-control" type="text" name="schoolName" placeholder="Nazwa placówki">
-							</div>
-							<div class="form-group">
-								<input class="form-control" type="text" name="schoolAlias" placeholder="Alias" required>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<h4>Dane konta</h4>
-							<div class="form-group">
-								<input class="form-control" placeholder="Login" name="username" type="text" required>
-							</div>
-							<div class="form-group">
-								<input class="form-control" placeholder="E-mail" name="email" type="email" required>
-							</div>
-							<div class="form-group">
-								<input class="form-control" placeholder="Hasło" name="pass" type="password" required>
-							</div>
-							<div class="form-group">
-								<input class="form-control" placeholder="Powtórz hasło" type="password">
-							</div>
-						</div>
-						<div class="col-md-12 text-right">
-							<input class="btn btn-success" type="submit" value="Zarejestruj" style="margin-top:20px">
-						</div>
-					</fieldset>
-				</form>
-			</div>
-		</div>
-	</div>
+{% block body %}
+    <script type="text/javascript">
+        $("#n-signin").addClass("active");
+        $(".banner").toggleClass("banner1");
+    </script>
+</div>		
+<!-- banner -->
+<!-- registration -->
+<div class="main-1">
+    <div class="container">
+        <div class="register">
+            <form> 
+                <div class="register-top-grid">
+                    <h3>PERSONAL INFORMATION</h3>
+                    <div class="wow fadeInLeft" data-wow-delay="0.4s">
+                        <span>First Name<label>*</label></span>
+                        <input type="text"> 
+                    </div>
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <span>Last Name<label>*</label></span>
+                        <input type="text"> 
+                    </div>
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <span>Email Address<label>*</label></span>
+                        <input type="text"> 
+                    </div>
+                    <div class="clearfix"> </div>
+                    <a class="news-letter" href="#">
+                        <label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i>Sign Up for Newsletter</label>
+                    </a>
+                </div>
+                <div class="register-bottom-grid">
+                    <h3>LOGIN INFORMATION</h3>
+                    <div class="wow fadeInLeft" data-wow-delay="0.4s">
+                        <span>Password<label>*</label></span>
+                        <input type="password">
+                    </div>
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <span>Confirm Password<label>*</label></span>
+                        <input type="password">
+                    </div>
+                </div>
+            </form>
+            <div class="clearfix"> </div>
+            <div class="register-but">
+                <form>
+                    <input type="submit" value="submit">
+                    <div class="clearfix"> </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

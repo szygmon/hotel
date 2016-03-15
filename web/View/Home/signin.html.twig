@@ -1,0 +1,41 @@
+{% extends './baseSP.html.twig' %}
+
+{% block title %}Hotel JM{% endblock %}
+
+{% block body %}
+    <script type="text/javascript">
+        $("#n-signin").addClass("active");
+        $(".banner").toggleClass("banner1");
+    </script>
+</div>		
+<!-- banner -->
+
+<div class="login-page">
+    <div class="container">
+        <div class="account_grid">
+            <div class="col-md-6 login-left wow fadeInLeft" data-wow-delay="0.4s">
+                <h3>NOWY UŻYTKOWNIK</h3>
+                <p>Dzięki utworzeniu własnego konta, będziesz mógł m.in. przejść proces rezerwacji pokoju szybciej, będziesz miał podgląd na status rezerwacji i ich historie.</p>
+                <a class="acount-btn" href="{{ url('Home/register') }}">Załóż konto</a>
+            </div>
+            <div class="col-md-6 login-right wow fadeInRight" data-wow-delay="0.4s">
+                <h3>ZAREJESTROWANY UŻYTKOWNIK</h3>
+                <p>Jeśli masz już u nas konto, zaloguj się.</p>
+                <form>
+                    <div>
+                        <span>Adres e-mail<label>*</label></span>
+                        <input type="text"> 
+                    </div>
+                    <div>
+                        <span>Hasło<label>*</label></span>
+                        <input type="password"> 
+                    </div>
+                    <a class="forgot" href="#">Zapomniałeś hasła?</a>
+                    <input type="submit" value="Zaloguj">
+                </form>
+            </div>	
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
