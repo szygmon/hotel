@@ -1,0 +1,182 @@
+{% extends './base.html.twig' %}
+
+{% block title %}eDziennik AMN - lekcja{% endblock %}
+{% block head %}
+    <link href="{{ url('template') }}/css/datepicker3.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/themes/base/jquery-ui.css">
+    <script type="text/javascript" src="{{ url('template') }}/js/datepicker-pl.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#lessons-category-sidebar, #mylessons-sidebar").addClass("treeview active");
+            $('.week-picker').val('Wybierz tydzień');
+
+            var startDate;
+            var endDate;
+
+            var selectCurrentWeek = function () {
+                window.setTimeout(function () {
+                    $('.week-picker').find('.ui-datepicker-current-day a').addClass('ui-state-active')
+                }, 1);
+            }
+
+            $('.week-picker').datepicker({
+                firstDay: 1,
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateFormat: 'yy-mm-dd',
+                onSelect: function (dateText, inst) {
+                    $('.week-picker').val('Wybierz tydzień');
+                    $(".box-body").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+                    var date = $(this).datepicker('getDate');
+                    startDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 1);
+                    endDate = new Date(date.getFullYear(), date.getMonth(), date.getDate() - date.getDay() + 5);
+                    var dateFormat = inst.settings.dateFormat || $.datepicker._defaults.dateFormat;
+                    $('#startDate').text($.datepicker.formatDate(dateFormat, startDate, inst.settings));
+                    $('#endDate').text($.datepicker.formatDate(dateFormat, endDate, inst.settings));
+
+                    var url = '{{ url('Student/attendance', {'startDate': 'sd' }) }} .box-body';
+                    url = url.replace('sd', $.datepicker.formatDate(dateFormat, startDate, inst.settings));
+                    $('.box-body').load(url, function () {
+                        $(this).children().unwrap();
+                    });
+                    selectCurrentWeek();
+                },
+                beforeShowDay: function (date) {
+                    var cssClass = '';
+                    if (date >= startDate && date <= endDate)
+                        cssClass = 'ui-datepicker-current-day';
+                    return [true, cssClass];
+                },
+                onChangeMonthYear: function (year, month, inst) {
+                    selectCurrentWeek();
+                }
+            });
+
+            $('.week-picker .ui-datepicker-calendar tr').live('mousemove', function () {
+                $(this).find('td a').addClass('ui-state-hover');
+            });
+            $('.week-picker .ui-datepicker-calendar tr').live('mouseleave', function () {
+                $(this).find('td a').removeClass('ui-state-hover');
+            });
+        });
+    </script>
+{% endblock %}
+{% block content %}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Moje zajęcia
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <!-- TO DO List -->
+        <div class="box box-primary">
+            <div class="box-header">
+                <input type="text" class="week-picker" val="Wybierz tydzień" />
+                <label>Tydzień :</label> <span id="startDate">{{ startDate }}</span> - <span id="endDate">{{ endDate }}</span>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    {% for i in range(0, 5) %}
+                        <div class="col-md-2">
+                            <div class="bg-blue-active plan-top-margin">
+                                <div class="info-box-content plan-top text-center">
+                                    <span class="info-box-text">{{ dayname[i] }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% for i in range(1, 8) %}
+                    <div class="row">
+                        {% for d in range(0, 5) %}
+                            {% if d > 0 %}
+                                <div class="col-md-2">
+                                    {% if lesson[d][i].subject.subject %}
+                                        <div class="info-box {% if attendance[d][i].presence == 1 %}bg-green
+                                        {% elseif attendance[d][i].presence == 2 %}bg-orange
+                                        {% elseif attendance[d][i].presence == 3 %}bg-yellow
+                                        {% elseif attendance[d][i].presence == 4 %}bg-green
+                                        {% elseif attendance[d][i].presence == 5 %}bg-green
+                                        {% else %}bg-gray
+                                        {% endif %}">
+                                        <div class="info-box-content plan-plan">
+                                            <span class="info-box-text">{{ lesson[d][i].subject.subject }}</span>
+                                            <span class="info-box-text">
+                                                {% if attendance[d][i].presence == 1 %} obecność
+                                                {% elseif attendance[d][i].presence == 2 %} nieobecność 
+                                                {% elseif attendance[d][i].presence == 3 %} spóźnienie
+                                                {% elseif attendance[d][i].presence == 4 %} zwolnienie
+                                                {% elseif attendance[d][i].presence == 5 %} nieobecność uspraw. 
+                                                {% else %} B/D
+                                                {% endif %}
+                                            </span>
+                                            <div class="progress">
+                                                <div class="progress-bar" style="width: 70%"></div>
+                                            </div>
+                                            <span class="progress-description">
+                                                {{ lesson[d][i].teacher.givenName }} {{ lesson[d][i].teacher.familyName }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div class="info-box bg-gray">
+                                        <div class="info-box-content plan-plan">
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="col-md-2">
+                                <div class="info-box bg-blue">
+                                    <span class="info-box-icon plan-number">{{ i }}</span>
+                                    <div class="info-box-content plan-hour">
+                                        <span class="info-box-number">{{ hours[i-1].fromTime|date('H:i') }}</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 70%"></div>
+                                        </div>
+                                        <span class="progress-description">{{ hours[i-1].toTime|date('H:i') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+                                {% endfor %}
+                                </div>
+                                {% endfor %}
+                                </div><!-- /.box-body -->
+                            </div>
+                        </section>
+                        <style type="text/css">
+                            .plan-number {
+                                width: 30px !important;
+                            }
+                            .plan-hour {
+                                margin-left: 30px !important;
+                            }
+                            .plan-plan {
+                                margin-left: 0 !important;
+                            }
+                            .plan-top {
+                                margin:0 auto !important;
+                            }
+                            .plan-top-margin {
+                                margin-bottom: 10px;
+                            }
+                            .divlink {
+                                cursor: pointer;
+                            }
+                        </style>
+                        <script type="text/javascript">
+                            $(document).delegate('.divlink', 'click', function () {
+                                window.location = $(this).find('a').attr('href');
+                            });
+
+                            $("#student-category-sidebar, #student-attendance-sidebar").addClass("treeview active");
+                        </script>
+
+                        {% endblock %}

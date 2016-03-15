@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title>e-Dziennik AMN</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+        {#		<link rel="shortcut icon" href="{{ url('template') }}/img/favicon.ico" type="image/x-icon">#}
+        <link rel="stylesheet" href="{{ url('libs') }}css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url('template') }}/css/AdminLTE.css" type="text/css" >
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <script src="{{ url('libs') }}js/bootstrap.min.js"></script>	
+    </head>
+    <body class="login-page">
+        <div class="login-box">
+            <div class="login-logo">
+                <a href="{{ url('Home/index') }}"><b>e-Dziennik</b> AMN</a>
+            </div><!-- /.login-logo -->
+            <div class="login-box-body">
+                {% if msg is not null %}
+                    <div class="alert alert-danger">Dane logowania są niepoprawne.</div>
+                {% endif %}
+                <p class="login-box-msg">Zaloguj się do swojego e-Dziennika</p>
+                <form method="post" class="form-signin">
+                    <div class="form-group has-feedback">
+                        <input type="text" class="form-control" name="username" placeholder="Login lub email" required/>
+                        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input type="password" class="form-control" name="password" placeholder="Hasło" required />
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                    {% if salesPage is defined and salesPage %}
+                        <div class="form-group has-feedback">
+                            <select class="form-control" name="school" required>
+                                <option value="">Wybierz szkołę</option>
+                                {% for value, school in schools %}
+                                    <option value="{{ value }}">{{ school }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    {% endif %}
+                    <div class="row">
+                        <div class="col-xs-4 col-xs-offset-8">
+                            <input type="submit" class="btn btn-primary btn-block btn-flat pull-right" id="login" value="Zaloguj" />
+                        </div>
+                    </div>
+                </form>
+
+                <div class="social-auth-links text-center">
+                    <p>- lub -</p>
+                    <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Zaloguj używając Facebook</a>
+                    <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat"><i class="fa fa-google-plus"></i> Zaloguj używając Google+</a>
+                </div><!-- /.social-auth-links -->
+
+                <a href="#">Zapomniałem hasła</a><br>
+                <!--a href="register.html" class="text-center">Register a new membership</a-->
+
+            </div><!-- /.login-box-body -->
+        </div><!-- /.login-box -->
+        {% if salesPage is defined and salesPage %}
+            <script type="text/javascript">
+                $("form").submit(function () {
+                    var select = $(this).find('select');
+                    if (select.val() == "")
+                        return false;
+
+                    var action = "{{ url('Home/login', {}, '%subdomain%') }}";
+                    $(this).attr("action", action.replace(/%subdomain%/, select.val()));
+                });
+            </script>
+        {% endif %}
+    </body>
+</html>

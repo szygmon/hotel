@@ -1,0 +1,12 @@
+{
+    "name": "Put/dziennik",
+    "description": "edziennik",
+	"config": {
+		"vendor-dir": "core/vendor"
+	},
+    "minimum-stability": "stable",
+    "require": {
+		"twig/twig":"~1.0",
+		"doctrine/orm": "2.4.*"
+	}
+}

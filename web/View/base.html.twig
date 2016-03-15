@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title>{% block title %}| E-dziennik{% endblock %}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+		{#		<link rel="shortcut icon" href="{{ url('template') }}/img/favicon.ico" type="image/x-icon">#}
+		<link rel="stylesheet" href="{{ url('libs') }}css/bootstrap.min.css">
+		{#	<link rel="stylesheet" href="{{ url('libs') }}css/bootstrap-theme.min.css">#}
+		<link rel="stylesheet" href="{{ url('template') }}/css/style.css?v1.0.0" type="text/css" >
+		<link rel="stylesheet" href="{{ url('template') }}/css/AdminLTE.css" type="text/css" >
+		<link rel="stylesheet" href="{{ url('template') }}/css/skin-green.css" type="text/css" >
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+		<script src="{{ url('libs') }}js/bootstrap.min.js"></script>	
+		<script>
+			$.widget.bridge('uibutton', $.ui.button);
+		</script>
+		<script src="{{ url('template') }}/js/app.js"></script>	
+	{% block head %}{% endblock %}
+</head>
+
+<body class="skin-green">
+	<div class="wrapper">
+		{{ include('navbar.html.twig') }}
+		{{ include('sidebar.html.twig') }}
+		{% block body %}
+			<div class="content-wrapper">
+				{% block content %}{% endblock %}
+			</div>
+	{% endblock %}
+
+	{% block footer %}
+		{{ include('footer.html.twig') }}
+	{% endblock %}
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends './base.html.twig' %}
+
+{% block method %}Reset{% endblock %}
+
+{% block content %}
+	{% if error|length %}
+		{% for key, e in error %}
+			<div class="panel panel-danger">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						{{ key }}
+						<span class="label label-danger" style="float: right">Line: {{ e.line }}</span></h3>
+				</div>
+				<div class="panel-body">{{ e.message }}</div>
+			</div>
+		{% endfor %}
+	{% else %}
+		<div class="alert alert-success row">
+			<div class="col-md-12">
+				Success
+			</div>
+		</div>
+	{% endif %}
+{% endblock %}

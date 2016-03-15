@@ -1,0 +1,7 @@
+{% extends './base.html.twig' %}
+
+{% block method %}Dump{% endblock %}
+
+{% block content %}
+	<pre><code>{% for sql in sqls %}{{ sql }};<br/>{% endfor %}</code></pre>
+{% endblock %}

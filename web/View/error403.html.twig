@@ -1,0 +1,13 @@
+{% extends './base.html.twig' %}
+
+{% block title %} ERROR 403 - Access denied {{ parent() }}{% endblock %}
+
+
+{% block body %}
+    <div class="container container-extra">
+        <div class="content" style="margin-top:85px;text-align:center;">
+            <h1 style="font-size:40px;">ERROR 403</h1>
+            <img src="{{ url('site') }}/files/images/error403.jpg">
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,118 @@
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <link rel="stylesheet" href="{{ url('libs') }}css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url('template') }}/css/style.css?v1.0.0" type="text/css" >
+    <link rel="stylesheet" href="{{ url('template') }}/css/AdminLTE.css" type="text/css" >
+    <link rel="stylesheet" href="{{ url('template') }}/css/skin-green.css" type="text/css" >
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://code.ionicframework.com/ionicons/2.0.0/css/ionicons.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ url('template') }}/css/icheck/line/green.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <form id="attendance-form" name="inputform" method="POST" action="{{ url('Lesson/editLesson', {'id': lesson.id }) }}">
+        <table class="table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th rowspan="2" width="1%">#</th>
+                    <th rowspan="2" width="15%">Uczeń</th>
+                    <th colspan="8">Lekcja</th>
+                    <th rowspan="2" width="4%">Statystyki</th>
+                </tr>
+                <tr>
+                    {% for i in range(1, 8) %}
+                        <th width="10%">{{ i }}</th>
+                        {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% set nr = 1 %}
+                {% for student in lesson.class.students %}
+                    <tr>
+                        <td>{{ nr }}</td>
+                        <td>{{ student.givenName }} {{ student.familyName }}</td>
+                        {% for l in range(1, 8) %}
+                            <td>
+                                {% if lesson.hour.id == l %}
+                                    <input type="radio" name="attendance{{ student.id }}" value="1" {% if attendance[student.id][l] == 1 %}checked{% endif %}>
+                                    <label>OB</label>
+                                    <input type="radio" name="attendance{{ student.id }}" value="2" {% if attendance[student.id][l] == 2 %}checked{% endif %}>
+                                    <label>NB</label>
+                                    <input type="radio" name="attendance{{ student.id }}" value="3" {% if attendance[student.id][l] == 3 %}checked{% endif %}>
+                                    <label>S</label>
+                                    <input type="radio" name="attendance{{ student.id }}" value="4" {% if attendance[student.id][l] == 4 %}checked{% endif %}>
+                                    <label>ZW</label>
+                                    <input type="radio" name="attendance{{ student.id }}" value="5" {% if attendance[student.id][l] == 5 %}checked{% endif %}>
+                                    <label>NU</label>
+                                {% else %}
+                                    {% if attendance[student.id][l] == 1 %}
+                                        obecny
+                                    {% elseif attendance[student.id][l] == 2 %}
+                                        nieobecny
+                                    {% elseif attendance[student.id][l] == 3 %}
+                                        spóźniony
+                                    {% elseif attendance[student.id][l] == 4 %}
+                                        zwolniony
+                                    {% elseif attendance[student.id][l] == 5 %}
+                                        nieobecny usprawiedliwiony
+                                    {% endif%}
+                                {% endif %}
+                            </td>
+
+                        {% endfor %}
+                        <td>..</td>
+                    </tr>
+
+
+                    {% set nr = nr + 1 %}
+                {% endfor %}
+            </tbody>
+        </table>
+        <input type="hidden" name="class" value="{{ lesson.class.id }}" />
+        <input type="hidden" name="date" value="{{ lesson.date|date('Y-m-d') }}" />
+
+        <div class="box-footer clearfix no-border">
+            <input type="hidden" name="saveAttendance" value="Zapisz"/>
+            <input type="submit" name="saveAttendance" value="Zapisz" class="btn btn-default pull-right" />
+        </div>
+    </form>
+
+
+
+    <script type="text/javascript" >
+        $(document).ready(function () {
+            $(':radio').each(function () {
+                var self = $(this),
+                        label = self.next(),
+                        label_text = label.text();
+
+                label.remove();
+                self.iCheck({
+                    checkboxClass: 'icheckbox_line-green',
+                    radioClass: 'iradio_line-green',
+                    insert: '<div class="icheck_line-icon"></div>' + label_text
+                });
+            });
+        });
+
+        // zapis opisu ocen
+        $("#attendance-form").submit(function (event) {
+            $("#attendance-chart").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+
+            // Stop form from submitting normally
+            event.preventDefault();
+            // Get some values from elements on the page:
+            var $form = $(this),
+                    url = $form.attr("action");
+
+            var serializedData = $form.serialize();
+            // Send the data using post
+            var posting = $.post(url, serializedData);
+
+            posting.done(function () {
+                $("#attendance-chart").load("{{ url('Lesson/attendance', {'id': lesson.id}) }}");
+            });
+        });
+
+    </script>
+</body>

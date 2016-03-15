@@ -1,0 +1,13 @@
+{% extends './base.html.twig' %}
+
+{% block title %} ERROR 404 - Not Found {{ parent() }}{% endblock %}
+
+
+{% block body %}
+    <div class="container container-extra">
+		{#<META HTTP-EQUIV="refresh" CONTENT="2; URL=http://repostuj.pl">#}
+        <div class="content" style="margin-top:85px;text-align:center;">
+            <img src="{{ url('site') }}/files/images/error404.jpg">
+        </div>
+    </div>
+{% endblock %}

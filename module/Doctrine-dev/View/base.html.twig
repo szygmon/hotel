@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head> 
+        <title>NC DB DEBUG</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>	
+    </head>
+
+	<body>
+		<div class="container">
+			<div class="page-header">	
+				<h1>DevDebug <small>DB:{% block method %}{% endblock %}</small></h1>
+			</div>
+			<div class="col-md-12">
+				{% block content %}{% endblock %}
+			</div>	
+		</div>
+	</body>
+</html>

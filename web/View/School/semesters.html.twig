@@ -1,0 +1,63 @@
+{% extends './base.html.twig' %}
+
+{% block title %}eDziennik AMN - semestry{% endblock %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Szkoła
+            <small>Lista semestrów</small>
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+		{{ Notify.r }}
+        <!-- TO DO List -->
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">Semestry</h3>
+            </div><!-- /.box-header -->
+
+            <div class="box-body">
+                <ul class="todo-list">
+                    {% for s in semesters %}
+                        <li>
+                            <!-- drag handle -->
+                            <span class="handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>
+                            <!-- checkbox -->
+                            <input type="checkbox" value="" name=""/>
+                            <!-- todo text -->
+                            <span class="text">Rok {{ s.year.fromYear }}/{{ s.year.toYear }}<small class="label {% if s.semester == 1 %}label-primary{% else %}label-warning{% endif %}">semestr {{ s.semester }}</small> od {{ s.fromDate|date("Y-m-d") }} do {{ s.toDate|date("Y-m-d") }}</span>
+                            <!-- General tools such as edit or delete-->
+                            <div class="tools">
+                                <a href="{{ url('School/semestersEdit', {'id': s.id}) }}" class="fa fa-edit"></a>
+                                <a href="{{ url('School/semesters', {'action': 'del', 'id': s.id}) }}" class="fa fa-trash-o"></a>
+                            </div>
+                        </li>
+                    {% else %}
+                        <li>
+                            <span class="text">Brak semestrów w bazie</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- /.box-body -->
+
+            <div class="box-footer clearfix no-border">
+                <a href="{{ url('School/semestersEdit') }}" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Dodaj nowy</a>
+            </div>
+        </div><!-- /.box -->
+
+
+    </section><!-- /.Left col -->
+
+    <script type="text/javascript">
+        $("#school-category-sidebar, #semesters-sidebar").addClass("treeview active");
+    </script>
+
+{% endblock %}

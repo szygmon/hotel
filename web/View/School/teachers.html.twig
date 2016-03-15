@@ -1,0 +1,97 @@
+{% extends './base.html.twig' %}
+
+{% block title %}eDziennik AMN - nauczyciele{% endblock %}
+
+{% block head %}
+    <link href="{{ url('template') }}/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content %}
+
+    {% if info != 'brak' %}
+        {% if info.col == 'red' %}               
+            <div class="alert alert-danger" role="alert">
+            {% else %}
+                <div class="alert alert-success" role="alert">
+                {% endif %}
+
+                {{ info.inf }}
+            </div>
+        {% endif %}
+
+
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                Szkoła
+            <small>Lista nauczycieli</small>
+            </h1>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <!-- TO DO List -->
+            <div class="box box-primary">
+                <div class="box-header">
+                    <i class="ion ion-clipboard"></i>
+                    <h3 class="box-title">Lista nauczycieli</h3>
+                </div><!-- /.box-header -->
+
+                <div class="box-body">
+                    <table id="teachers-table" class="table table-bordered table-hover dataTable">
+                        <thead>
+                            <tr>
+                                <th width="5%">#</th>
+                                <th>Nazwisko</th>
+                                <th>Imię</th>
+                                <th>Nick</th>
+                                <th>E-mail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in teachers %}
+                                <tr>
+                                    <td>
+                                        <a href="{{ url('School/teacherEdit', {'info': t.id}) }}" class="fa fa-edit"></a>
+                                        <a href="{{ url('School/teachers', {'action': 'del', 'id': t.id}) }}" class="fa fa-trash-o"></a>
+                                    </td>
+                                    <td>{{ t.familyName }}</td>
+                                    <td>{{ t.givenName }}</td> 
+                                    <td>{{ t.username }}</td>
+                                    <td>{{ t.email }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div><!-- /.box-body -->
+
+                <div class="box-footer clearfix no-border">
+                    <a href="{{ url('School/teacherEdit') }}" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Dodaj nowego</a>
+                </div>
+            </div><!-- /.box -->
+
+
+        </section><!-- /.Left col -->
+        <script src="{{ url('template') }}/js/jquery.dataTables.js" type="text/javascript"></script>
+        <script src="{{ url('template') }}/js/dataTables.bootstrap.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $("#school-category-sidebar, #teachers-sidebar").addClass("treeview active");
+
+            $('#teachers-table').dataTable({
+                "bPaginate": true,
+                "bLengthChange": true,
+                "bFilter": true,
+                "bSort": true,
+                "bInfo": true,
+                "bAutoWidth": false,
+                "aoColumnDefs": [{
+                        'bSortable': false,
+                        'aTargets': [0]
+                    }]
+            });
+
+            $("#classes-category-sidebar").addClass("treeview active");
+
+        </script>
+    {% endblock %}

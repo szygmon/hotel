@@ -1,0 +1,181 @@
+{% extends './base.html.twig' %}
+
+{% block title %}eDziennik AMN - klasy{% endblock %}
+{% block head %}
+    <link href="{{ url('template') }}/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>Klasa {{ class.name }}</h1>
+    </section>
+
+    <section class="content">
+        <div class="box">
+            <div class="box-header">
+                <form id="addStudentsForm" method="POST" action="{{ url('Classes/students') }}">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">Rok urodzenia:</span>
+                                <select id="students-year-input" name="hour" class="form-control">
+
+                                    {% for i in range(1990, 2015) %}
+                                        <option value="{{ i }}">{{ i }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-9">
+                            <input type="submit" class="btn btn-default" value="Dodaj uczniów">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="box-body">
+                <div id="students-table_wrapper" class="dataTables_wrapper form-inline" role="grid">
+                    <form method="POST" action="{{ url('Classes/students', {'class': class.id } ) }}">
+                        <div class="clearfix margin-bottom">
+                            <input type="submit" name="del" value="Usuń uczniów z klasy" class="btn btn-default" />
+                        </div>
+                        <table id="students-table" class="table table-bordered table-hover dataTable">
+                            <thead>
+                                <tr>
+                                    <th width="5%">#</th>
+                                    <th>Nazwisko</th>
+                                    <th>Imię</th>
+                                    <th>Nick</th>
+                                    <th>E-mail</th>
+                                    <th>Miejsce urodzenia</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for student in class.students %}
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="students[]" value="{{ student.id }}" />
+                                            <a href="#" class="pull-right" data-toggle="modal" data-target="#addGroups" data-groups="{{ student.id }}"><i class="fa fa-group"></i></a>
+                                        </td>
+                                        <td>{{ student.familyName }}</td>
+                                        <td>{{ student.givenName }}</td>
+                                        <td>{{ student.username }}</td>
+                                        <td>{{ student.email }}</td>
+                                        <td>{{ student.birthplace }}</td>
+
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <div class="modal fade" id="addGroups" tabindex="-1" role="dialog" aria-labelledby="addGroupsLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addGroupsLabel">Grupy ucznia</h4>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="ajaxform" action="{{ url('Classes/studentsGroups', {'id': class.id } ) }}">
+
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Grupy:</label>
+                            <select multiple="" name="groups[]" class="form-control">
+                                {% for gr in groups %}
+                                    <option value="{{ gr.id }}">
+                                        {% if gr.level > 0 %}
+                                            {% for i in range(1, gr.level) %}&nbsp;&nbsp;&nbsp;{% endfor %}
+                                        {% endif %}
+                                        {{ gr.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <input type="hidden" name="student" id="student-input" />
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Zamknij</button>
+                            <input type="submit" name="save" class="btn btn-primary" value="Zapisz" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="modal fade" id="addStudents" tabindex="-1" role="dialog" aria-labelledby="addStudentsLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="addStudentsLabel">Dodaj uczniów</h4>
+                </div>
+                <div class="modal-body" id="students-modal">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{{ url('template') }}/js/jquery.dataTables.js" type="text/javascript"></script>
+    <script src="{{ url('template') }}/js/dataTables.bootstrap.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $('#addGroups').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var recipient = button.data('groups'); // Extract info from data-* attributes
+            var modal = $(this);
+            modal.find('#student-input').val(recipient);
+        });
+
+        $("#addStudentsForm").submit(function (event) {
+            $("#addStudents").modal('toggle');
+            $("#students-modal").append('<div class="overlay"><i class="fa fa-refresh fa-spin"></i></div>');
+            var yearval = $(this).find("#students-year-input").val();
+
+            var url = '{{ url('Classes/students', {'class': class.id, 'year': 'yearval' }) }}';
+            url = url.replace("yearval", yearval);
+
+            $("#students-modal").load(url);
+            // Stop form from submitting normally
+            event.preventDefault();
+        });
+
+        $('#students-table').dataTable({
+            "bPaginate": true,
+            "bLengthChange": true,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": true,
+            "bAutoWidth": false,
+            "aoColumnDefs": [{
+                    'bSortable': false,
+                    'aTargets': [0]
+                }]
+        });
+
+        $("#classes-category-sidebar").addClass("treeview active");
+    </script>
+{% endblock %}
