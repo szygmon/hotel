@@ -4,7 +4,7 @@ namespace Model;
 
 /**
  * @Entity()
- * @Table(schema="public", name="roles")
+ * @Table(name="roles")
  */
 class Role {
 

@@ -19,8 +19,13 @@
                         <li id="n-index"><a href="{{ url('Home/index') }}">Home</a></li>
                         <li id="n-rooms"><a href="{{ url('Home/rooms') }}">Pokoje</a></li>
                         <li id="n-offert"><a href="{{ url('Home/offert') }}">Oferta</a></li>
-                        <li id="n-offert"><a href="{{ url('Home/tp') }}">Typografia</a></li>
-                        <li id="n-signin"><a href="{{ url('Home/signin') }}">Zaloguj</a></li>
+                        <li id="n-offert"><a href="{{ url('Home/tp') }}">Typ</a></li>
+                            {% if Me.isLogged() %}
+                            <li id="n-signin"><a href="#">Konto</a></li>
+                            <li id="n-signin"><a href="{{ url('Home/logout') }}">Wyloguj</a></li>
+                            {% else %}
+                            <li id="n-signin"><a href="{{ url('Home/signin') }}">Zaloguj</a></li>
+                            {% endif %}
                         <li id="n-contact"><a href="{{ url('Home/contact') }}">Kontakt</a></li>
                     </ul>
                 </div>

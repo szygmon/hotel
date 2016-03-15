@@ -116,9 +116,9 @@
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Godzina:</label>
                         <select name="hour" id="lesson-hour-input" class="form-control">
-                            {% for h in Me.getTeacherSidebarData.hours %}
+                            {#% for h in Me.getTeacherSidebarData.hours %}
                                 <option value="{{ h.id }}">{{ h.id }}. {{ h.fromTime|date('H:i') }} - {{ h.toTime|date('H:i') }}</option>
-                            {% endfor %}
+                            {% endfor %#}
                         </select>
                     </div>
 
@@ -127,18 +127,18 @@
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Nauczyciel:</label>
                         <select name="teacher" class="form-control">
-                            {% for t in Me.getTeacherSidebarData.teachers %}
+                            {#% for t in Me.getTeacherSidebarData.teachers %}
                                 <option value="{{ t.id }}" {% if t.id == Me.getModel.id %} selected {% endif %}>{{ t.familyName }} {{ t.givenName }}</option>
-                            {% endfor %}
+                            {% endfor %#}
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Klasa:</label>
                         <select name="class" class="form-control" id="lesson-class-input">
-                            {% for c in Me.getTeacherSidebarData.classes %}
+                            {#% for c in Me.getTeacherSidebarData.classes %}
                                 <option value="{{ c.id }}">{{ c.name }}</option>
-                            {% endfor %}
+                            {% endfor %#}
                         </select>
                     </div>
 
@@ -146,23 +146,23 @@
                         <label for="recipient-name" class="control-label">Grupa:</label>
                         <select name="group" class="form-control" id="lesson-group-input">
                             <option value="0">-cała klasa-</option>
-                            {% for gr in Me.getTeacherSidebarData.groups %}
+                            {#% for gr in Me.getTeacherSidebarData.groups %}
                                 <option value="{{ gr.id }}">
                                     {% if gr.level > 0 %}
                                         {% for i in range(1, gr.level) %}&nbsp;&nbsp;&nbsp;{% endfor %}
                                     {% endif %}
                                     {{ gr.name }}
                                 </option>
-                            {% endfor %}
+                            {% endfor %#}
                         </select>
                     </div>
 
                     <div class="form-group">
                         <label for="recipient-name" class="control-label">Przedmiot:</label>
                         <select name="subject" class="form-control" id="lesson-subject-input">
-                            {% for s in Me.getTeacherSidebarData.subjects %}
+                            {#% for s in Me.getTeacherSidebarData.subjects %}
                                 <option value="{{ s.id }}">{{ s.subject }}</option>
-                            {% endfor %}
+                            {% endfor %#}
                         </select>
                     </div>
 

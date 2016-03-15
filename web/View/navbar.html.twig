@@ -1,5 +1,5 @@
 <header class="main-header">
-    <a href="{{ url('Home/index') }}" class="logo">e-<b>Dziennik</b></a>
+    <a href="{{ url('Home/index') }}" class="logo">HOTEL <b>JM</b></a>
     <nav class="navbar navbar-static-top" role="navigation">
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
             <span class="sr-only">Toggle navigation</span>
@@ -86,15 +86,15 @@
                     </ul>
                 </li>#}
                 <!-- Notifications: style can be found in dropdown.less -->
-                <li class="dropdown notifications-menu">
+                {#<li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
                         {% if Me.getNotifications.count > 0 %}
                         <span class="label label-warning" id="notifscountern">{{ Me.getNotifications.count }}</span>
-                        {% endif %}
+                        {% endif %#}
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">Liczba powiadomień: <span id="notifscounter">{{ Me.getNotifications.count }}</span></li>
+                        <li class="header">Liczba powiadomień: <span id="notifscounter">{#{ Me.getNotifications.count }}</span></li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
@@ -109,7 +109,7 @@
                         </li>
                         <li class="footer"><a href="#">Zobacz wszystkie</a></li>
                     </ul>
-                </li>
+                </li>#}
                 <!-- Tasks: style can be found in dropdown.less -->
              {#   <li class="dropdown tasks-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">

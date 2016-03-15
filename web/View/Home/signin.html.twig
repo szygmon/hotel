@@ -21,14 +21,14 @@
             <div class="col-md-6 login-right wow fadeInRight" data-wow-delay="0.4s">
                 <h3>ZAREJESTROWANY UŻYTKOWNIK</h3>
                 <p>Jeśli masz już u nas konto, zaloguj się.</p>
-                <form>
+                <form method="post">
                     <div>
-                        <span>Adres e-mail<label>*</label></span>
-                        <input type="text"> 
+                        <span>Nazwa użytkownika lub e-mail<label>*</label></span>
+                        <input type="text" name="username"> 
                     </div>
                     <div>
                         <span>Hasło<label>*</label></span>
-                        <input type="password"> 
+                        <input type="password" name="password"> 
                     </div>
                     <a class="forgot" href="#">Zapomniałeś hasła?</a>
                     <input type="submit" value="Zaloguj">

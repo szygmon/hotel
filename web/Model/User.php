@@ -24,7 +24,7 @@ class User {
 	/** @Column(type="string", unique=true) */
 	protected $email;
 
-	/** @Column(type="text", unique=true) */
+	/** @Column(type="string", unique=true) */
 	protected $username;
 
 	/** @Column(type="string") */
@@ -50,10 +50,6 @@ class User {
 
 	/** @ManyToMany(targetEntity="\Model\Role") */
 	protected $roles;
-
-	/** @OneToMany(targetEntity="\Model\Notification", mappedBy="user") */
-	protected $notifications;
-
 	
 	public function __construct() {
 		$this->roles = new Collection;
@@ -102,7 +98,6 @@ class User {
 	
 	public function addRole($role) {
 		$this->roles->add($role);
-	//	$team->addContract($this);
 		return $this;
 	}
 

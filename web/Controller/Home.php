@@ -31,12 +31,12 @@ class Home {
      * @param \Core\Router $Router
      */
     public function index($Me, $Router) {
-        (new \UserManager)->switchSchema('hotel');
-        if ($Me->auth('student'))
+        //(new \UserManager)->switchSchema('hotel');
+        if ($Me->auth('admin'))
             $Router->redirect('Student/index');
 
-        if ($Me->auth('user'))
-            return new Response([], 'Home/indexSchool');
+        //if ($Me->auth('user'))
+          //  return new Response([], 'Home/indexSchool');
 
         return array("salesPage" => !$Router->getSubdomain());
     }
@@ -52,11 +52,17 @@ class Home {
 
     /**
      * Pokoje
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
      * @Route(/signin)
      */
     public function signin() {
-
-        return array("salesPage" => true);
+        $msg = null;
+        if (isset($_POST['username']))
+            $msg = $this->homeUtil->loginForm($_POST);
+        
+        
+        return array("salesPage" => true, 'msg' => $msg);
     }
 
     /**
@@ -123,17 +129,11 @@ class Home {
      * @param \Core\Router $Router
      */
     public function admin($Me, $Router) {
-        $schools = $this->em->getRepository('Model\\School')->findAll();
-        $s = array();
-        foreach ($schools as $school) {
-            $s[$school->getAlias()] = $school->getName();
-        }
-
         $msg = null;
         if (isset($_POST['username']))
             $msg = $this->homeUtil->loginForm($_POST);
 
-        return array("salesPage" => !$Router->getSubdomain(), 'schools' => $s, 'msg' => $msg);
+        return array("salesPage" => !$Router->getSubdomain(), 'msg' => $msg);
     }
 
     /**
