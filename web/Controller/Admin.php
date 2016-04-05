@@ -105,4 +105,21 @@ class Admin {
         return array('room' => $room);
     }
 
+    /**
+     * Rules
+     * @Route(/admin/rules/{action})
+     */
+    public function rules($action = null) {
+        if ($action == 'save') {
+            $rules = $this->em->getRepository('\Model\Setting')->find('rules');
+            $rules->setValue($_POST['value']);
+            $this->em->flush();
+            
+            \Notify::success('Zapisano regulamin.');
+        }
+        
+        $rules = $this->em->getRepository('\Model\Setting')->find('rules');
+        
+        return array('rules' => $rules);
+    }
 }
