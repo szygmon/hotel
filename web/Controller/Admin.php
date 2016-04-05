@@ -57,11 +57,52 @@ class Admin {
 
     
     /**
-     * index
-     * @Route(/admin/groups)
+     * Rooms
+     * @Route(/admin/rooms/{action}/{id})
      */
-    public function groups() {
-        return array('classes' => '$classes');
+    public function rooms($action = null, $id = null) {
+        if ($action == 'del' && is_numeric($id)) {
+            $room = $this->em->getRepository('\Model\Room')->find($id);
+            $this->em->remove($room);
+            $this->em->flush();
+            \Notify::success('Pokój został usunięty z bazy danych.');
+        } else if ($action == 'add' && isset($_POST)) {
+            $room = new \Model\Room();
+            $room->setNumber($_POST['number']);
+            $room->setName($_POST['name']);
+            $room->setUsers($_POST['users']);
+            $room->setDescription($_POST['description']);
+            $this->em->persist($room);
+            $this->em->flush();
+            
+            \Notify::success('Dodano pokój do bazy danych.');
+        } else if ($action == 'updt' && isset($_POST) && is_numeric($id)) {
+            $room = $this->em->getRepository('\Model\Room')->find($id);
+            $room->setNumber($_POST['number']);
+            $room->setName($_POST['name']);
+            $room->setUsers($_POST['users']);
+            $room->setDescription($_POST['description']);
+            $this->em->flush();
+            
+            \Notify::success('Zaktualizowano pokój w bazie danych.');
+        }
+        
+        $rooms = $this->em->getRepository('\Model\Room')->findAll();
+        
+        return array('rooms' => $rooms);
+    }
+    
+    /**
+     * Add rooms
+     * @Route(/admin/editroom/{id})
+     */
+    public function editRoom($id = null) {
+        if (is_numeric($id)) {
+            $room = $this->em->getRepository('\Model\Room')->find($id);
+        } else 
+            $room = null;
+            
+        return array('room' => $room);
     }
 
 }

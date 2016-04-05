@@ -1,0 +1,82 @@
+{% extends './base.html.twig' %}
+
+{% block title %}HOTEL JM - edycja pokoju{% endblock %}
+
+{% block content %}
+
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Hotel
+            <small>Edycja pokoju</small>
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        {{ Notify.r }}
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">Dodaj pokój</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+
+                {% if room.id %}
+                    <form name="inputform" method="POST" action="{{ url('Admin/rooms', {'action': 'updt', 'id': room.id}) }}">
+                    {% else %}
+                        <form name="inputform" method="POST" action="{{ url('Admin/rooms', {'action': 'add'}) }}">
+                        {% endif %}
+
+                        <div class="row">
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Numer pokoju:</label>
+                                    <input type="text" name="number" value="{{ room.number }}" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Nazwa pokoju:</label>
+                                    <input type="text" name="name" value="{{ room.name }}" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Miejsc:</label>
+                                    <input type="text" name="users" value="{{ room.users }}" class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Opis pokoju:</label>
+                                    <textarea rows="4" cols="50" class="form-control" name="description">{{ room.description }}</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="box-footer clearfix no-border">
+                            <input type="submit" name="save" value="Zapisz" class="btn btn-default pull-right" />
+                            <!--input type="submit" name="saveAndAdd" value="Zapisz i nowy" class="btn btn-default pull-right" /-->
+                        </div>
+
+                    </form>
+            </div><!-- /.box-body -->
+
+
+
+
+        </div><!-- /.box -->
+
+
+    </section><!-- /.Left col -->
+
+</div><!-- /.row (main row) -->
+<script type="text/javascript">
+    $("#rooms-category-sidebar, #editroom-sidebar").addClass("treeview active");
+</script>
+
+{% endblock %}

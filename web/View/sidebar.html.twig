@@ -30,16 +30,16 @@
                 {# active  gdzies ... dodaj do aktywnej zakłądki :-) #}
                 <li class="treeview" id="rooms-category-sidebar">
                     <a href="#">
-                        <i class="fa fa-gear"></i> <span>Pokoje</span> <i class="fa fa-angle-left pull-right"></i>
+                        <i class="fa fa-star"></i> <span>Pokoje</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Lista pokoi</a></li>
-                        <li id="classes-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj pokój</a></li>
+                        <li id="rooms-sidebar"><a href="{{ url('Admin/rooms') }}"><i class="fa fa-circle-o"></i> Lista pokoi</a></li>
+                        <li id="editroom-sidebar"><a href="{{ url('Admin/editRoom') }}"><i class="fa fa-circle-o"></i> Dodaj pokój</a></li>
                     </ul>
                 </li>
                 <li class="treeview" id="rezerwacje-category-sidebar">
                     <a href="#">
-                        <i class="fa fa-gear"></i> <span>Rezerwacje</span> <i class="fa fa-angle-left pull-right"></i>
+                        <i class="fa fa-calendar"></i> <span>Rezerwacje</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
                         <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Lista rezerwacji</a></li>
@@ -48,7 +48,7 @@
                 </li>
                 <li class="treeview" id="users-category-sidebar">
                     <a href="#">
-                        <i class="fa fa-gear"></i> <span>Użytkownicy</span> <i class="fa fa-angle-left pull-right"></i>
+                        <i class="fa fa-users"></i> <span>Użytkownicy</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
                         <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Lista użytkowników</a></li>

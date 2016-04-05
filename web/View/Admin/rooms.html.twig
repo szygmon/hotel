@@ -1,0 +1,63 @@
+{% extends './base.html.twig' %}
+
+{% block title %}HOTEL JM - pokoje{% endblock %}
+
+{% block content %}
+
+    
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Hotel
+            <small>Lista pokoi</small>
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        {{ Notify.r }}
+        <!-- TO DO List -->
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">Pokoje</h3>
+            </div><!-- /.box-header -->
+
+            <div class="box-body">
+                <ul class="todo-list">
+                    {% for r in rooms %}
+                        <li>
+                            <!-- drag handle -->
+                            <span class="handle">
+                                <i class="fa fa-ellipsis-v"></i>
+                                <i class="fa fa-ellipsis-v"></i>
+                            </span>
+                            <!-- checkbox -->
+                            <input type="checkbox" value="" name=""/>
+                            <!-- todo text -->
+                            <span class="text">{{ r.number }}: {{ r.name }} ({{ r.users }})</span>
+                            <!-- General tools such as edit or delete-->
+                            <div class="tools">
+                                <a href="{{ url('Admin/editRoom', {'id': r.id}) }}" class="fa fa-edit"></a>
+                                <a href="{{ url('Admin/rooms', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
+                            </div>
+                        </li>
+                         {% else %}
+                        <li>
+                            <span class="text">Brak pokoi w bazie</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div><!-- /.box-body -->
+
+            <div class="box-footer clearfix no-border">
+                <a href="{{ url('Admin/editRoom') }}" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Dodaj nowy</a>
+            </div>
+        </div><!-- /.box -->
+    </section><!-- /.Left col -->
+
+    <script type="text/javascript">
+        $("#rooms-category-sidebar, #rooms-sidebar").addClass("treeview active");
+    </script>
+
+{% endblock %}
