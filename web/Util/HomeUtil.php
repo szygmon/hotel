@@ -26,7 +26,7 @@ class HomeUtil {
         $this->em->persist($user);
         $this->em->flush();
 
-        return \Notify::success('Zarejestrowano pomyślnie');
+        return \Notify::success('Zarejestrowano pomyślnie! Możesz się teraz <a href="signin">zaloogować</a>.');
     }
 
     public function updateForm($post) {
@@ -70,8 +70,9 @@ class HomeUtil {
                 Di::get('Router')->redirect('Admin/index');
             else
                 Di::get('Router')->redirect('Home/index');
-        }
-        return false;
+        } 
+            
+        return \Notify::error('Błędny login i/lub hasło.');
     }
 
 }

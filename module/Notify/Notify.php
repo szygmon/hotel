@@ -36,7 +36,7 @@ class Notify {
 	 * @return boolean
 	 */
 	public static function error($msg, $title = NULL) {
-		return self::add('error', $msg, $title);
+		return self::add('danger', $msg, $title);
 	}
 
 	/**

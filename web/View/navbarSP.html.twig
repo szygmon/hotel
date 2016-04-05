@@ -21,8 +21,12 @@
                         <li id="n-offert"><a href="{{ url('Home/offert') }}">Oferta</a></li>
                         <li id="n-offert"><a href="{{ url('Home/tp') }}">Typ</a></li>
                             {% if Me.isLogged() %}
+                            {% if Me.auth('admin') %}
+                            <li id="n-signin"><a href="{{ url('Admin/index') }}">Admin</a></li>
+                            {% else %}
                             <li id="n-signin"><a href="{{ url('Home/account') }}">Konto</a></li>
                             <li id="n-signin"><a href="{{ url('Home/logout') }}">Wyloguj</a></li>
+                            {% endif %}
                             {% else %}
                             <li id="n-signin"><a href="{{ url('Home/signin') }}">Zaloguj</a></li>
                             {% endif %}

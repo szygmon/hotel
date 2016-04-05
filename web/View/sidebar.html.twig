@@ -28,67 +28,46 @@
                 <li class="header">ADMINISTRATOR</li>
 
                 {# active  gdzies ... dodaj do aktywnej zakłądki :-) #}
-                <li class="treeview" id="school-category-sidebar">
+                <li class="treeview" id="rooms-category-sidebar">
                     <a href="#">
-                        <i class="fa fa-gear"></i> <span>Szkoła</span> <i class="fa fa-angle-left pull-right"></i>
+                        <i class="fa fa-gear"></i> <span>Pokoje</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Semestry</a></li>
-                        <li id="classes-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Klasy</a></li>
+                        <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Lista pokoi</a></li>
+                        <li id="classes-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj pokój</a></li>
                     </ul>
                 </li>
+                <li class="treeview" id="rezerwacje-category-sidebar">
+                    <a href="#">
+                        <i class="fa fa-gear"></i> <span>Rezerwacje</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Lista rezerwacji</a></li>
+                        <li id="classes-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
+                    </ul>
+                </li>
+                <li class="treeview" id="users-category-sidebar">
+                    <a href="#">
+                        <i class="fa fa-gear"></i> <span>Użytkownicy</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Lista użytkowników</a></li>
+                        <li id="classes-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj użytkownika</a></li>
+                    </ul>
+                </li>
+                <li class="treeview" id="settings-category-sidebar">
+                    <a href="#">
+                        <i class="fa fa-gear"></i> <span>Ustawienia</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Regulamin</a></li>
+                        <li id="classes-sidebar"><a href="#"><i class="fa fa-circle-o"></i> tpay.com</a></li>
+                    </ul>
+                </li>
+           
             {% endif %}
             
-            {% if Me.auth('teacher') %}
-                <li class="header">NAUCZYCIEL</li>
 
-                <li class="treeview" id="classes-category-sidebar">
-                    <a href="#">
-                        <i class="fa fa-gear"></i> <span>Klasy</span> <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        {% for class in Me.getActualClasses %}
-                            <li><a href="{{ url('Classes/classes', {'id': class.id }) }}"><i class="fa fa-circle-o"></i> {{ class.name }}</a></li>
-                            {% endfor %}
-                    </ul>
-                </li>
-
-                <li class="treeview" id="lessons-category-sidebar">
-                    <a href="#">
-                        <i class="fa fa-edit"></i> <span>Zajęcia</span> <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        {% for i, plan in Me.getTeacherPlan().plan %}
-                            <li>
-                                {% if Me.getTeacherPlan.link[i] == '#' %}
-                                    <a href="#" data-toggle="modal" data-target="#addLesson" data-lesson="{{ plan.hour.id }}|{{ plan.class.id }}|{{ plan.group.id }}|{{ plan.subject.id }}"><i class="fa fa-circle-o"></i> {{ plan.hour.id }}. {{ plan.class.name }}: {{ plan.subject.subject }}</a>
-                                {% else %} 
-                                    <a href="{{ url('Lesson/editLesson', {'id': Me.getTeacherPlan.plan[i].id }) }}"><i class="fa fa-circle-o"></i> {{ plan.hour.id }}. {{ plan.class.name }}: {{ plan.subject.subject }}</a>
-                                {% endif %}
-                            </li>
-                        {% endfor %}
-                        <li class="header"></li>
-                        <li id="mylessons-sidebar"><a href="{{ url('Lesson/myLessons') }}"><i class="fa fa-circle-o"></i> Moje zajęcia</a></li>
-                        <li><a href="{{ url('Lesson/editLesson') }}"><i class="fa fa-circle-o"></i> Nowa lekcja</a></li>
-                    </ul>
-                </li>
-            {% endif %}
-
-            {% if Me.auth('student') %}
-                <li class="header">MENU UCZNIA</li>
-
-                <li class="treeview" id="student-category-sidebar">
-                    <a href="#">
-                        <i class="fa fa-edit"></i> <span>Dziennik</span> <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li id="student-index-sidebar"><a href="{{ url('Student/index') }}"><i class="fa fa-circle-o"></i> Strona główna</a></li>
-                        <li id="student-ratings-sidebar"><a href="{{ url('Student/ratings') }}"><i class="fa fa-circle-o"></i> Oceny</a></li>
-                        <li id="student-attendance-sidebar"><a href="{{ url('Student/attendance') }}"><i class="fa fa-circle-o"></i> Frekwencja</a></li>
-                        <li id="student-plan-sidebar"><a href="{{ url('Student/plan') }}"><i class="fa fa-circle-o"></i> Plan lekcji</a></li>
-                    </ul>
-                </li>
-            {% endif %}
         </ul>
     </section>
     <!-- /.sidebar -->

@@ -12,7 +12,7 @@
                 <div class="col-md-10 dropdown-buttons">   
                     <div class="col-md-3 dropdown-button">           			
                         <div class="input-group">
-                            <input class="form-control has-dark-background" name="slider-name" id="slider-name" placeholder="Imię i nazwisko" type="text" required="" value="{% if Me.isLogged() %}{{ Me.getModel.givenName }} {{ Me.getModel.familyName }}{% endif %}">
+                            <input class="form-control has-dark-background" name="slider-name" id="slider-name" placeholder="Imię i nazwisko" type="text" required="" value="{% if Me.isLogged() and not Me.auth('admin') %}{{ Me.getModel.givenName }} {{ Me.getModel.familyName }}{% endif %}">
                         </div>
                     </div>
                     <!---strat-date-piker---->
