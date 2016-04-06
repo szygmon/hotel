@@ -29,4 +29,9 @@ class Room {
 	/** @Column(type="text") */
 	protected $description;
 
+        /** @Column(type="boolean") */
+	protected $balcony;
+        
+        /** @Column(type="boolean") */
+	protected $toilet;
 }
