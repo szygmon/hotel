@@ -266,6 +266,13 @@ input#datepicker, input#datepicker1 {
     color: #9C9C9C;
     font-size: 14px;
 }
+input.datepickerR {
+    padding: 10px 9px 10px 9px;
+    box-shadow: none;
+    outline: none;
+    color: #9C9C9C;
+    font-size: 14px;
+}
 .date {
     background: url(../images/box.png) no-repeat 94% 50% #FFF;
 }
