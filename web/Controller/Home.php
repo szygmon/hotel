@@ -136,16 +136,16 @@ class Home {
      * @Route(/getrooms/{from}/{to})
      */
     public function getRooms($from = null, $to = null) {
-        /*$r = $this->em->getRepository('\Model\Room')->find(2);
-        $re = new \Model\Reservation();
-        $re->setFromDate(new \DateTime());
-        $re->setToDate(new \DateTime('2016-04-10'));
-        $re->addRoom($r);
-        $re->setGuest('');
-        $this->em->persist($re);
-        $this->em->flush();*/
-        
-        
+        /* $r = $this->em->getRepository('\Model\Room')->find(2);
+          $re = new \Model\Reservation();
+          $re->setFromDate(new \DateTime());
+          $re->setToDate(new \DateTime('2016-04-10'));
+          $re->addRoom($r);
+          $re->setGuest('');
+          $this->em->persist($re);
+          $this->em->flush(); */
+
+
         if ($from != null && $to != null) {
             $from = new \DateTime($from);
             $to = new \DateTime($to);
@@ -158,30 +158,20 @@ class Home {
                     ->setParameters(array(1 => $from, 2 => $to))
                     ->getQuery()
                     ->getResult();
-            
-            /*foreach ($reservations as $r) {
-                $tmp = $r->getRooms();
-                foreach ($tmp as $room) {
-                    $notIn[] = $room->getId();
-                }
-            }*/
-            
-         //foreach ($reservations as $reserw) {
-             var_dump($reservations);
-         //}
-            
 
-
-            $rooms = $qb->select('ro')
-                    ->from('\Model\Room', 'ro')                   
-                    ->where($qb->expr()->notIn('ro.id', $reservations))
-                    ->getQuery()
-                    ->getResult();
-            var_dump($rooms);
+            if (isset($reservations[0])) {
+                $rooms = $this->em->createQueryBuilder()->select('ro')
+                        ->from('\Model\Room', 'ro')
+                        ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
+                        ->getQuery()
+                        ->getResult();
+            } else {
+                $rooms = $this->em->getRepository('\Model\Room')->findAll();
+            }
         } else {
             $rooms = null;
         }
-        
+
         return array("rooms" => $rooms);
     }
 
@@ -195,18 +185,16 @@ class Home {
         $Me->logout();
         $Router->redirect('Home/index');
     }
-    
-    
-    
-    /**
-	 * @Route(/removeNotif)
-	 */
-	public function removeNotif() {
-		$n = $this->em->getRepository('\Model\\Notification')->find($_POST['id']);
-		$this->em->remove($n);
-		$this->em->flush();
 
-		return array("info" => "brak");
-	}
+    /**
+     * @Route(/removeNotif)
+     */
+    public function removeNotif() {
+        $n = $this->em->getRepository('\Model\\Notification')->find($_POST['id']);
+        $this->em->remove($n);
+        $this->em->flush();
+
+        return array("info" => "brak");
+    }
 
 }
