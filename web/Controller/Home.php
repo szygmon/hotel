@@ -133,9 +133,9 @@ class Home {
 
     /**
      * Reservation
-     * @Route(/getrooms/{from}/{to})
+     * @Route(/getrooms/{from}/{to}/{param})
      */
-    public function getRooms($from = null, $to = null) {
+    public function getRooms($from = null, $to = null, $param = null) {
         /* $r = $this->em->getRepository('\Model\Room')->find(2);
           $re = new \Model\Reservation();
           $re->setFromDate(new \DateTime());
@@ -172,7 +172,7 @@ class Home {
             $rooms = null;
         }
 
-        return array("rooms" => $rooms);
+        return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
     }
 
     /**
