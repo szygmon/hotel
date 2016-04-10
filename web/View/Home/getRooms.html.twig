@@ -1,0 +1,6 @@
+{% for r in rooms %}
+
+    {% if ((toilet and r.toilet == 1) or (toilet == "false" or toilet == null)) and ((balcony and r.balcony == 1) or (balcony == null or balcony == "false"))%}
+        <p>{{ r.number }} - {{ r.name }}</p>
+    {% endif %}
+{% endfor %}

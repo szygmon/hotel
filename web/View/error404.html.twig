@@ -1,13 +1,13 @@
-{% extends './base.html.twig' %}
+{% extends './baseSP.html.twig' %}
 
 {% block title %} ERROR 404 - Not Found {{ parent() }}{% endblock %}
 
 
 {% block body %}
     <div class="container container-extra">
-		{#<META HTTP-EQUIV="refresh" CONTENT="2; URL=http://repostuj.pl">#}
-        <div class="content" style="margin-top:85px;text-align:center;">
-            <img src="{{ url('site') }}/files/images/error404.jpg">
+        {#<META HTTP-EQUIV="refresh" CONTENT="2; URL=http://repostuj.pl">#}
+        <div class="content" style="margin:150px 0;text-align:center;">
+            <div class="details-1"><h1 style="color:#fff; padding: 10px 0 20px 0;">Błąd 404 - Nie znaleziono strony</h1></div>
         </div>
     </div>
 {% endblock %}

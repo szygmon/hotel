@@ -9,57 +9,60 @@
     <div class="banner-info">
         <div class="container">
             <div class="details-1">
-                <div class="col-md-10 dropdown-buttons">   
-                    <div class="col-md-3 dropdown-button">           			
-                        <div class="input-group">
-                            <input class="form-control has-dark-background" name="slider-name" id="slider-name" placeholder="Imię i nazwisko" type="text" required="" value="{% if Me.isLogged() and not Me.auth('admin') %}{{ Me.getModel.givenName }} {{ Me.getModel.familyName }}{% endif %}">
-                        </div>
-                    </div>
-                    <!---strat-date-piker---->
-                    <link rel="stylesheet" href="{{ url('template') }}/css/jquery-ui.css" />
-                    <script src="{{ url('template') }}/js/jquery-ui.js"></script>
-                    <script>
-            $(function () {
-                $("#datepicker,#datepicker1").datepicker();
-            });
-                    </script>
-                    <!---/End-date-piker---->
+                <form action="{{ url('Home/reservation') }}" method="POST">
+                    <div class="col-md-10 dropdown-buttons">  
 
-                    <div class="col-md-3 dropdown-button">           			
-                        <div class="book_date">
-                            <form>
-                                <input class="date" id="datepicker" type="text" value="Od dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
+                        <div class="col-md-3 dropdown-button">           			
+                            <div class="input-group">
+                                <input class="form-control has-dark-background" name="name" id="slider-name" placeholder="Imię i nazwisko" type="text" required="" value="{% if Me.isLogged() and not Me.auth('admin') %}{{ Me.getModel.givenName }} {{ Me.getModel.familyName }}{% endif %}">
+                            </div>
+                        </div>
+                        <!---strat-date-piker---->
+                        <link rel="stylesheet" href="{{ url('template') }}/css/jquery-ui.css" />
+                        <script src="{{ url('template') }}/js/jquery-ui.js"></script>
+                        <script>
+        $(function () {
+            $("#datepicker,#datepicker1").datepicker().formatDate('YYYY-MM-DD');
+        });
+                        </script>
+                        <!---/End-date-piker---->
+
+                        <div class="col-md-3 dropdown-button">           			
+                            <div class="book_date">
+
+                                <input class="date" id="datepicker" name="fromDate" type="text" value="Od dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
                                             this.value = 'Od dnia';
                                         }">
-                            </form>
-                        </div>		
-                    </div>
-                    <div class="col-md-3 dropdown-button">           			
-                        <div class="book_date">
-                            <form>
-                                <input class="date1" id="datepicker1" type="text" value="Do dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
+
+                            </div>		
+                        </div>
+                        <div class="col-md-3 dropdown-button">           			
+                            <div class="book_date">
+
+                                <input class="date1" id="datepicker1" name="toDate" type="text" value="Do dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
                                             this.value = 'Do dnia';
                                         }">
-                            </form>
-                        </div>		
-                    </div>
-                    <div class="col-md-3 dropdown-button">
-                        <div class="section_1">
-                            <select id="country" onchange="change_country(this.value)" class="frm-field required">
-                                <option value="null">Pokój dwuosobowy</option>
-                                <option value="null">Pokój jednoosobowy</option>         
-                                <option value="AX">Pokój z garderobą</option>
-                                <option value="AX">Pokój gościnny</option>
-                            </select>
+
+                            </div>		
                         </div>
-                    </div>
-                    <div class="clearfix"> </div>
-                </div> 
-                <div class="col-md-2 submit_button"> 
-                    <form action="{{ url('Home/details') }}">
+                        <div class="col-md-3 dropdown-button">
+                            <div class="section_1">
+                                <select id="country" onchange="change_country(this.value)" class="frm-field required">
+                                    <option value="null">Pokój dwuosobowy</option>
+                                    <option value="null">Pokój jednoosobowy</option>         
+                                    <option value="AX">Pokój z garderobą</option>
+                                    <option value="AX">Pokój gościnny</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div> 
+                    <div class="col-md-2 submit_button"> 
+
                         <input type="submit" value="Szukaj">
-                    </form>
-                </div>
+
+                    </div>
+                </form>
                 <div class="clearfix"> </div>
             </div>
         </div>

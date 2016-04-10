@@ -43,13 +43,35 @@
                                     <input type="text" name="name" value="{{ room.name }}" class="form-control" />
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Miejsc:</label>
                                     <input type="text" name="users" value="{{ room.users }}" class="form-control" />
                                 </div>
                             </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Balkon:</label>
+                                    <select name="balcony" class="form-control">
+                                        <option value="0">NIE</option>
+                                        <option value="1" {% if room.balcony %}selected{% endif %}>TAK</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="recipient-name" class="control-label">Toaleta:</label>
+                                    <select name="toilet" class="form-control">
+                                        <option value="0">NIE</option>
+                                        <option value="1" {% if room.toilet %}selected{% endif %}>TAK</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Opis pokoju:</label>

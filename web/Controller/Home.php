@@ -32,8 +32,6 @@ class Home {
      */
     public function index($Me, $Router) {
         //(new \UserManager)->switchSchema('hotel');
-        
-
         //if ($Me->auth('user'))
         //  return new Response([], 'Home/indexSchool');
 
@@ -66,8 +64,8 @@ class Home {
     public function account($Me, $Router) {
         if (!$Me->auth('user'))
             $Router->redirect('Home/index');
-        
-        if (isset($_POST['username'])) 
+
+        if (isset($_POST['username']))
             $msg = $this->homeUtil->updateForm($_POST);
         return array("salesPage" => true);
     }
@@ -151,16 +149,57 @@ class Home {
     }
 
     /**
-     * @Route(/removeNotif)
+     * Reservation
+     * @Route(/reservation)
      */
-    public function removeNotif() {
-        $n = $this->em->getRepository('\Model\\Notification')->find($_POST['id']);
-        $this->em->remove($n);
-        $this->em->flush();
+    public function reservation() {
 
-        return array("info" => "brak");
+        return array("data" => $_POST);
     }
 
+    /**
+     * Reservation
+     * @Route(/getrooms/{from}/{to}/{param})
+     */
+    public function getRooms($from = null, $to = null, $param = null) {
+        /* $r = $this->em->getRepository('\Model\Room')->find(2);
+          $re = new \Model\Reservation();
+          $re->setFromDate(new \DateTime());
+          $re->setToDate(new \DateTime('2016-04-10'));
+          $re->addRoom($r);
+          $re->setGuest('');
+          $this->em->persist($re);
+          $this->em->flush(); */
+
+
+        if ($from != null && $to != null) {
+            $from = new \DateTime($from);
+            $to = new \DateTime($to);
+            $qb = $this->em->createQueryBuilder();
+            $reservations = $qb
+                    ->select('rr.id')
+                    ->from('\Model\Reservation', 're')
+                    ->join('re.rooms', 'rr')
+                    ->where('(re.fromDate < ?1 AND re.toDate <= ?2 AND re.toDate > ?1) OR (re.fromDate >= ?1 AND re.fromDate < ?2)')
+                    ->setParameters(array(1 => $from, 2 => $to))
+                    ->getQuery()
+                    ->getResult();
+
+            if (isset($reservations[0])) {
+                $rooms = $this->em->createQueryBuilder()->select('ro')
+                        ->from('\Model\Room', 'ro')
+                        ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
+                        ->getQuery()
+                        ->getResult();
+            } else {
+                $rooms = $this->em->getRepository('\Model\Room')->findAll();
+            }
+        } else {
+            $rooms = null;
+        }
+
+        return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
+    }
 
     /**
      * Logout
@@ -171,6 +210,17 @@ class Home {
     public function logout($Me, $Router) {
         $Me->logout();
         $Router->redirect('Home/index');
+    }
+
+    /**
+     * @Route(/removeNotif)
+     */
+    public function removeNotif() {
+        $n = $this->em->getRepository('\Model\\Notification')->find($_POST['id']);
+        $this->em->remove($n);
+        $this->em->flush();
+
+        return array("info" => "brak");
     }
 
 }
