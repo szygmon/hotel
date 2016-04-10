@@ -48,7 +48,15 @@ class Home {
 
         return array("salesPage" => true);
     }
+/**
+     * Pokoje
+     * @Route(/rooms_oldcopy)
+     */
+    public function rooms_oldcopy() {
 
+        return array("salesPage" => true);
+    }
+    
     /**
      * Pokoje
      * @param \User\Me $Me
@@ -88,6 +96,15 @@ class Home {
     }
 
     /**
+     * Pokoje
+     * @Route(/reviews)
+     */
+    public function reviews() {
+
+        return array("salesPage" => true);
+    }
+
+    /**
      * Typografia - chwilowo
      * @Route(/tp)
      */
@@ -110,6 +127,15 @@ class Home {
      * @Route(/contact)
      */
     public function contact() {
+
+        return array("salesPage" => true);
+    }
+
+    /**
+     * Pokoje
+     * @Route(/discover)
+     */
+    public function discover() {
 
         return array("salesPage" => true);
     }

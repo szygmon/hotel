@@ -16,7 +16,7 @@
 /*----*/
 #ui-datepicker-div {
 	font-family: 'Open Sans', sans-serif;
-	background: rgba(16, 37, 60, 1);
+	background: #6495ED;
 }
 .ui-datepicker-title span{
 	color: #EEE;
@@ -95,7 +95,7 @@ padding: 0 0em 0;
 .ui-datepicker .ui-datepicker-header {
 	position: relative;
 	padding: .56em 0;
-	background:#6cbc35;
+	background:#333333;
 	text-transform: uppercase;
 }
 .ui-datepicker .ui-datepicker-prev, .ui-datepicker .ui-datepicker-next { position:absolute; top: 10px; width: 1.8em; height: 1.8em; }

@@ -11,3 +11,17 @@
 .acenter{
 	text-align:center;
 }
+.icon-color-eight {
+    color: #888;
+} 
+.icon-orange {
+    color: orange;
+}
+.icon-yellow {
+    color: yellow;
+}
+.icon--yellow-exclusive {
+    color: #FFF400;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: orange;
+}
