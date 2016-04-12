@@ -162,10 +162,10 @@ class Home {
      * @Route(/getrooms/{from}/{to}/{param})
      */
     public function getRooms($from = null, $to = null, $param = null) {
-        /* $r = $this->em->getRepository('\Model\Room')->find(2);
+         /*$r = $this->em->getRepository('\Model\Room')->find(2);
           $re = new \Model\Reservation();
           $re->setFromDate(new \DateTime());
-          $re->setToDate(new \DateTime('2016-04-10'));
+          $re->setToDate(new \DateTime('2016-04-17'));
           $re->addRoom($r);
           $re->setGuest('');
           $this->em->persist($re);
@@ -180,7 +180,7 @@ class Home {
                     ->select('rr.id')
                     ->from('\Model\Reservation', 're')
                     ->join('re.rooms', 'rr')
-                    ->where('(re.fromDate < ?1 AND re.toDate <= ?2 AND re.toDate > ?1) OR (re.fromDate >= ?1 AND re.fromDate < ?2)')
+                    ->where('(re.fromDate >= ?1 AND re.fromDate < ?2) OR (re.toDate >= ?2 AND re.fromDate < ?2) OR (re.fromDate < ?1 AND re.toDate > ?1)')
                     ->setParameters(array(1 => $from, 2 => $to))
                     ->getQuery()
                     ->getResult();
