@@ -2,18 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/Model/Room.php</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/View/base.html.twig</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/Controller/Home.php</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/Util/UserUtil.php</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/View/Home/reservation.html.twig</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/View/error403.html.twig</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/Model/User.php</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/View/Home/getRooms.html.twig</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/core/Error404.php</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/web/View/error404.html.twig</file>
-            <file>file:/C:/Users/Szymon/Documents/NetBeansProjects/Hotel/app.js</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

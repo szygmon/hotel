@@ -22,7 +22,9 @@
                         <script src="{{ url('template') }}/js/jquery-ui.js"></script>
                         <script>
         $(function () {
-            $("#datepicker,#datepicker1").datepicker().formatDate('YYYY-MM-DD');
+            $("#datepicker,#datepicker1").datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
         });
                         </script>
                         <!---/End-date-piker---->
@@ -129,59 +131,59 @@
             <h3>Najbliższe wydarzenia</h3>
             <div class="col-md-4">
                 <div class="new">
-                        <div class="n-lft">
-                            <h5>10</h5>
-                            <h6>Mar</h6>
-                        </div>
-                        <div class="n-rgt">
-                            <p>Koncert znanego na całym świecie zespołu U2 w naszym hotelu, serdecznie zapraszamy.</p>
-                        </div>
-                        <div class="clearfix"></div>
+                    <div class="n-lft">
+                        <h5>10</h5>
+                        <h6>Mar</h6>
                     </div>
+                    <div class="n-rgt">
+                        <p>Koncert znanego na całym świecie zespołu U2 w naszym hotelu, serdecznie zapraszamy.</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="new">
-                        <div class="n-lft">
-                            <h5>28</h5>
-                            <h6>Kwi</h6>
-                        </div>
-                        <div class="n-rgt">
-                            <p>Koncert legend polskiego Rocka - zespołu TSA</p>
-                        </div>
-                        <div class="clearfix"></div>
-               </div>
+                    <div class="n-lft">
+                        <h5>28</h5>
+                        <h6>Kwi</h6>
+                    </div>
+                    <div class="n-rgt">
+                        <p>Koncert legend polskiego Rocka - zespołu TSA</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
             </div>
             <div class="col-md-4">
                 <div class="new">
-                        <div class="n-lft">
-                            <h5>5</h5>
-                            <h6>Kwi</h6>
-                        </div>
-                        <div class="n-rgt">
-                            <p>Duuuuża ryba! Pod tym hasłem odbędzie się coroczna otwarta konferencja Polskiego Związku Wędkarzy. Tym razem w naszym hotelu !</p>
-                        </div>
-                        <div class="clearfix"></div>
+                    <div class="n-lft">
+                        <h5>5</h5>
+                        <h6>Kwi</h6>
                     </div>
+                    <div class="n-rgt">
+                        <p>Duuuuża ryba! Pod tym hasłem odbędzie się coroczna otwarta konferencja Polskiego Związku Wędkarzy. Tym razem w naszym hotelu !</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
                 <div class="new">
-                        <div class="n-lft">
-                            <h5>3</h5>
-                            <h6>Maj</h6>
-                        </div>
-                        <div class="n-rgt">
-                            <p>Wielka majówka w hotelu JM tylko dla naszych gości. Masa atrakcji, zabaw, a wieczorem dyskoteka</p>
-                        </div>
-                        <div class="clearfix"></div>
+                    <div class="n-lft">
+                        <h5>3</h5>
+                        <h6>Maj</h6>
                     </div>
+                    <div class="n-rgt">
+                        <p>Wielka majówka w hotelu JM tylko dla naszych gości. Masa atrakcji, zabaw, a wieczorem dyskoteka</p>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
             </div>
             <div class="col-md-4">
                 <div class="n-lft">
-                        <h5>16</h5>
-                        <h5>-</h5>
-                        <h5>18</h5>
-                        <h6>Kwi</h6>
-                    </div>
+                    <h5>16</h5>
+                    <h5>-</h5>
+                    <h5>18</h5>
+                    <h6>Kwi</h6>
+                </div>
                 <div class="n-rgt">
-                        <p>Największa w Polsce konferencja dla programistów. 3 dni, ponad 20 występień, około 500 uczestników. 
-                            Ogromna ilość świeżutkiej wiedzy, popularne i dopiero przebijające się rozwiązania. Tylko u nas od 16 do 18 kwietnia. Zapraszamy <a href="#">Więcej</a></p>
-                    </div>
+                    <p>Największa w Polsce konferencja dla programistów. 3 dni, ponad 20 występień, około 500 uczestników. 
+                        Ogromna ilość świeżutkiej wiedzy, popularne i dopiero przebijające się rozwiązania. Tylko u nas od 16 do 18 kwietnia. Zapraszamy <a href="#">Więcej</a></p>
+                </div>
                 <div class="clearfix"></div>
             </div>
         </div>

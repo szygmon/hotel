@@ -4,11 +4,11 @@
             <div class="logo">
                 <h1><a style="margin-left:3%" href="{{ url('Home/index') }}">Hotel JM</a></h1>
                 <h1>
-                <i class="fa fa-star icon--yellow-exclusive"></i>
-                <i class="fa fa-star icon--yellow-exclusive"></i>
-                <i class="fa fa-star icon--yellow-exclusive"></i>
-                <i class="fa fa-star icon--yellow-exclusive"></i>
-                <i class="fa fa-star-half-full icon--yellow-exclusive"></i>
+                    <i class="fa fa-star icon--yellow-exclusive"></i>
+                    <i class="fa fa-star icon--yellow-exclusive"></i>
+                    <i class="fa fa-star icon--yellow-exclusive"></i>
+                    <i class="fa fa-star icon--yellow-exclusive"></i>
+                    <i class="fa fa-star-half-full icon--yellow-exclusive"></i>
                 </h1>
             </div>
             <nav class="navbar navbar-default" role="navigation">
@@ -21,7 +21,7 @@
                     </button>
                 </div>
                 <!--/.navbar-header-->
-                <div class="collapse navbar-collapse ">
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li id="n-index"><a href="{{ url('Home/index') }}">Strona główna</a></li>
                         <li id="n-rooms"><a href="{{ url('Home/rooms') }}">Pokoje</a></li>                      
@@ -29,12 +29,12 @@
                         <li id="n-offert"><a href="{{ url('Home/discover') }}">Odkryj JM</a></li>
                         <li id="n-offert"><a href="{{ url('Home/tp') }}">Typ</a></li>
                             {% if Me.isLogged() %}
-                            {% if Me.auth('admin') %}
-                            <li id="n-signin"><a href="{{ url('Admin/index') }}">Admin</a></li>
-                            {% else %}
-                            <li id="n-signin"><a href="{{ url('Home/account') }}">Konto</a></li>
-                            <li id="n-signin"><a href="{{ url('Home/logout') }}">Wyloguj</a></li>
-                            {% endif %}
+                                {% if Me.auth('admin') %}
+                                <li id="n-signin"><a href="{{ url('Admin/index') }}">Admin</a></li>
+                                {% else %}
+                                <li id="n-signin"><a href="{{ url('Home/account') }}">Konto</a></li>
+                                <li id="n-signin"><a href="{{ url('Home/logout') }}">Wyloguj</a></li>
+                                {% endif %}
                             {% else %}
                             <li id="n-signin"><a href="{{ url('Home/signin') }}">Zaloguj</a></li>
                             {% endif %}              
@@ -45,24 +45,9 @@
                 </div>
                 <!--/.navbar-collapse-->
             </nav>
-            <!--<div class="search-box">
-                <div id="sb-search" class="sb-search">
-                    <form>
-                        <input class="sb-search-input" placeholder="Wpisz szukane słowo..." type="search" name="search" id="search">
-                        <input class="sb-search-submit" type="submit" value="">
-                        <span class="sb-icon-search"> </span>
-                    </form>
-                </div>
-            </div>-->
+            
             <div class="clearfix"> </div>
 
-            <!-- search-scripts -->
-            <script src="{{ url('template') }}/js/classie.js"></script>
-            <script src="{{ url('template') }}/js/uisearch.js"></script>
-            <script>
-                new UISearch(document.getElementById('sb-search'));
-            </script>
-            <!-- //search-scripts -->
 
         </div>
     </div>
