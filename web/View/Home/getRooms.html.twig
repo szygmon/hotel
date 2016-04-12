@@ -1,6 +1,36 @@
-{% for r in rooms %}
+<head>
+    <link href="{{ url('template') }}/css/bootstrap.css" rel='stylesheet' type='text/css' />
+    <!-- Custom Theme files -->
+    <link href="{{ url('template') }}/css/styleH.css" rel='stylesheet' type='text/css' />	
+    <link href="{{ url('template') }}/css/style.css" rel='stylesheet' type='text/css' />	
+    <script src="{{ url('template') }}/js/jquery-1.11.1.min.js"></script>
+    <!--webfonts-->		
+    <link href="{{ url('template') }}/css/font-awesome.css" rel="stylesheet" type="text/css" >
+    <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,600' rel='stylesheet' type='text/css'>
+    <!--//webfonts-->
+    <script type="text/javascript" src="{{ url('template') }}/js/bootstrap.js"></script>
+</head>
+<body>
 
-    {% if ((toilet and r.toilet == 1) or (toilet == "false" or toilet == null)) and ((balcony and r.balcony == 1) or (balcony == null or balcony == "false"))%}
-        <p>{{ r.number }} - {{ r.name }}</p>
-    {% endif %}
-{% endfor %}
+    {% for r in rooms %}
+        {% if ((toilet and r.toilet == 1) or (toilet == "false" or toilet == null)) and ((balcony and r.balcony == 1) or (balcony == null or balcony == "false"))%}
+            <div class="single-top">
+                <div class="col-md-6 single-left">
+                    <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
+                </div>
+                <div class="col-md-6 single-right">
+                    <h3><a href="#">{{ r.name }}</a></h3>
+                        {{ r.description }}
+                    <h5>*The Booking detials for must be Ipsum is that it has.</h5>
+                    <h6>• Our stylish hotel is ideally located</h6>
+                    <div class="sinbt">
+                        <a class="hvr-shutter-in-horizontal" href="#">Rezerwuj</a>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+</body>
