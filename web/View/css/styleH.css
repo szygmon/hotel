@@ -2202,5 +2202,14 @@ div#rooms div.single-top {
 }
 
 .no-padding {
-    padding: 0;
+    padding: 0 !important;
+}
+
+.guestbook-padding {
+    padding: 20px;
+}
+
+.guestbook-bg, .guestbook-bg p {
+    background: #555;
+    color: #fff;
 }

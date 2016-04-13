@@ -13,22 +13,21 @@
 
 <div class="details">
     <div class="container">
-        <div class="single-top">
-            <div class="col-md-4">
+        <div class="single-top no-padding">
+            <div class="col-md-4 no-margin guestbook-padding">
                 <a>Księga gości</a>
                 <p>Poznaj opinie naszych gości.<br/><a href="#reviews" >118 zweryfikowanych recenzji gości</a></p>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-8 no-margin guestbook-padding guestbook-bg">
                 <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
-            </div>
-            <div class="col-md-4">
-                <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
+                <p> lalala</p>
+                {#<a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>#}
             </div>
             <div class="clearfix"> </div>
         </div>
         <div id="reviews">
             {% for r in rooms %}
-                <div class="single-top no-padding">
+                <div class="single-top">
                     <div class="col-md-6 single-left">
                         <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
                     </div>
