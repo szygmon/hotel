@@ -8,10 +8,11 @@
 
 <div class="details">
     <div class="container">
-        <div class="row">
-            <h3>Rezerwacja</h3>
-            <div class="booking-form" style="margin:0;">
-                <form method="POST">
+        <form action="{{ url('Home/reservationPay') }}#rooms-list" method="POST">
+            <div class="row">
+                <h3>Rezerwacja</h3>
+                <div class="booking-form" style="margin:0;">
+
                     <div class="col-md-6">
 
 
@@ -22,14 +23,11 @@
 
                         <h5>IMIĘ I NAZWISKO</h5>
                         <input type="text" name="name" value="{{ data.name }}">
-
                         <h5>NUMER TELEFONU</h5>
                         <input name="phone" type="text" value="">
                         {% if Me.isLogged() %}
                             <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
                         {% endif %}
-
-
                     </div>
 
                     <div class="col-md-6">		
@@ -51,26 +49,33 @@
                         <textarea value=""></textarea>
                         <input type="submit" value="Submit">
                         <input type="reset" value="Reset">#}
+                    </div>
+
+                </div>
+            </div>
+            <div class="clearfix margin-bottom">&nbsp;</div>
+            <div class="row">
+                <h3 id="rooms-list">Dostępne pokoje</h3>
+                <div class="col-md-3">
+                    <div class="well" id="filters">
+                        <p><input type="checkbox" id="balcony" class="properties" name="balcony" value="1" /> Balkon</p>
+                        <p><input type="checkbox" id="toilet" class="properties" name="toilet" value="1" /> Toaleta</p>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div id="rooms">
 
                     </div>
-                </form>
-            </div>
-        </div>
-        <div class="clearfix margin-bottom">&nbsp;</div>
-        <div class="row">
-            <h3 id="rooms-list">Dostępne pokoje</h3>
-            <div class="col-md-3">
-                <div class="well" id="filters">
-                    <p><input type="checkbox" id="balcony" class="properties" name="balcony" value="1" /> Balkon</p>
-                    <p><input type="checkbox" id="toilet" class="properties" name="toilet" value="1" /> Toaleta</p>
                 </div>
             </div>
-            <div class="col-md-9">
-                <div id="rooms">
-
+            <div class="row">
+                <div class="booking-form no-margin">
+                    <div class="col-md-12">
+                        <input type="submit" class="pull-right" value="Rezerwuj" />
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 

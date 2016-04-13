@@ -2127,3 +2127,15 @@ div.sinbt button.btn i.glyphicon {
     font-size: 14px;
     margin-top: 2px;
 }
+
+div#rooms div.single-top {
+    margin: 0 0 2em;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.booking-form h5 {
+    margin-top: 10px;
+}

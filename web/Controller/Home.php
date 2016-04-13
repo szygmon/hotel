@@ -46,7 +46,8 @@ class Home {
 
         return array("salesPage" => true);
     }
-/**
+
+    /**
      * Pokoje
      * @Route(/rooms_oldcopy)
      */
@@ -54,7 +55,7 @@ class Home {
 
         return array("salesPage" => true);
     }
-    
+
     /**
      * Pokoje
      * @param \User\Me $Me
@@ -162,7 +163,7 @@ class Home {
      * @Route(/getrooms/{from}/{to}/{param})
      */
     public function getRooms($from = null, $to = null, $param = null) {
-         /*$r = $this->em->getRepository('\Model\Room')->find(2);
+        /* $r = $this->em->getRepository('\Model\Room')->find(2);
           $re = new \Model\Reservation();
           $re->setFromDate(new \DateTime());
           $re->setToDate(new \DateTime('2016-04-17'));
@@ -189,6 +190,7 @@ class Home {
                 $rooms = $this->em->createQueryBuilder()->select('ro')
                         ->from('\Model\Room', 'ro')
                         ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
+                        ->andWhere()
                         ->getQuery()
                         ->getResult();
             } else {
@@ -199,6 +201,20 @@ class Home {
         }
 
         return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
+    }
+
+    /**
+     * Reservation Pay
+     * @Route(/reservationpay)
+     */
+    public function reservationPay() {
+        $rooms = $this->em->createQueryBuilder()->select('ro')
+                ->from('\Model\Room', 'ro')
+                ->where($this->em->createQueryBuilder()->expr()->in('ro.id', $_POST['room']))
+                ->getQuery()
+                ->getResult();
+
+        return array("data" => $_POST, 'rooms' => $rooms);
     }
 
     /**
