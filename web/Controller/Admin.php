@@ -127,5 +127,34 @@ class Admin {
 
         return array('rules' => $rules);
     }
+    
+    public function settings($name = null) {
+        if ($name != null) {
+            $settings = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => $name));
+            $return = $settings->value();
+        } else {
+            $return = $this->em->getRepository('\Model\Setting')->findAll();
+        }
+            
+        return $return;
+    }
 
+
+    /**
+     * tpay
+     * @Route(/admin/tpay/{action})
+     */
+    public function tpay($action = null) {
+        if ($action == 'save') {
+            $tid = $this->em->getRepository('\Model\Setting')->find('tid');
+            $tid->setValue($_POST['tid']);
+            $tkey = $this->em->getRepository('\Model\Setting')->find('tkey');
+            $tkey->setValue($_POST['tkey']);
+            $this->em->flush();
+
+            \Notify::success('Zapisano ustawienia tpay.com.');
+        }
+        
+        return array('tid' => $this->settings('tid'), 'tkey' => $this->settings('tkey'));
+    }
 }
