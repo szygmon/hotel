@@ -16,10 +16,12 @@ class Home {
     protected $homeUtil;
 
     /**
+     * @param \User\Me $Me
      * @param \Doctrine\ORM\EntityManager $em
      * @param \HomeUtil $HomeUtil
      */
-    function __construct($em, $HomeUtil) {
+    function __construct($Me, $em, $HomeUtil) {
+        $this->me = $Me;
         $this->em = $em;
         $this->homeUtil = $HomeUtil;
     }
@@ -95,12 +97,25 @@ class Home {
     }
 
     /**
-     * Pokoje
+     * Księga gości
      * @Route(/reviews)
      */
     public function reviews() {
-        $rooms = $this->em->getRepository('\Model\Room')->findAll();
-        return array("rooms" => $rooms);
+        if (isset($_POST['save'])) {
+            $user = $this->me->getModel();
+            //$user = $this->em->getRepository('\Model\User')->find($this->me->getModel()->getId());
+            $opinion = new \Model\Opinion();
+            $opinion->setContent($_POST['opinion']);
+            $opinion->setRating($_POST['score']);
+            $opinion->setDate(new \DateTime());
+            $opinion->setUser($user);
+            $this->em->persist($opinion);
+            $this->em->flush();
+
+            \Notify::success('Twoja opinia zostanie dodana do księgi gości zaraz po weryfikacji.');
+        }
+        $opinions = $this->em->getRepository('\Model\Opinion')->findBy(array('isActive' => '1', 'isVerified' => '1'));
+        return array("opinions" => $opinions);
     }
 
     /**
@@ -135,7 +150,6 @@ class Home {
      * @Route(/discover)
      */
     public function discover() {
-
         return array("salesPage" => true);
     }
 
@@ -157,7 +171,7 @@ class Home {
 
         return array("data" => $_POST);
     }
-    
+
     /**
      * Reservation
      * @Route(/getrooms/{from}/{to}/{param})
@@ -176,16 +190,16 @@ class Home {
                     ->getQuery()
                     ->getResult();
         }
-            if (isset($reservations[0])) {
-                $rooms = $this->em->createQueryBuilder()->select('ro')
-                        ->from('\Model\Room', 'ro')
-                        ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
-                        ->getQuery()
-                        ->getResult();
-            } else {
-                $rooms = $this->em->getRepository('\Model\Room')->findAll();
-            }
-            
+        if (isset($reservations[0])) {
+            $rooms = $this->em->createQueryBuilder()->select('ro')
+                    ->from('\Model\Room', 'ro')
+                    ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
+                    ->getQuery()
+                    ->getResult();
+        } else {
+            $rooms = $this->em->getRepository('\Model\Room')->findAll();
+        }
+
         return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
     }
 

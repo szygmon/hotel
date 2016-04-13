@@ -2,10 +2,16 @@
 
 {% block title %}Hotel JM{% endblock %}
 
+{% block head %}
+    <script src="{{ url('template') }}/js/jquery.localscroll.js" type="text/javascript"></script> 
+    <script src="{{ url('template') }}/js/jquery.scrollTo.js" type="text/javascript"></script>     
+    <script src="{{ url('template') }}/js/jquery.raty.js" type="text/javascript"></script> 
+{% endblock %}
+
 {% block body %}
     <script type="text/javascript">
         $(".banner").toggleClass("banner1");
-        $("#n-offert").addClass("active");
+        $("#n-reviews").addClass("active");
     </script> 
 </div>		
 <!-- banner -->
@@ -16,36 +22,94 @@
         <div class="single-top no-padding">
             <div class="col-md-4 no-margin guestbook-padding">
                 <a>Księga gości</a>
-                <p>Poznaj opinie naszych gości.<br/><a href="#reviews" >118 zweryfikowanych recenzji gości</a></p>
+                <p>Poznaj opinie naszych gości.<br/><div id="nav"><a href="#reviews" >118 zweryfikowanych recenzji gości</a></div></p>
             </div>
             <div class="col-md-8 no-margin guestbook-padding guestbook-bg">
-                <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
-                <p> lalala</p>
-                {#<a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>#}
+                <p><a>90%</a> Naszych gości poleca nasz hotel</p>
+                <p><a>4.5/5</a> to średnia ocen wystawiona przez naszych gości</p>
+                <div id="nav2"><p>Przekonaj się sam, przeczytaj opinie o naszym hotelu <a href="#reviews">tutaj</a></p></div>
+                {% if Me.isLogged() %}
+                    {% if not Me.auth('admin') %}
+                        <div class="sinbt">
+                            <button button type="button" data-toggle="modal" data-target="#myModal" class="label label-primary">dodaj opinię</button>
+                        </div>
+                    {% endif %}
+                {% endif %}
             </div>
             <div class="clearfix"> </div>
         </div>
-        <div id="reviews">
-            {% for r in rooms %}
-                <div class="single-top">
-                    <div class="col-md-6 single-left">
-                        <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
+        <h3 id="reviews">Księga gości</h3>
+        {% for r in opinions %}
+            <div class="single-top">
+                <div class="single-left">
+                    <h3><a href="#">{{ r.user.username }}</a></h3>
+                    <p>{{ r.content }}</p>
+                    <div class="sinbt">
+                        <p>Ocena: <span class="badge badge-primary">{{ r.rating }}</span>&nbsp;
+                            Data: <span class="badge badge-primary">{{ r.date | date("d/m/Y")}}</span></p>
                     </div>
-                    <div class="col-md-6 single-right">
-                        <h3><a href="#">{{ r.name }}</a> <span class="badge badge-primary"><i class="glyphicon glyphicon-user room-info"></i> {{ r.users }}</span> <span class="badge badge-success">{{ r.cost }} zł</span></h3>
-                        <p>{{ r.description }}</p>
+                </div>
+                <div class="clearfix"> </div>
+            </div>               
+        {% endfor %}
+    </div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Dodaj opinię</h4>
+            </div>
+            <form id="addReview-form" name="inputform" method="POST" action="{{ url('Home/reviews', {'action': 'add'}) }}">
+                <div class="modal-body">
 
-                        <div class="sinbt">
-                            <span class="button-checkbox">
-                                <button type="button" class="btn btn-xs" data-color="primary">Wybieram</button>
-                                <input type="checkbox" name="room[]" class="hidden" value="{{ r.id }}" />
-                            </span>
+                    <div class="form-group">
+                        <label class="control-label"><a>Ocena:</a></label>
+                        <div id="default" style="cursor: pointer;">
+                            <i title="bad" data-score="1"></i>&nbsp;
+                            <i title="poor" data-score="2"></i>&nbsp;
+                            <i title="regular" data-score="3"></i>&nbsp;
+                            <i title="good" data-score="4"></i>&nbsp;
+                            <i title="gorgeous" data-score="5"></i>
+                            <input type="hidden" id="score" name="score">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label"><a>Opinia :</a></label>
+                            <textarea rows="4" type="text" name="opinion" class="form-control" style="width: 100%" id="rating-desc-input" required></textarea>
                         </div>
                     </div>
-                    <div class="clearfix"> </div>
-                </div>               
-            {% endfor %}
+
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="save" value="Dodaj" class="btn btn-default pull-right" />
+                </div>
+            </form>
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    //$(function () {
+    //animowany scroll
+    $('#nav').localScroll({duration: 800});
+    $('#nav2').localScroll({duration: 800});
+    //animacja gwiazdek w modalu 
+    $('#default').raty({
+        path: "{{ url('template') }}/css/images",
+    });
+    $('#score').val($('div').raty('score'));
+    //zapis forma do bazy
+    $("#addReview-form").submit(function (event) {
+        // Stop form from submitting normally
+        event.preventDefault();
+        // Get some values from elements on the page:
+        var $form = $(this),
+                url = $form.attr("action");
+
+        var serializedData = $form.serialize();
+        // Send the data using post
+        var posting = $.post(url, serializedData);
+    });
+    //});
+</script>
 {% endblock %}
