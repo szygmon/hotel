@@ -27,6 +27,9 @@ class Room {
 
     /** @Column(type="integer") */
     protected $users;
+    
+    /** @Column(type="float") */
+    protected $cost;
 
     /** @Column(type="text") */
     protected $description;

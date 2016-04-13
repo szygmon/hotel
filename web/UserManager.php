@@ -8,13 +8,7 @@ class UserManager {
 		$this->router = Di::get('Router');
 	}
 
-	public function setup($school) {
-		try {
-			Db::exec('CREATE SCHEMA IF NOT EXISTS ' . $school->getSchema());
-		} catch (Exception $e) {
-			Db::exec('CREATE SCHEMA ' . $school->getSchema());
-		}
-		$this->switchSchema($school);
+	public function setup() {
 		return Db::install();
 	}
 

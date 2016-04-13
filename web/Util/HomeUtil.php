@@ -1,7 +1,5 @@
 <?php
 
-use \Model\School;
-
 class HomeUtil {
 
     /** @var \User\Me */

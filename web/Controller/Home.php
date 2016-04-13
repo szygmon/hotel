@@ -46,7 +46,8 @@ class Home {
 
         return array("salesPage" => true);
     }
-/**
+
+    /**
      * Pokoje
      * @Route(/rooms_oldcopy)
      */
@@ -54,7 +55,7 @@ class Home {
 
         return array("salesPage" => true);
     }
-    
+
     /**
      * Pokoje
      * @param \User\Me $Me
@@ -165,7 +166,7 @@ class Home {
         /* $r = $this->em->getRepository('\Model\Room')->find(2);
           $re = new \Model\Reservation();
           $re->setFromDate(new \DateTime());
-          $re->setToDate(new \DateTime('2016-04-10'));
+          $re->setToDate(new \DateTime('2016-04-17'));
           $re->addRoom($r);
           $re->setGuest('');
           $this->em->persist($re);
@@ -180,7 +181,7 @@ class Home {
                     ->select('rr.id')
                     ->from('\Model\Reservation', 're')
                     ->join('re.rooms', 'rr')
-                    ->where('(re.fromDate < ?1 AND re.toDate <= ?2 AND re.toDate > ?1) OR (re.fromDate >= ?1 AND re.fromDate < ?2)')
+                    ->where('(re.fromDate >= ?1 AND re.fromDate < ?2) OR (re.toDate >= ?2 AND re.fromDate < ?2) OR (re.fromDate < ?1 AND re.toDate > ?1)')
                     ->setParameters(array(1 => $from, 2 => $to))
                     ->getQuery()
                     ->getResult();
@@ -189,6 +190,7 @@ class Home {
                 $rooms = $this->em->createQueryBuilder()->select('ro')
                         ->from('\Model\Room', 'ro')
                         ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
+                        ->andWhere()
                         ->getQuery()
                         ->getResult();
             } else {
@@ -199,6 +201,20 @@ class Home {
         }
 
         return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
+    }
+
+    /**
+     * Reservation Pay
+     * @Route(/reservationpay)
+     */
+    public function reservationPay() {
+        $rooms = $this->em->createQueryBuilder()->select('ro')
+                ->from('\Model\Room', 'ro')
+                ->where($this->em->createQueryBuilder()->expr()->in('ro.id', $_POST['room']))
+                ->getQuery()
+                ->getResult();
+
+        return array("data" => $_POST, 'rooms' => $rooms);
     }
 
     /**

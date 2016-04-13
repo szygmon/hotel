@@ -35,15 +35,15 @@ class Reservation {
     protected $guest;
 
     /** @ManyToMany(targetEntity="\Model\Room", inversedBy="reservations")) 
-    * @JoinTable(name="reservations_rooms")
-    */
+     * @JoinTable(name="reservations_rooms")
+     */
     protected $rooms;
-    
+
     public function addRoom($room) {
         $this->rooms->add($room);
         return $this;
     }
-    
+
     public function __construct() {
         $this->rooms = new Collection();
     }

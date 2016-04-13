@@ -1,0 +1,72 @@
+{% extends './baseSP.html.twig' %}
+
+{% block title %}Hotel JM - rezerwacja{% endblock %}
+
+{% block body %}
+</div>		
+<!-- banner -->
+
+<div class="details">
+    <div class="container">
+        <form action="{{ url('Home/reservationPay') }}#rooms-list" method="POST">
+            <div class="row">
+                <h3>Rezerwacja - płatność</h3>
+                <div class="booking-form" style="margin:0;">
+
+                    <div class="col-md-6">
+
+                        <h5>IMIĘ I NAZWISKO</h5>
+                        <p>{{ data.name }}</p>
+                        <h5>NUMER TELEFONU</h5>
+                        <p>{{ data.phone }}</p>
+                        {% if Me.isLogged() %}
+                            <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-6">		
+
+                        <h5>OD DNIA</h5>
+                        <p>{{ data.fromDate }}</p>
+                        <h5>DO DNIA</h5>
+                        <p>{{ data.toDate }}</p>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="clearfix margin-bottom">&nbsp;</div>
+            <div class="row">
+                <h3 id="rooms-list">Wybrane pokoje</h3>
+                {% for r in rooms %}
+                    <div class="single-top">
+                        <div class="col-md-6 single-left">
+                            <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
+                        </div>
+                        <div class="col-md-6 single-right">
+                            <h3><a href="#">{{ r.name }}</a> <span class="badge badge-primary"><i class="glyphicon glyphicon-user room-info"></i> {{ r.users }}</span> <span class="badge badge-success">{{ r.cost }} zł</span></h3>
+                            <p>{{ r.description }}</p>
+
+                        </div>
+                        <div class="clearfix"> </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="row">
+                <div class="booking-form no-margin">
+                    <div class="col-md-12">
+                        <input type="submit" class="pull-right" value="Rezerwuj" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $("#n-rooms").addClass("active");
+    $(".banner").toggleClass("banner1");
+
+</script>
+{% endblock %}

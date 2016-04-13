@@ -1,6 +1,106 @@
-{% for r in rooms %}
+<head>
+    <link href="{{ url('template') }}/css/bootstrap.css" rel='stylesheet' type='text/css' />
+    <!-- Custom Theme files -->
+    <link href="{{ url('template') }}/css/styleH.css" rel='stylesheet' type='text/css' />	
+    <link href="{{ url('template') }}/css/style.css" rel='stylesheet' type='text/css' />	
+    <script src="{{ url('template') }}/js/jquery-1.11.1.min.js"></script>
+    <!--webfonts-->		
+    <link href="{{ url('template') }}/css/font-awesome.css" rel="stylesheet" type="text/css" >
+    <link href='//fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300italic,300,600' rel='stylesheet' type='text/css'>
+    <!--//webfonts-->
+    <script type="text/javascript" src="{{ url('template') }}/js/bootstrap.js"></script>
+</head>
+<body>
 
-    {% if ((toilet and r.toilet == 1) or (toilet == "false" or toilet == null)) and ((balcony and r.balcony == 1) or (balcony == null or balcony == "false"))%}
-        <p>{{ r.number }} - {{ r.name }}</p>
-    {% endif %}
-{% endfor %}
+    {% for r in rooms %}
+        {% if ((toilet and r.toilet == 1) or (toilet == "false" or toilet == null)) and ((balcony and r.balcony == 1) or (balcony == null or balcony == "false"))%}
+            <div class="single-top">
+                <div class="col-md-6 single-left">
+                    <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
+                </div>
+                <div class="col-md-6 single-right">
+                    <h3><a href="#">{{ r.name }}</a> <span class="badge badge-primary"><i class="glyphicon glyphicon-user room-info"></i> {{ r.users }}</span> <span class="badge badge-success">{{ r.cost }} zł</span></h3>
+                    <p>{{ r.description }}</p>
+
+                    <div class="sinbt">
+                        <span class="button-checkbox">
+                            <button type="button" class="btn btn-xs" data-color="primary">Wybieram</button>
+                            <input type="checkbox" name="room[]" class="hidden" value="{{ r.id }}" />
+                        </span>
+                    </div>
+                </div>
+                <div class="clearfix"> </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+    <script type="text/javascript">
+        $(function () {
+            $('.button-checkbox').each(function () {
+
+                // Settings
+                var $widget = $(this),
+                        $button = $widget.find('button'),
+                        $checkbox = $widget.find('input:checkbox'),
+                        color = $button.data('color'),
+                        settings = {
+                            on: {
+                                icon: 'glyphicon glyphicon-check',
+                                color: '#fff'
+                            },
+                            off: {
+                                icon: 'glyphicon glyphicon-unchecked',
+                                color: '#555'
+                            }
+                        };
+
+                // Event Handlers
+                $button.on('click', function () {
+                    $checkbox.prop('checked', !$checkbox.is(':checked'));
+                    $checkbox.triggerHandler('change');
+                    updateDisplay();
+                });
+                $checkbox.on('change', function () {
+                    updateDisplay();
+                });
+
+                // Actions
+                function updateDisplay() {
+                    var isChecked = $checkbox.is(':checked');
+
+                    // Set the button's state
+                    $button.data('state', (isChecked) ? "on" : "off");
+
+                    // Set the button's icon
+                    $button.find('.state-icon')
+                            .removeClass()
+                            .addClass('state-icon ' + settings[$button.data('state')].icon)
+                            .css('color', settings[$button.data('state')].color);
+
+                    // Update the button's color
+                    if (isChecked) {
+                        $button
+                                .removeClass('btn-default')
+                                .addClass('btn-' + color + ' active');
+                    } else {
+                        $button
+                                .removeClass('btn-' + color + ' active')
+                                .addClass('btn-default');
+                    }
+                }
+
+                // Initialization
+                function init() {
+
+                    updateDisplay();
+
+                    // Inject the icon if applicable
+                    if ($button.find('.state-icon').length == 0) {
+                        $button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '" style="color:#555"></i> ');
+                    }
+                }
+                init();
+            });
+        });
+    </script>
+</body>
