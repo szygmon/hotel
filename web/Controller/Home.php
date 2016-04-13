@@ -99,8 +99,8 @@ class Home {
      * @Route(/reviews)
      */
     public function reviews() {
-
-        return array("salesPage" => true);
+        $rooms = $this->em->getRepository('\Model\Room')->findAll();
+        return array("rooms" => $rooms);
     }
 
     /**
@@ -157,7 +157,7 @@ class Home {
 
         return array("data" => $_POST);
     }
-
+    
     /**
      * Reservation
      * @Route(/getrooms/{from}/{to}/{param})
@@ -185,7 +185,7 @@ class Home {
                     ->setParameters(array(1 => $from, 2 => $to))
                     ->getQuery()
                     ->getResult();
-
+        }
             if (isset($reservations[0])) {
                 $rooms = $this->em->createQueryBuilder()->select('ro')
                         ->from('\Model\Room', 'ro')
@@ -196,10 +196,7 @@ class Home {
             } else {
                 $rooms = $this->em->getRepository('\Model\Room')->findAll();
             }
-        } else {
-            $rooms = null;
-        }
-
+            
         return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
     }
 

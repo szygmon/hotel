@@ -486,6 +486,57 @@ span {
     -webkit-transform: scaleX(0);
     transform: scaleX(0);
 }
+
+/* Shutter In Horizontal */
+.hvr-shutter-in-horizontal-inverted-colors {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -moz-osx-font-smoothing: grayscale;
+    position: relative;
+    background:#FF353D;
+    -webkit-transition-property: color;
+    transition-property: color;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    text-decoration: none;
+    padding: 0.4em 1em;
+    font-size: 0.875em;
+    color: #fff;
+}
+.hvr-shutter-in-horizontal-inverted-colors:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #6495ED;
+    -webkit-transform: scaleX(1);
+    transform: scaleX(1);
+    -webkit-transform-origin: 50%;
+    transform-origin: 50%;
+    -webkit-transition-property: transform;
+    transition-property: transform;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+    -webkit-transition-timing-function: ease-out;
+    transition-timing-function: ease-out;
+}
+.hvr-shutter-in-horizontal-inverted-colors:hover, .hvr-shutter-in-horizontal-inverted-colors:focus, .hvr-shutter-in-horizontal-inverted-colors:active {
+    color: white;
+    text-decoration: none;
+}
+.hvr-shutter-in-horizontal-inverted-colors:hover:before, .hvr-shutter-in-horizontal-inverted-colors:focus:before, .hvr-shutter-in-horizontal-inverted-colors:active:before {
+    -webkit-transform: scaleX(0);
+    transform: scaleX(0);
+}
+
 .footer {
     background:#6495ED;
     padding: 3em 0;
@@ -1633,6 +1684,16 @@ h2.typoh2{
         width: 59%;
     }
 }
+
+@media(min-width:768px) and (max-width:991px){
+    .img-responsive{
+        display: block;
+        max-width: 100%;
+        height: auto;
+        width: 100%;
+    }
+}
+
 /*--responsive--*/
 @media(max-width:767px){
     .navbar-toggle {
@@ -2138,4 +2199,8 @@ div#rooms div.single-top {
 
 .booking-form h5 {
     margin-top: 10px;
+}
+
+.no-padding {
+    padding: 0;
 }
