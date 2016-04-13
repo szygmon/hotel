@@ -31,7 +31,7 @@ class Reservation {
      */
     protected $user;
 
-    /** @Column(type="string") */
+    /** @Column(type="string", nullable=true) */
     protected $guest;
 
     /** @ManyToMany(targetEntity="\Model\Room", inversedBy="reservations")) 

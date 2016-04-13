@@ -163,16 +163,6 @@ class Home {
      * @Route(/getrooms/{from}/{to}/{param})
      */
     public function getRooms($from = null, $to = null, $param = null) {
-        /* $r = $this->em->getRepository('\Model\Room')->find(2);
-          $re = new \Model\Reservation();
-          $re->setFromDate(new \DateTime());
-          $re->setToDate(new \DateTime('2016-04-17'));
-          $re->addRoom($r);
-          $re->setGuest('');
-          $this->em->persist($re);
-          $this->em->flush(); */
-
-
         if ($from != null && $to != null) {
             $from = new \DateTime($from);
             $to = new \DateTime($to);
@@ -190,7 +180,6 @@ class Home {
                 $rooms = $this->em->createQueryBuilder()->select('ro')
                         ->from('\Model\Room', 'ro')
                         ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
-                        ->andWhere()
                         ->getQuery()
                         ->getResult();
             } else {
@@ -205,13 +194,95 @@ class Home {
      * @Route(/reservationpay)
      */
     public function reservationPay() {
+
         $rooms = $this->em->createQueryBuilder()->select('ro')
                 ->from('\Model\Room', 'ro')
                 ->where($this->em->createQueryBuilder()->expr()->in('ro.id', $_POST['room']))
                 ->getQuery()
                 ->getResult();
 
-        return array("data" => $_POST, 'rooms' => $rooms);
+        $allCost = 0;
+        // dodanie rezerwacji do BD
+        $re = new \Model\Reservation();
+        $re->setFromDate(new \DateTime($_POST['fromDate']));
+        $re->setToDate(new \DateTime($_POST['toDate']));
+        foreach ($rooms as $room) {
+            $re->addRoom($room);
+            $allCost += $room->getCost();
+        }
+        if (isset($_POST['userId']) && is_numeric($_POST['userId'])) {
+            $user = $this->em->getRepository('\Model\\User')->find($_POST['userId']);
+            $re->setUser($user);
+        } else {
+            $re->setGuest($_POST['name']);
+        }
+        $this->em->persist($re);
+        $this->em->flush();
+
+
+        // tpay.com
+        $tid = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tid'))->value();
+        $crc = $re->getId();
+        $tkey = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tkey'))->value();
+        $md5 = md5($tid . $allCost . $crc . $tkey);
+
+
+        return array("data" => $_POST, 'rooms' => $rooms, 'rid' => $re->getId(), 'cost' => $allCost, 'md5' => $md5, 'crc' => $crc);
+    }
+
+    /**
+     * Reservation Pay
+     * @Route(/reservationpayconfirm/{id})
+     */
+    public function reservationPayConfirm($id = null) {
+        \Notify::success('Płatość zaksięgowana!');
+
+
+
+        return array();
+    }
+
+    /**
+     * Reservation Pay
+     * @Route(/reservationpayerr/{id})
+     */
+    public function reservationPayErr($id = null) {
+        \Notify::error('Rezerwacja anulowana!');
+
+        return array();
+    }
+
+    /**
+     * Potwierdzenie dla tPay.com
+     * @Route(/tpayconfirm)
+     */
+    public function tPayConfirm() {
+        // sprawdzenie adresu IP oraz występowania zmiennych POST
+        if ($_SERVER['REMOTE_ADDR'] == '195.149.229.109' && !empty($_POST)) {
+            //$id_sprzedawcy = $_POST['id'];
+            $status_transakcji = $_POST['tr_status'];
+            //$id_transakcji = $_POST['tr_id'];
+            //$kwota_transakcji = $_POST['tr_amount'];
+            //$kwota_zaplacona = $_POST['tr_paid'];
+            $blad = $_POST['tr_error'];
+            //$data_transakcji = $_POST['tr_date'];
+            //$opis_transakcji = $_POST['tr_desc'];
+            $id = $_POST['tr_crc'];
+            //$email_klienta = $_POST['tr_email'];
+            //$suma_kontrolna = $_POST['md5sum'];
+            // sprawdzenie stanu transakcji
+            if ($status_transakcji == 'TRUE' && $blad == 'none') {
+                $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
+                $reservation->setPaid(true);
+                $this->em->flush();
+            } else {
+                $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
+                $this->em->remove($reservation);
+                $this->em->flush();
+            }
+        }
+        //echo 'TRUE'; // odpowiedź dla serwera o odebraniu danych
+        return array();
     }
 
     /**
