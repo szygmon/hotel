@@ -1,0 +1,52 @@
+{% extends './base.html.twig' %}
+
+{% block title %}HOTEL JM - ustawienia tpay.com{% endblock %}
+
+{% block content %}
+
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Hotel
+            <small>tpay.com</small>
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        {{ Notify.r }}
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">Ustawienia tpay.com</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <form name="inputform" method="POST" action="{{ url('Admin/tpay', {'action': 'save'}) }}">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">ID:</label>
+                            <input type="text" name="tid" value="{{ tid }}" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">Kod bezpieczeństwa:</label>
+                            <input type="text" name="tkey" value="{{ tkey }}" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="box-footer clearfix no-border">
+                        <input type="submit" name="save" value="Zapisz" class="btn btn-default pull-right" />
+                    </div>
+
+                </form>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </section><!-- /.Left col -->
+
+</div><!-- /.row (main row) -->
+<script type="text/javascript">
+    $("#settings-category-sidebar, #tpay-sidebar").addClass("treeview active");
+</script>
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends './baseSP.html.twig' %}
+
+{% block title %}Hotel JM - rezerwacja{% endblock %}
+{% block head %}<meta http-equiv="refresh" content="2;url={{ url('Home/index') }}">{% endblock %}
+
+{% block body %}
+</div>		
+<!-- banner -->
+
+<div class="details">
+    <div class="container">
+        <div class="row">
+            <h3>Rezerwacja - płatność</h3>
+            {{ Notify.r }}
+            <div class="booking-form">
+                <h4 class="center-block">Za chwilę nastąpi przekieowanie na <a href="{{ url('Home/index') }}">stronę główną.</a></h4>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $("#n-rooms").addClass("active");
+    $(".banner").toggleClass("banner1");
+
+</script>
+{% endblock %}

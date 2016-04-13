@@ -8,58 +8,74 @@
 
 <div class="details">
     <div class="container">
-        <form action="{{ url('Home/reservationPay') }}#rooms-list" method="POST">
-            <div class="row">
-                <h3>Rezerwacja - płatność</h3>
-                <div class="booking-form" style="margin:0;">
 
-                    <div class="col-md-6">
+        <div class="row">
+            <h3>Rezerwacja - płatność</h3>
+            <div class="booking-form no-margin">
 
-                        <h5>IMIĘ I NAZWISKO</h5>
-                        <p>{{ data.name }}</p>
-                        <h5>NUMER TELEFONU</h5>
-                        <p>{{ data.phone }}</p>
-                        {% if Me.isLogged() %}
-                            <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
-                        {% endif %}
-                    </div>
+                <div class="col-md-6">
 
-                    <div class="col-md-6">		
+                    <h5>IMIĘ I NAZWISKO</h5>
+                    <p>{{ data.name }}</p>
+                    <h5>NUMER TELEFONU</h5>
+                    <p>{{ data.phone }}</p>
+                    {% if Me.isLogged() %}
+                        <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
+                    {% endif %}
+                </div>
 
-                        <h5>OD DNIA</h5>
-                        <p>{{ data.fromDate }}</p>
-                        <h5>DO DNIA</h5>
-                        <p>{{ data.toDate }}</p>
+                <div class="col-md-6">		
 
-                    </div>
+                    <h5>OD DNIA</h5>
+                    <p>{{ data.fromDate }}</p>
+                    <h5>DO DNIA</h5>
+                    <p>{{ data.toDate }}</p>
 
                 </div>
-            </div>
-            <div class="clearfix margin-bottom">&nbsp;</div>
-            <div class="row">
-                <h3 id="rooms-list">Wybrane pokoje</h3>
-                {% for r in rooms %}
-                    <div class="single-top">
-                        <div class="col-md-6 single-left">
-                            <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
-                        </div>
-                        <div class="col-md-6 single-right">
-                            <h3><a href="#">{{ r.name }}</a> <span class="badge badge-primary"><i class="glyphicon glyphicon-user room-info"></i> {{ r.users }}</span> <span class="badge badge-success">{{ r.cost }} zł</span></h3>
-                            <p>{{ r.description }}</p>
 
-                        </div>
-                        <div class="clearfix"> </div>
-                    </div>
-                {% endfor %}
             </div>
-            <div class="row">
-                <div class="booking-form no-margin">
-                    <div class="col-md-12">
-                        <input type="submit" class="pull-right" value="Rezerwuj" />
+        </div>
+        <div class="clearfix margin-bottom">&nbsp;</div>
+        <div class="row">
+            <h3 id="rooms-list">Wybrane pokoje</h3>
+            {% for r in rooms %}
+                <div class="single-top">
+                    <div class="col-md-6 single-left">
+                        <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
                     </div>
+                    <div class="col-md-6 single-right">
+                        <h3><a href="#">{{ r.name }}</a> <span class="badge badge-primary"><i class="glyphicon glyphicon-user room-info"></i> {{ r.users }}</span> <span class="badge badge-success">{{ r.cost }} zł</span></h3>
+                        <p>{{ r.description }}</p>
+
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+            {% endfor %}
+        </div>
+
+
+        <div class="row">
+            <div class="booking-form no-margin">
+                <div class="col-md-12">
+                    <h3>Razem do zapłaty: {{ cost }} zł</h3>                    
+                    <form action="https://secure.tpay.com" method="post"> 
+                        <input type="hidden" name="id" value="22856" />
+                        <input type="hidden" name="kwota" value="{{ cost }}" />
+                        <input type="hidden" name="opis" value="Rezerwacja pokoi hotelowych" />
+                        <input type="hidden" name="crc" value="{{ crc }}" />
+                        <input type="hidden" name="wyn_url" value="{{ url('Home/tPayConfirm') }}" />
+                        <input type="hidden" name="pow_url" value="{{ url('Home/reservationPayConfirm') }}/{{ rid }}" />
+                        <input type="hidden" name="pow_url_blad" value="{{ url('Home/reservationPayErr') }}/{{ rid }}" />
+                        <input type="hidden" name="nazwisko" value="{{ data.name }}" />
+                        <input type="hidden" name="telefon" value="{{ data.phone }}" />
+                        <input type="hidden" name="jezyk" value="pl" />
+                        <input type="hidden" name="md5sum" value="{{ md5 }}">
+                        <input type="image" class="center-block" src="https://tpay.com/img/banners/tpaycom_zaplac-z-200x135.png" alt="Submit">
+                    </form>
                 </div>
             </div>
-        </form>
+        </div>
+
     </div>
 </div>
 
