@@ -24,6 +24,9 @@ class Reservation {
 
     /** @Column(type="date") */
     protected $toDate;
+    
+    /** @Column(type="datetime") */
+    protected $reservationDate;
 
     /**
      * @ManyToOne(targetEntity="User")

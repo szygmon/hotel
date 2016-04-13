@@ -206,6 +206,7 @@ class Home {
         $re = new \Model\Reservation();
         $re->setFromDate(new \DateTime($_POST['fromDate']));
         $re->setToDate(new \DateTime($_POST['toDate']));
+        $re->setReservationDate(new \DateTime());
         foreach ($rooms as $room) {
             $re->addRoom($room);
             $allCost += $room->getCost();
