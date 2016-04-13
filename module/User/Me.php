@@ -153,41 +153,6 @@ class Me {
         return array('plan' => $list, 'link' => $link);
     }
 
-    public function getActualSemester() {
-        $em = \Di::get('em');
-        $sem = $em->createQueryBuilder()
-                ->select('s')
-                ->from('\Model\\Semester', 's')
-                ->where('s.fromDate <= ?1 AND s.toDate >= ?1')
-                ->setMaxResults(1)
-                ->setParameters(array('1' => new \DateTime()))
-                ->getQuery()
-                ->getResult();
-        if ($sem[0])
-            return $sem[0];
-        else
-            return null;
-    }
-
-    public function getActualYear() {
-        if ($this->getActualSemester())
-            return $this->getActualSemester()->getYear();
-        else
-            return null;
-    }
-
-    public function getTeacherSidebarData() {
-        $em = \Di::get('em');
-        $subjects = $em->getRepository('\Model\\Subject')->findBy(array(), array('subject' => 'ASC'));
-        $teachers = $em->getRepository('\Model\Teacher')->findBy(array(), array('familyName' => 'ASC'));
-        $classes = $em->getRepository('\Model\Clas')->findBy(array('year' => $this->getActualYear()), array('name' => 'ASC'));
-        $hours = $em->getRepository('\Model\Hour')->findAll();
-        $groups = null;
-        $this->groupList($groups);
-
-        return array('subjects' => $subjects, 'teachers' => $teachers, 'classes' => $classes, 'hours' => $hours, 'groups' => $groups);
-    }
-
     public function getNotifications() {
         $em = \Di::get('em');
 
@@ -196,35 +161,4 @@ class Me {
 
         return array('notifs' => $notifications, 'count' => $count);
     }
-
-    public function isTeacher() {
-        if ($this->model instanceof \Model\Teacher)
-            return true;
-        else
-            return false;
-    }
-
-    public function isStudent() {
-        if ($this->model instanceof \Model\Student)
-            return true;
-        else
-            return false;
-    }
-
-    // lista grup //    
-    public function groupList(&$array, $criteria = array('mainGroup' => NULL), $offset = 0, $lvl = 0) {
-        $em = \Di::get('em');
-        while (($groups = $em->getRepository('Model\\Group')->findBy($criteria, array('name' => 'ASC'), 1, $offset)) != NULL) {
-            if (is_array($groups)) {
-                foreach ($groups as $group) {
-                    $array[] = array('id' => $group->getId(), 'name' => $group->getName(), 'level' => $lvl);
-                    if ($group->getSubGroups() != NULL) {
-                        $this->groupList($array, array('mainGroup' => $group->getId()), 0, $lvl + 1);
-                    }
-                }
-            }
-            $offset++;
-        }
-    }
-
 }
