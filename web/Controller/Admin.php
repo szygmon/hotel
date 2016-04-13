@@ -71,6 +71,7 @@ class Admin {
             $room->setName($_POST['name']);
             $room->setUsers($_POST['users']);
             $room->setDescription($_POST['description']);
+            $room->setCost($_POST['cost']);
             $room->setBalcony($_POST['balcony']);
             $room->setToilet($_POST['toilet']);
             $this->em->persist($room);
@@ -83,6 +84,7 @@ class Admin {
             $room->setName($_POST['name']);
             $room->setUsers($_POST['users']);
             $room->setDescription($_POST['description']);
+            $room->setCost($_POST['cost']);
             $room->setBalcony($_POST['balcony']);
             $room->setToilet($_POST['toilet']);
             $this->em->flush();
