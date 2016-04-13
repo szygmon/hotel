@@ -13,20 +13,24 @@
             </div>
         </div>
         <!-- search form -->
-        <form action="#" method="get" class="sidebar-form">
+        {#<form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Szukaj..."/>
                 <span class="input-group-btn">
                     <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
                 </span>
             </div>
-        </form>
+        </form>#}
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             {% if Me.auth('admin') %}
                 <li class="header">ADMINISTRATOR</li>
-
+                <li class="treeview" id="dashboard-category-sidebar">
+                    <a href="{{ url('Admin/index') }}">
+                        <i class="fa fa-dashboard"></i> <span>Kokpit</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                </li>
                 {# active  gdzies ... dodaj do aktywnej zakłądki :-) #}
                 <li class="treeview" id="rooms-category-sidebar">
                     <a href="#">
@@ -37,13 +41,13 @@
                         <li id="editroom-sidebar"><a href="{{ url('Admin/editRoom') }}"><i class="fa fa-circle-o"></i> Dodaj pokój</a></li>
                     </ul>
                 </li>
-                <li class="treeview" id="rezerwacje-category-sidebar">
+                <li class="treeview" id="reservations-category-sidebar">
                     <a href="#">
                         <i class="fa fa-calendar"></i> <span>Rezerwacje</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Lista rezerwacji</a></li>
-                        <li id="classes-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
+                        <li id="reservations-sidebar"><a href="{{ url('Admin/reservations') }}"><i class="fa fa-circle-o"></i> Lista rezerwacji</a></li>
+                        <li id="editreservations-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
                     </ul>
                 </li>
                 <li class="treeview" id="users-category-sidebar">
@@ -64,9 +68,9 @@
                         <li id="tpay-sidebar"><a href="{{ url('Admin/tpay') }}"><i class="fa fa-circle-o"></i> tpay.com</a></li>
                     </ul>
                 </li>
-           
+
             {% endif %}
-            
+
 
         </ul>
     </section>

@@ -52,7 +52,11 @@ class Admin {
      * @Route(/admin/index)
      */
     public function index() {
-        return array('classes' => '$classes');
+        $users = $this->em->createQueryBuilder()->select('COUNT(u.id)')->from('\Model\User', 'u')->getQuery()->getSingleScalarResult();
+        $reservationsConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 1')->getQuery()->getSingleScalarResult();
+        $reservationsNotConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 0')->getQuery()->getSingleScalarResult();
+        $rooms = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Room', 'r')->getQuery()->getSingleScalarResult();
+        return array('users' => $users, 'reservationsConfirm' => $reservationsConfirm, 'reservationsNotConfirm' => $reservationsNotConfirm, 'rooms' => $rooms);
     }
 
     /**
@@ -127,7 +131,7 @@ class Admin {
 
         return array('rules' => $rules);
     }
-    
+
     public function settings($name = null) {
         if ($name != null) {
             $settings = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => $name));
@@ -135,10 +139,9 @@ class Admin {
         } else {
             $return = $this->em->getRepository('\Model\Setting')->findAll();
         }
-            
+
         return $return;
     }
-
 
     /**
      * tpay
@@ -154,7 +157,33 @@ class Admin {
 
             \Notify::success('Zapisano ustawienia tpay.com.');
         }
-        
+
         return array('tid' => $this->settings('tid'), 'tkey' => $this->settings('tkey'));
     }
+
+    /**
+     * Rezerwacje
+     * @Route(/admin/reservations/{action}/{id})
+     */
+    public function reservations($action = null, $id = null) {
+        if ($action == 'del' && is_numeric($id)) {
+            $res = $this->em->getRepository('\Model\Reservation')->find($id);
+            $this->em->remove($res);
+            $this->em->flush();
+            \Notify::success('Usunięto rezerwację');
+        }
+
+        $reservations = $this->em->createQueryBuilder()
+                ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')
+                ->from('\Model\Reservation', 'r')
+                ->join('r.user', 'u')
+                ->where('r.fromDate >= ?1')
+                ->setParameter(1, new \DateTime())
+                ->orderBy('r.fromDate')
+                ->getQuery()
+                ->getResult();
+
+        return array('reservations' => $reservations);
+    }
+
 }
