@@ -63,7 +63,7 @@
     <script src="{{ url('template') }}/js/jquery.dataTables.js" type="text/javascript"></script>
     <script src="{{ url('template') }}/js/dataTables.bootstrap.js" type="text/javascript"></script>
     <script type="text/javascript">
-        $("#school-category-sidebar, #students-sidebar").addClass("treeview active");
+        $("#users-category-sidebar, #users-sidebar").addClass("treeview active");
 
         $('#users-table').dataTable({
             "bPaginate": true,
@@ -77,8 +77,6 @@
                     'aTargets': [0]
                 }]
         });
-
-        $("#classes-category-sidebar").addClass("treeview active");
 
     </script>
 {% endblock %}
