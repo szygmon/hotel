@@ -41,13 +41,18 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Klient:</label>
-                                    <input type="text" name="users" value="{{ room.user.id }}" class="form-control" />
+                                    <select name="user" class="form-control">
+                                        <option value="0">-brak-</option>
+                                        {% for u in users %}
+                                            <option value="{{ u.id }}" {% if reservation.user.id == u.id %}selected{% endif %}>{{ u.givenName }} {{ u.familyName }}</option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Status:</label>
-                                    <input type="text" name="name" value="{{ room.name }}" class="form-control" />
+                                    <input type="text" name="name" value="{{ reservation.paid }}" class="form-control" />
                                 </div>
                             </div>
                         </div>
@@ -55,17 +60,17 @@
                             <div class="col-md-6 dropdown-button">           			
                                 <div class="book_date form-group">
                                     <label for="recipient-name" class="control-label">Data początkowa:</label>
-                                    <input class="date form-control" id="datepicker" name="fromDate" type="text" placeholder="Od dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = 'Od dnia';
-                                            }" required>
+                                    <input class="date form-control" id="datepicker" name="fromDate" type="text" value="{{ reservation.fromDate|date('Y-m-d') }}" placeholder="Od dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
+                                                        this.value = 'Od dnia';
+                                                    }" required>
                                 </div>		
                             </div>
                             <div class="col-md-6 dropdown-button">           			
                                 <div class="book_date form-group">
                                     <label for="recipient-name" class="control-label">Data zarezerwowania:</label>
-                                    <input class="date form-control" id="datepicker2" name="reservationDate" type="text" placeholder="Data rezerwacji" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = 'Data rezerwacji';
-                                            }" required>
+                                    <input class="date form-control" id="datepicker2" name="reservationDate" type="text" value="{{ reservation.reservationDate|date('Y-m-d') }}" placeholder="Data rezerwacji" onfocus="this.value = '';" onblur="if (this.value == '') {
+                                                        this.value = 'Data rezerwacji';
+                                                    }" required>
                                 </div>		
                             </div>	
                         </div>
@@ -73,9 +78,9 @@
                             <div class="col-md-6 dropdown-button">           			
                                 <div class="book_date form-group">
                                     <label for="recipient-name" class="control-label">Data końcowa:</label>
-                                    <input class="date form-control" id="datepicker1" name="toDate" type="text" placeholder="Do dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                this.value = 'Do dnia';
-                                            }" required>
+                                    <input class="date form-control" id="datepicker1" name="toDate" type="text" value="{{ reservation.toDate|date('Y-m-d') }}" placeholder="Do dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
+                                                        this.value = 'Do dnia';
+                                                    }" required>
                                 </div>		
                             </div>
                             <div class="col-md-6">
@@ -104,7 +109,7 @@
 
 </div><!-- /.row (main row) -->
 <script type="text/javascript">
-    $("#rooms-category-sidebar, #editroom-sidebar").addClass("treeview active");
+    $("#reservations-category-sidebar, #editreservations-sidebar").addClass("treeview active");
 </script>
 
 {% endblock %}

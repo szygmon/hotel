@@ -256,8 +256,10 @@ class Admin {
             $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
         } else
             $reservation = null;
+        
+        $users = $this->em->getRepository('\Model\User')->findAll();
 
-        return array('reservation' => $reservation);
+        return array('reservation' => $reservation, 'users' => $users);
     }
 
     /**

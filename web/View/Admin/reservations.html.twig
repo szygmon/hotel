@@ -53,6 +53,7 @@
                                     <td></td>
                                     {% if action != 'old' %}
                                     <td>
+                                        <a href="{{ url('Admin/editReservation', {'id': r.id}) }}" class="fa fa-edit"></a>
                                         <a href="{{ url('Admin/reservations', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
                                     </td>
                                     {% endif %}
