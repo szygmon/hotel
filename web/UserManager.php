@@ -11,13 +11,4 @@ class UserManager {
 	public function setup() {
 		return Db::install();
 	}
-
-	public function switchSchema($school) {
-		if (is_object($school))
-			$school = $school->getSchema();
-
-		$query = "set search_path to {$school}, public";
-		Db::exec($query);
-	}
-
 }

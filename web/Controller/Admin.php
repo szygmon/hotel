@@ -172,18 +172,29 @@ class Admin {
             $this->em->flush();
             \Notify::success('Usunięto rezerwację');
         }
+        if ($action == 'old') {
+            $reservations = $this->em->createQueryBuilder()
+                    ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')
+                    ->from('\Model\Reservation', 'r')
+                    ->leftJoin('r.user', 'u')
+                    ->where('r.fromDate < ?1')
+                    ->setParameter(1, new \DateTime())
+                    ->orderBy('r.fromDate', 'DESC')
+                    ->getQuery()
+                    ->getResult();
+        } else {
+            $reservations = $this->em->createQueryBuilder()
+                    ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')
+                    ->from('\Model\Reservation', 'r')
+                    ->leftJoin('r.user', 'u')
+                    ->where('r.fromDate >= ?1')
+                    ->setParameter(1, new \DateTime())
+                    ->orderBy('r.fromDate')
+                    ->getQuery()
+                    ->getResult();
+        }
 
-        $reservations = $this->em->createQueryBuilder()
-                ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')
-                ->from('\Model\Reservation', 'r')
-                ->join('r.user', 'u')
-                ->where('r.fromDate >= ?1')
-                ->setParameter(1, new \DateTime())
-                ->orderBy('r.fromDate')
-                ->getQuery()
-                ->getResult();
-
-        return array('reservations' => $reservations);
+        return array('reservations' => $reservations, 'action' => $action);
     }
 
 }

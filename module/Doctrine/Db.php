@@ -25,7 +25,7 @@ class Db {
                     ++$lines;
                 }
             } catch (Exception $e) {
-                if (strpos(strtolower($e->getMessage()), 'duplicate') === false) {
+                if (strpos(strtolower($e->getMessage()), 'already exists') === false) {
                     $r[$file]['line'] = $lines;
                     $r[$file]['message'] = $e->getMessage();
                 }
