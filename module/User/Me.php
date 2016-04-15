@@ -50,7 +50,7 @@ class Me {
 
         if (isset($_SESSION['user.email']) && isset($_SESSION['user.auth'])) {
             $this->setUser($_SESSION['user.email']);
-            if (!($_SESSION['user.auth'] === crypt($this->model->getPassword(), $_SESSION['user.auth']))) {
+            if ((!$this->model) || !($_SESSION['user.auth'] === crypt($this->model->getPassword(), $_SESSION['user.auth']))) {
                 $this->logout();
             }
             $cookie->setSave(TRUE);
@@ -102,55 +102,6 @@ class Me {
         if (is_null($this->cookie))
             $this->cookie = Cookie::create(Conf::get('nc.title') . "_session");
         return $this->cookie;
-    }
-
-    public function getActualClasses() {
-        $em = \Di::get('em');
-        return $em->getRepository('Model\\Clas')->findBy(array('year' => $this->getActualYear()), array('name' => 'ASC'));
-    }
-
-    public function getTeacherPlan($date = null) {
-        if (!$date)
-            $date = date('Y-m-d');
-
-        $day = date('N', strtotime($date));
-
-        $em = \Di::get('em');
-
-        $lessons = $em->getRepository('\Model\\Lesson')->findBy(array('date' => new \DateTime($date), 'teacher' => $this->getModel()));
-
-        foreach ($lessons as $lesson) {
-            $l[] = $lesson->getHour()->getId();
-            $link[$lesson->getHour()->getId()] = $lesson;
-            $list[$lesson->getHour()->getId()] = $lesson;
-        }
-        if ($l[0]) {
-            $plans = $em->createQueryBuilder()
-                    ->select('p')
-                    ->from('\Model\\Plan', 'p')
-                    ->where('p.teacher = ?1 AND p.fromDate <= ?2 AND p.toDate >= ?2 AND p.day = ?3 AND p.hour NOT IN (?4)')
-                    ->orderBy('p.hour')
-                    ->setParameters(array(1 => $this->getModel(), 2 => $date, 3 => $day, 4 => $l))
-                    ->getQuery()
-                    ->getResult();
-        } else {
-            $plans = $em->createQueryBuilder()
-                    ->select('p')
-                    ->from('\Model\\Plan', 'p')
-                    ->where('p.teacher = ?1 AND p.fromDate <= ?2 AND p.toDate >= ?2 AND p.day = ?3')
-                    ->orderBy('p.hour')
-                    ->setParameters(array(1 => $this->getModel(), 2 => $date, 3 => $day))
-                    ->getQuery()
-                    ->getResult();
-        }
-        foreach ($plans as $plan) {
-            $link[$plan->getHour()->getId()] = '#';
-            $list[$plan->getHour()->getId()] = $plan;
-        }
-
-        if (is_array($list))
-            ksort($list);
-        return array('plan' => $list, 'link' => $link);
     }
 
     public function getNotifications() {

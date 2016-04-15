@@ -64,8 +64,9 @@ class Doctrine {
             $dev = new \DevReset;
             $r;
             //$r = $dev->create();
+            $r = Db::install();
             if (Conf::get('nc.debug') && $data)
-                $r += $dev->dummyData();
+                $r .= $dev->dummyData();
         } else {
             $r = Db::install();
         }

@@ -79,7 +79,7 @@
     </section><!-- /.Left col -->
 
     <script type="text/javascript">
-        $("#reservations-category-sidebar, #reservations-sidebar").addClass("treeview active");
+        $("#reservations-category-sidebar, {% if action == 'old' %}#oldreservations-sidebar{% else %}#reservations-sidebar{% endif %}").addClass("treeview active");
     </script>
 
 {% endblock %}

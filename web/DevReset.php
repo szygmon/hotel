@@ -21,59 +21,35 @@ class DevReset {
     public function dummyData() {
         $userManager = new UserManager;
 
-        // School
-        $school = new School();
-        $school->setAlias('test');
-        $school->setName('Szkoła testowa');
-        $this->em->persist($school);
-        $r = $userManager->setup($school);
-        if (count($r))
-            return $r;
-
         // Role
         $adminRole = new \Model\Role;
         $adminRole->setName('admin');
         $this->em->persist($adminRole);
 
         // Admin
-        $user = new \Model\Teacher();
-        $user->setEmail('admin@put.poznan.pl');
+        $user = new \Model\User();
+        $user->setEmail('admin@admin.pl');
         $user->setUsername('admin');
-        $user->setPassword('qwerty');
+        $user->setPassword('pass');
         $user->setGivenName('Admin');
         $user->setFamilyName('Test');
         $user->addRole($adminRole);
         $this->em->persist($user);
         $this->em->flush();
 
-        // Teacher
-        $user = new \Model\Teacher();
-        $user->setEmail('teacher@put.poznan.pl');
-        $user->setUsername('teacher');
-        $user->setPassword('qwerty');
-        $user->setGivenName('Teacher');
-        $user->setFamilyName('Test');
-        $this->em->persist($user);
-        $this->em->flush();
-
-        // U1
-        $user = new \Model\Student;
-        $user->setEmail('adamski@put.poznan.pl');
-        $user->setUsername('adamski');
-        $user->setPassword('qwerty');
-        $user->setGivenName('Adrian');
-        $user->setFamilyName('Adamski');
-        $this->em->persist($user);
-        $this->em->flush();
-
-        // U2
-        $user = new \Model\Student;
-        $user->setEmail('michalewicz@put.poznan.pl');
-        $user->setUsername('michalewicz');
-        $user->setPassword('qwerty');
-        $user->setGivenName('Szymon');
-        $user->setFamilyName('Michalewicz');
-        $this->em->persist($user);
+        // Settings
+        $settings[0] = new \Model\Setting();
+        $settings[0]->setName('rules');
+        $settings[0]->setValue('');
+        $this->em->persist($settings[0]);
+        $settings[1] = new \Model\Setting();
+        $settings[1]->setName('tid');
+        $settings[1]->setValue('');
+        $this->em->persist($settings[1]);
+        $settings[2] = new \Model\Setting();
+        $settings[2]->setName('tkey');
+        $settings[2]->setValue('');
+        $this->em->persist($settings[2]);
         $this->em->flush();
 
         return $r;
