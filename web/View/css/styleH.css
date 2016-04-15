@@ -2213,3 +2213,7 @@ div#rooms div.single-top {
     background: #333333;
     color: #fff;
 }
+
+.center {
+    text-align: center;
+}

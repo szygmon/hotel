@@ -50,8 +50,13 @@ class Admin {
     /**
      * index
      * @Route(/admin/index)
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
      */
-    public function index() {
+    public function index($Me, $Router) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+
         $users = $this->em->createQueryBuilder()->select('COUNT(u.id)')->from('\Model\User', 'u')->getQuery()->getSingleScalarResult();
         $reservationsConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 1')->getQuery()->getSingleScalarResult();
         $reservationsNotConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 0')->getQuery()->getSingleScalarResult();
@@ -62,8 +67,13 @@ class Admin {
     /**
      * Rooms
      * @Route(/admin/rooms/{action}/{id})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
      */
-    public function rooms($action = null, $id = null) {
+    public function rooms($Me, $Router, $action = null, $id = null) {
+        if (!$Me->auth('admin'))
+            $Router->redirect('Admin/admin');
+
         if ($action == 'del' && is_numeric($id)) {
             $room = $this->em->getRepository('\Model\Room')->find($id);
             $this->em->remove($room);
@@ -104,8 +114,13 @@ class Admin {
     /**
      * Add rooms
      * @Route(/admin/editroom/{id})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
      */
-    public function editRoom($id = null) {
+    public function editRoom($Me, $Router, $id = null) {
+        if (!$Me->auth('admin'))
+            $Router->redirect('Admin/admin');
+
         if (is_numeric($id)) {
             $room = $this->em->getRepository('\Model\Room')->find($id);
         } else
@@ -117,8 +132,13 @@ class Admin {
     /**
      * Rules
      * @Route(/admin/rules/{action})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
      */
-    public function rules($action = null) {
+    public function rules($Me, $Router, $action = null) {
+        if (!$Me->auth('admin'))
+            $Router->redirect('Admin/admin');
+
         if ($action == 'save') {
             $rules = $this->em->getRepository('\Model\Setting')->find('rules');
             $rules->setValue($_POST['value']);
@@ -146,8 +166,13 @@ class Admin {
     /**
      * tpay
      * @Route(/admin/tpay/{action})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
      */
-    public function tpay($action = null) {
+    public function tpay($Me, $Router, $action = null) {
+        if (!$Me->auth('admin'))
+            $Router->redirect('Admin/admin');
+
         if ($action == 'save') {
             $tid = $this->em->getRepository('\Model\Setting')->find('tid');
             $tid->setValue($_POST['tid']);
@@ -164,8 +189,13 @@ class Admin {
     /**
      * Rezerwacje
      * @Route(/admin/reservations/{action}/{id})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
      */
-    public function reservations($action = null, $id = null) {
+    public function reservations($Me, $Router, $action = null, $id = null) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+
         if ($action == 'del' && is_numeric($id)) {
             $res = $this->em->getRepository('\Model\Reservation')->find($id);
             $this->em->remove($res);
