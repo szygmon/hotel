@@ -24,7 +24,7 @@ class HomeUtil {
         $this->em->persist($user);
         $this->em->flush();
 
-        return \Notify::success('Zarejestrowano pomyślnie! Możesz się teraz <a href="signin">zaloogować</a>.');
+        return \Notify::success('Zarejestrowano pomyślnie! Możesz się teraz <a href="signin">zalogować</a>.');
     }
 
     public function updateForm($post) {
