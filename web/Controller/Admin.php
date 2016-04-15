@@ -227,4 +227,81 @@ class Admin {
         return array('reservations' => $reservations, 'action' => $action);
     }
 
+    /**
+     * Add rooms
+     * @Route(/admin/editreservation/{id})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function editReservation($Me, $Router, $id = null) {
+        if (!$Me->auth('admin'))
+            $Router->redirect('Admin/admin');
+
+        if (is_numeric($id)) {
+            $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
+        } else
+            $reservation = null;
+
+        return array('reservation' => $reservation);
+    }
+
+    /**
+     * Rezerwacje
+     * @Route(/admin/users/{action}/{id})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function users($Me, $Router, $action = null, $id = null) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+
+        if ($action == 'del' && is_numeric($id)) {
+            $res = $this->em->getRepository('\Model\Reservation')->find($id);
+            $this->em->remove($res);
+            $this->em->flush();
+            \Notify::success('Usunięto rezerwację');
+        }
+        if ($action == 'old') {
+            $reservations = $this->em->createQueryBuilder()
+                    ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')
+                    ->from('\Model\Reservation', 'r')
+                    ->leftJoin('r.user', 'u')
+                    ->where('r.fromDate < ?1')
+                    ->setParameter(1, new \DateTime())
+                    ->orderBy('r.fromDate', 'DESC')
+                    ->getQuery()
+                    ->getResult();
+        } else {
+            $reservations = $this->em->createQueryBuilder()
+                    ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')
+                    ->from('\Model\Reservation', 'r')
+                    ->leftJoin('r.user', 'u')
+                    ->where('r.fromDate >= ?1')
+                    ->setParameter(1, new \DateTime())
+                    ->orderBy('r.fromDate')
+                    ->getQuery()
+                    ->getResult();
+        }
+
+        return array('reservations' => $reservations, 'action' => $action);
+    }
+
+    /**
+     * Add user
+     * @Route(/admin/edituser/{id})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function editUser($Me, $Router, $id = null) {
+        if (!$Me->auth('admin'))
+            $Router->redirect('Admin/admin');
+
+        if (is_numeric($id)) {
+            $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
+        } else
+            $reservation = null;
+
+        return array('reservation' => $reservation);
+    }
+
 }

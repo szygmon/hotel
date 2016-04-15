@@ -35,47 +35,76 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive no-padding">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Użytkownik</th>
-                                    <th>Od</th>
-                                    <th>Do</th>
-                                    <th>Zarezerwował</th>
-                                    <th>Status</th>
-                                    <th>Pokoje</th>
-                                    <th>Opcje</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for r in reservations %}
+                        {% if action == 'old' %}
+                            <table class="table table-hover">
+                                <thead>
                                     <tr>
-                                        <td>{{ r.id }}</td>
-                                        <td>{% if r.uid %}{{ r.givenName}} {{ r.familyName }}{% else %}{{ r.guest }}{% endif %}</td>
-                                        <td>{{ r.fromDate|date('Y-m-d') }}</td>
-                                        <td>{{ r.toDate|date('Y-m-d') }}</td>
-                                        <td>{{ r.reservationDate|date('Y-m-d') }}</td>
-                                        <td>{% if r.paid %}<span class="badge bg-green"><i class="fa fa-fw fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-fw fa-warning"></i></span>{% endif %}</td>
-                                        <td></td>
-                                        <td>
-                                            <a href="{{ url('Admin/reservations', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
-                                        </td>
+                                        <th>ID</th>
+                                        <th>Użytkownik</th>
+                                        <th>Od</th>
+                                        <th>Do</th>
+                                        <th>Zarezerwował</th>
+                                        <th>Status</th>
+                                        <th>Pokoje</th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in reservations %}
+                                        <tr>
+                                            <td>{{ r.id }}</td>
+                                            <td>{% if r.uid %}{{ r.givenName}} {{ r.familyName }}{% else %}{{ r.guest }}{% endif %}</td>
+                                            <td>{{ r.fromDate|date('Y-m-d') }}</td>
+                                            <td>{{ r.toDate|date('Y-m-d') }}</td>
+                                            <td>{{ r.reservationDate|date('Y-m-d') }}</td>
+                                            <td>{% if r.paid %}<span class="badge bg-green"><i class="fa fa-fw fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-fw fa-warning"></i></span>{% endif %}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Użytkownik</th>
+                                        <th>Od</th>
+                                        <th>Do</th>
+                                        <th>Zarezerwował</th>
+                                        <th>Status</th>
+                                        <th>Pokoje</th>
+                                        <th>Opcje</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for r in reservations %}
+                                        <tr>
+                                            <td>{{ r.id }}</td>
+                                            <td>{% if r.uid %}{{ r.givenName}} {{ r.familyName }}{% else %}{{ r.guest }}{% endif %}</td>
+                                            <td>{{ r.fromDate|date('Y-m-d') }}</td>
+                                            <td>{{ r.toDate|date('Y-m-d') }}</td>
+                                            <td>{{ r.reservationDate|date('Y-m-d') }}</td>
+                                            <td>{% if r.paid %}<span class="badge bg-green"><i class="fa fa-fw fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-fw fa-warning"></i></span>{% endif %}</td>
+                                            <td></td>
+                                            <td>
+                                                <a href="{{ url('Admin/reservations', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
+                                            </td>
+                                        </tr>
 
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endif %}
                     </div>
                     <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
             </div>
         </div>
-
-        <div class="box-footer clearfix no-border">
-            <a href="{{ url('Admin/editRoom') }}" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Dodaj nową</a>
-        </div>
+        {% if action != 'old' %}
+            <div class="box-footer clearfix no-border">
+                <a href="{{ url('Admin/editReservation') }}" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Dodaj nową</a>
+            </div>
+        {% endif %}
     </section><!-- /.Left col -->
 
     <script type="text/javascript">

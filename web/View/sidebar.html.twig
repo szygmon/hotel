@@ -47,7 +47,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li id="reservations-sidebar"><a href="{{ url('Admin/reservations') }}"><i class="fa fa-circle-o"></i> Lista rezerwacji</a></li>
-                        <li id="editreservations-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
+                        <li id="editreservations-sidebar"><a href={{ url('Admin/editReservation') }}><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
                         <li id="oldreservations-sidebar"><a href="{{ url('Admin/reservations', {'action': 'old'}) }}"><i class="fa fa-circle-o"></i> Stare rezerwacje</a></li>
                     </ul>
                 </li>
@@ -56,8 +56,8 @@
                         <i class="fa fa-users"></i> <span>Użytkownicy</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li id="semesters-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Lista użytkowników</a></li>
-                        <li id="classes-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj użytkownika</a></li>
+                        <li id="semesters-sidebar"><a href="{{ url('Admin/users') }}"><i class="fa fa-circle-o"></i> Lista użytkowników</a></li>
+                        <li id="classes-sidebar"><a href="{{ url('Admin/editUser') }}"><i class="fa fa-circle-o"></i> Dodaj użytkownika</a></li>
                     </ul>
                 </li>
                 <li class="treeview" id="settings-category-sidebar">
