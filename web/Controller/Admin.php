@@ -249,7 +249,7 @@ class Admin {
      * @param \Core\Router $Router
      */
     public function editReservation($Me, $Router, $id = null) {
-        if (!$Me->auth('admin'))
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
             $Router->redirect('Admin/admin');
 
         if (is_numeric($id)) {
