@@ -36,15 +36,20 @@ class DevReset {
         $user->addRole($adminRole);
         $this->em->persist($user);
         $this->em->flush();
-        
+
         // Settings
         $settings[0] = new \Model\Setting();
         $settings[0]->setName('rules');
+        $settings[0]->setValue('');
+        $this->em->persist($settings[0]);
         $settings[1] = new \Model\Setting();
         $settings[1]->setName('tid');
+        $settings[1]->setValue('');
+        $this->em->persist($settings[1]);
         $settings[2] = new \Model\Setting();
         $settings[2]->setName('tkey');
-        //$this->em->persist($settings[0]);
+        $settings[2]->setValue('');
+        $this->em->persist($settings[2]);
         $this->em->flush();
 
         return $r;
