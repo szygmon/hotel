@@ -38,7 +38,7 @@
                                 <th>Zarezerwował</th>
                                 <th>Status</th>
                                 <th>Pokoje</th>
-                                <th>Opcje</th>
+                                {% if action != 'old' %}<th>Opcje</th>{% endif %}
                             </tr>
                         </thead>
                         <tbody>
@@ -51,9 +51,11 @@
                                     <td>{{ r.reservationDate|date('Y-m-d') }}</td>
                                     <td class="center">{% if r.paid %}<a href="{{ url('Admin/reservations', {'action': 'noPaid', 'id': r.id}) }}"><span class="badge bg-green"><i class="fa fa-fw fa-check"></i></span></a>{% else %}<a href="{{ url('Admin/reservations', {'action': 'paidConfirm', 'id': r.id}) }}"><span class="badge bg-red"><i class="fa fa-fw fa-warning"></i></span></a>{% endif %}</td>
                                     <td></td>
+                                    {% if action != 'old' %}
                                     <td>
                                         <a href="{{ url('Admin/reservations', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
                                     </td>
+                                    {% endif %}
                                 </tr>
 
                             {% endfor %}

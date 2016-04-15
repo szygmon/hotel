@@ -47,7 +47,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li id="reservations-sidebar"><a href="{{ url('Admin/reservations') }}"><i class="fa fa-circle-o"></i> Lista rezerwacji</a></li>
-                        <li id="editreservations-sidebar"><a href="#"><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
+                        <li id="editreservations-sidebar"><a href={{ url('Admin/editReservation') }}><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
                         <li id="oldreservations-sidebar"><a href="{{ url('Admin/reservations', {'action': 'old'}) }}"><i class="fa fa-circle-o"></i> Stare rezerwacje</a></li>
                     </ul>
                 </li>
