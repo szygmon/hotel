@@ -227,4 +227,67 @@ class Admin {
         return array('reservations' => $reservations, 'action' => $action);
     }
 
+    /**
+     * Użytkownicy
+     * @Route(/admin/users/{action}/{id})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function users($Me, $Router, $action = null, $id = null) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+
+        if ($action == 'add') {
+            $user = new \Model\User();
+            $user->setUsername($_POST['username']);
+            $user->setGivenName($_POST['givenName']);
+            $user->setFamilyName($_POST['familyName']);
+            if ($_POST['password'] == '')
+                $user->setPassword('qwerty');
+            else 
+                $user->setPassword($_POST['password']);
+            $user->setEmail($_POST['email']);
+            $user->setPhone($_POST['phone']);
+            
+            $this->em->persist($user);
+            $this->em->flush();
+            
+            \Notify::success('Dodano użytkownika.');
+        } else if ($action == 'updt' && is_numeric($id)) {
+            $user = $this->em->getRepository('\Model\User')->find($id);
+            $user->setUsername($_POST['username']);
+            $user->setGivenName($_POST['givenName']);
+            $user->setFamilyName($_POST['familyName']);
+            if ($_POST['password'] != '')
+                $user->setPassword($_POST['password']);
+            $user->setEmail($_POST['email']);
+            $user->setPhone($_POST['phone']);
+            
+            $this->em->flush();
+            
+            \Notify::success('Zaktualizowano dane użytkownika.');
+        }
+        
+        $users = $this->em->getRepository('\Model\User')->findAll();
+
+        return array('users' => $users);
+    }
+
+    /**
+     * Użytkownicy - edycja
+     * @Route(/admin/edituser/{id})
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function editUser($Me, $Router, $id = null) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+        $user = null;
+        if ($id) {
+            $user = $this->em->getRepository('\Model\User')->find($id);
+        }
+
+        return array('user' => $user);
+    }
+
 }
