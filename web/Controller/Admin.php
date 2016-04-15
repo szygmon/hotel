@@ -202,6 +202,21 @@ class Admin {
             $this->em->flush();
             \Notify::success('Usunięto rezerwację');
         }
+        
+        if ($action == 'noPaid' && is_numeric($id)) {
+            $res = $this->em->getRepository('\Model\Reservation')->find($id);
+            $res->setPaid(0);
+            $this->em->flush();
+            
+            \Notify::success('Zaktualizowano.');
+        } else if ($action == 'paidConfirm' && is_numeric($id)) {
+            $res = $this->em->getRepository('\Model\Reservation')->find($id);
+            $res->setPaid(1);
+            $this->em->flush();
+            
+            \Notify::success('Zaktualizowano.');
+        }
+        
         if ($action == 'old') {
             $reservations = $this->em->createQueryBuilder()
                     ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')

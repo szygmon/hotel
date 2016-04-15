@@ -21,6 +21,7 @@ class HomeUtil {
         $user->setUsername($_POST['username']);
         $user->setEmail($_POST['email']);
         $user->setPassword($_POST['pass']);
+        $user->setPhone($_POST['phone']);
         $this->em->persist($user);
         $this->em->flush();
 
@@ -33,6 +34,7 @@ class HomeUtil {
         $user->setGivenName($_POST['givenName']);
         $user->setFamilyName($_POST['familyName']);
         $user->setEmail($_POST['email']);
+        $user->setPhone($_POST['phone']);
         if (isset($_POST['pass']) && $_POST['pass'] != '' && $_POST['pass'] == $_POST['passconfirm'])
             $user->setPassword($_POST['pass']);
         //$this->em->persist($user);
