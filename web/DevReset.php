@@ -39,11 +39,11 @@ class DevReset {
         
         // Settings
         $settings[0] = new \Model\Setting();
-        $settings[0] = setName('rules');
+        $settings[0]->setName('rules');
         $settings[1] = new \Model\Setting();
-        $settings[1] = setName('tid');
+        $settings[1]->setName('tid');
         $settings[2] = new \Model\Setting();
-        $settings[2] = setName('tkey');
+        $settings[2]->setName('tkey');
         //$this->em->persist($settings[0]);
         $this->em->flush();
 
