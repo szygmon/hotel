@@ -103,7 +103,6 @@ class Home {
     public function reviews() {
         if (isset($_POST['save'])) {
             $user = $this->me->getModel();
-            //$user = $this->em->getRepository('\Model\User')->find($this->me->getModel()->getId());
             $opinion = new \Model\Opinion();
             $opinion->setContent($_POST['opinion']);
             $opinion->setRating($_POST['score']);
@@ -159,8 +158,13 @@ class Home {
      */
     public function register() {
         if (isset($_POST['username']))
+        {
+            $user = $this->em->getRepository('\Model\User')->findOneBy(array('username' => $_POST['username']));
+            if($user != null)
+                return array("values" =>  $_POST,"usernameIsInDatabase" => true);
             $msg = $this->homeUtil->registerForm($_POST);
-        return array("salesPage" => true);
+        }
+        return array();
     }
 
     /**

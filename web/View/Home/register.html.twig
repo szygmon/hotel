@@ -1,7 +1,9 @@
 {% extends './baseSP.html.twig' %}
 
 {% block title %}Hotel JM{% endblock %}
-
+{% block head %}
+    <script src="{{ url('template') }}/js/jquery.validate.min.js" type="text/javascript"></script> 
+{% endblock %}
 {% block body %}
     <script type="text/javascript">
         $("#n-signin").addClass("active");
@@ -14,36 +16,40 @@
     <div class="container">
         <div class="register">
             {{ Notify.r }}
-            <form method="post"> 
+            <div id="error-note" ></div>
+            {% if usernameIsInDatabase is not null %}
+                <li><b class="my-error-class">Niestety istnieje już użytkownik o podanym loginie. Wybierz inny login</b</li> 
+                {% endif %}
+            </br>
+            <form method="post" id="registerform" name="registerform"> 
                 <div class="register-top-grid login-right">
                     <h3>DANE UŻYTKOWNIKA</h3>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Imię<label>*</label></span>
-                        <input type="text" name="givenName"> 
+                        <input type="text" name="givenName" value={{ values.givenName}}> 
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>Nazwisko<label>*</label></span>
-                        <input type="text" name="familyName"> 
+                        <input type="text" name="familyName" value={{ values.familyName}}> 
                     </div>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Nazwa użytkownika<label>*</label></span>
-                        <input type="text" name="username" required> 
+                        <input type="text" name="username" id="username" value={{ values.username}}> 
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>E-mail<label>*</label></span>
-                        <input type="text" name="email" required> 
+                        <input type="text" id="email" name="email" value={{ values.email}}> 
                     </div>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Hasło<label>*</label></span>
-                        <input type="password" name="pass" required>
+                        <input type="password" id="password" name="password" value={{ values.password}}>
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>Potwierdź hasło<label>*</label></span>
-                        <input type="password" required>
+                        <input type="password" id="repeatedpassword" name="repeatedpassword" value={{ values.repeatedpassword}}>
                     </div>
 
                     <div class="clearfix"> </div>
-
                     <input type="submit" value="Zarejestruj" />
                     <div class="clearfix"> </div>
 
@@ -51,4 +57,42 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $.validator.addMethod("containsAtLeastOneDigit", function (value) {
+        return /[a-z].*[0-9]|[0-9].*[a-z]/i.test(value);
+    }, 'Hasło musi zawierać co najmniej 1 liczbę i 1 literę');
+
+    $('#registerform').validate({// initialize the plugin
+        errorClass: "my-error-class",
+        errorLabelContainer: "#error-note",
+        wrapper: "li",
+        rules: {
+            username: {
+                required: true,
+                minlength: 5,
+            },
+            password: {
+                required: true,
+                minlength: 8,
+                maxlength: 20,
+                containsAtLeastOneDigit: true
+            },
+            repeatedpassword: {
+                required: true,
+                equalTo: "#password"
+            },
+            email: {
+                required: true,
+                email: true
+            }
+        },
+        messages: {
+            username: "Podanie nazwy użytkownika jest wymagane (nazwa użytkownika musi zawierać co najmniej 5 znaków)",
+            password: "Hasło musi zawierać co najmniej 8 znaków (co najmniej 1 liczbę i 1 literę)",
+            repeatedpassword: "Hasło i powtórzone hasło muszą być takie same",
+            email: "Podany e-mail jest nieprawidłowy"
+        }
+    });
+
+</script>
 {% endblock %}
