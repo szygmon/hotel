@@ -31,7 +31,16 @@
                         <i class="fa fa-dashboard"></i> <span>Kokpit</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                 </li>
-                {# active  gdzies ... dodaj do aktywnej zakłądki :-) #}
+                <li class="treeview" id="mails-category-sidebar">
+                    <a href="#">
+                        <i class="fa fa-envelope"></i> <span>Wiadomości</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="mails-sidebar"><a href="{{ url('Admin/mails') }}"><i class="fa fa-circle-o"></i> Lista wiadomości</a></li>
+                        {#<li id="editreservations-sidebar"><a href={{ url('Admin/editReservation') }}><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
+                        <li id="oldreservations-sidebar"><a href="{{ url('Admin/reservations', {'action': 'old'}) }}"><i class="fa fa-circle-o"></i> Stare rezerwacje</a></li>#}
+                    </ul>
+                </li>
                 <li class="treeview" id="rooms-category-sidebar">
                     <a href="#">
                         <i class="fa fa-star"></i> <span>Pokoje</span> <i class="fa fa-angle-left pull-right"></i>
@@ -65,6 +74,7 @@
                         <i class="fa fa-gear"></i> <span>Ustawienia</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
+                        <li id="site-sidebar"><a href="{{ url('Admin/siteSettings') }}"><i class="fa fa-circle-o"></i> Główne</a></li>
                         <li id="rules-sidebar"><a href="{{ url('Admin/rules') }}"><i class="fa fa-circle-o"></i> Regulamin</a></li>
                         <li id="tpay-sidebar"><a href="{{ url('Admin/tpay') }}"><i class="fa fa-circle-o"></i> tpay.com</a></li>
                     </ul>

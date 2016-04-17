@@ -22,7 +22,7 @@ class Admin {
 
     /** @var \AdminUtil */
     protected $adminUtil;
-    
+
     /**
      * @param \User\Me $Me
      * @param \Doctrine\ORM\EntityManager $em
@@ -34,8 +34,8 @@ class Admin {
         $this->em = $em;
         $this->homeUtil = $HomeUtil;
         $this->adminUtil = $AdminUtil;
-        
-        \Di::get('Template')->addTwigGlobals(['mails' => $this->adminUtil->getMails()]);
+
+        \Di::get('Template')->addTwigGlobals(['newMails' => $this->adminUtil->getMails()]);
     }
 
     /**
@@ -283,12 +283,12 @@ class Admin {
                 $user = $this->em->getRepository('\Model\User')->findOneBy(array('username' => $_POST['username']));
                 if ($user != null) {
                     \Notify::success('Użytkownik o podanej nazwie użytkownika już istnieje, wybierz inną nazwę.');
-                    $Router->redirect("Admin/editUser", array("id" => null, "user"=> $_POST));
+                    $Router->redirect("Admin/editUser", array("id" => null, "user" => $_POST));
                 }
                 $this->adminUtil->addUser($_POST);
                 break;
             case 'updt':
-                $this->adminUtil->updateUser($_POST,$id);
+                $this->adminUtil->updateUser($_POST, $id);
                 break;
             case 'del':
                 $this->adminUtil->deleteUser($id);
@@ -315,6 +315,71 @@ class Admin {
         }
 
         return array('user' => $user);
+    }
+
+    /**
+     * Wiadomości
+     * @Route("/admin/mail/{id}")
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function mail($Me, $Router, $id = null) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+
+        if (is_numeric($id)) {
+            $mail = $this->em->getRepository('\Model\Mail')->find($id);
+            $mail->setIsRead(1);
+            $this->em->flush();
+        } 
+
+        return array('mail' => $mail);
+    }
+
+    /**
+     * Wiadomości
+     * @Route("/admin/mails/{action}/{id}")
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function mails($Me, $Router, $action = null, $id = null) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+
+        $mail = null;
+        if (isset($_POST['reply']) && $action == 'reply' && is_numeric($id)) {
+            $mail = $this->em->getRepository('\Model\Mail')->find($id);
+            $headers = 'From: ' . $this->settings('email');
+            mail($_POST['emailto'], $_POST['subject'], $_POST['message'], $headers);
+            
+            \Notify::success('Wiadomość została wysłana');
+        }
+        
+        $mails = $this->em->getRepository('\Model\Mail')->findBy(array(), array('id' => 'DESC'));
+
+        return array('mail' => $mail, 'allMails' => $mails);
+    }
+
+    /**
+     * Ustawienia strony
+     * @Route("/admin/sitesettings")
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function siteSettings($Me, $Router) {
+        if (!$Me->auth('admin'))
+            $Router->redirect('Admin/admin');
+
+        $email = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'email'));
+
+        if (isset($_POST['save'])) {
+            $email->setValue($_POST['email']);
+            $this->em->flush();
+
+            \Notify::success('Zapisano ustawienia.');
+        }
+
+        return array('email' => $email->getValue());
     }
 
 }

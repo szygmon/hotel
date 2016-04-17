@@ -50,6 +50,10 @@ class DevReset {
         $settings[2]->setName('tkey');
         $settings[2]->setValue('');
         $this->em->persist($settings[2]);
+        $settings[3] = new \Model\Setting();
+        $settings[3]->setName('email');
+        $settings[3]->setValue('');
+        $this->em->persist($settings[3]);
         $this->em->flush();
 
         return $r;
