@@ -18,23 +18,26 @@ class Mail {
      * @GeneratedValue(strategy="AUTO")
      */
     protected $id;
-    
+
     /** @Column(type="string") */
     protected $name;
-    
+
     /** @Column(type="string") */
     protected $email;
-    
+
     /** @Column(type="string") */
     protected $phone;
-    
+
     /** @Column(type="string") */
     protected $content;
 
+    /** @Column(type="datetime") */
+    protected $mailDate;
+
     /** @Column(type="boolean") */
     protected $isRead = false;
-    
+
     /** @Column(type="boolean") */
     protected $isActive = true;
-    
+
 }

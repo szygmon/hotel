@@ -20,7 +20,7 @@ class Admin {
     /** @var \HomeUtil */
     protected $homeUtil;
 
-    /** @var \HomeUtil */
+    /** @var \AdminUtil */
     protected $adminUtil;
     
     /**
@@ -34,6 +34,8 @@ class Admin {
         $this->em = $em;
         $this->homeUtil = $HomeUtil;
         $this->adminUtil = $AdminUtil;
+        
+        \Di::get('Template')->addTwigGlobals(['mails' => $this->adminUtil->getMails()]);
     }
 
     /**
