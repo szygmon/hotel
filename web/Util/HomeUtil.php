@@ -28,7 +28,7 @@ class HomeUtil {
         return \Notify::success('Zarejestrowano pomyślnie! Możesz się teraz <a href="signin">zalogować</a>.');
     }
 
-    public function updateForm($post) {
+    public function updateAccount($post) {
 
         $user = $this->em->getRepository('Model\\User')->findOneBy(array('username' => $_POST['username']));
         $user->setGivenName($_POST['givenName']);

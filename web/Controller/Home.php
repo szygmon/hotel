@@ -69,7 +69,7 @@ class Home {
             $Router->redirect('Home/index');
 
         if (isset($_POST['username']))
-            $this->homeUtil->updateForm($_POST);
+            $this->homeUtil->updateAccount($_POST);
         return array();
     }
 
