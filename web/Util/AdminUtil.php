@@ -57,11 +57,6 @@ class AdminUtil {
         \Notify::success('Usunięto użytkownika.');
     }
     
-    public function getMailsCount() {
-        $mails = $this->em->createQueryBuilder()->select('COUNT(m.id)')->from('\Model\Mail', 'm')->getQuery()->getSingleScalarResult();
-        return $mails;
-    }
-    
     public function getMails() {
         $mails = $this->em->getRepository('\Model\Mail')->findBy(array('isActive' => 1, 'isRead' => 0));
         
