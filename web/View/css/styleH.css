@@ -2224,3 +2224,7 @@ div#rooms div.single-top {
 .my-valid-class {
     color:#00CC00; /* green */
 }
+
+.nav li.active, nav li:hover {
+    height: 38px;
+}

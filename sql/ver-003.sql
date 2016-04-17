@@ -1,0 +1,1 @@
+ALTER TABLE mails ADD mailDate DATETIME NOT NULL;

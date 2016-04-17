@@ -1,0 +1,85 @@
+{% extends './base.html.twig' %}
+
+{% block title %}HOTEL JM - wiadomości{% endblock %}
+{% block head %}
+    <link href="{{ url('template') }}/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content %}
+
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Hotel
+            <small>Lista wiadomości</small>
+        </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        {{ Notify.r }}
+
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="ion ion-clipboard"></i>
+                <h3 class="box-title">Lista wiadomości</h3>
+            </div><!-- /.box-header -->
+
+            <div class="box-body">
+                <!-- /.box-header -->
+                <div class="box-body ">
+                    <table id="mails-table" class="table table-bordered table-hover dataTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Data</th>
+                                <th>Od</th>
+                                <th>E-mail</th>
+                                <th>Telefon</th>
+                                <th>Treść</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mail in allMails %}
+                                <tr>
+                                    <td><span class="badge bg-info">{% if mail.isRead %}<i class="fa fa-fw fa-envelope-o"></i></span>{% else %}<i class="fa fa-fw fa-envelope"></i></span>{% endif %}</td>
+                                    <td>{{ mail.mailDate|date('Y-m-d') }}</td>
+                                    <td><a href="{{ url('Admin/mail', {'id': mail.id}) }}">{{ mail.name }}</a></td>
+                                    <td><a href="{{ url('Admin/mail', {'id': mail.id}) }}">{{ mail.email }}</a></td>
+                                    <td>{{ mail.phone }}</td>
+                                    <td><a href="{{ url('Admin/mail', {'id': mail.id}) }}">{{ mail.content|slice(0, 50) }}</a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+
+    <div class="box-footer clearfix no-border">
+        <a href="{{ url('Admin/editRoom') }}" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Dodaj nową</a>
+    </div>
+</section><!-- /.Left col -->
+<script src="{{ url('template') }}/js/jquery.dataTables.js" type="text/javascript"></script>
+<script src="{{ url('template') }}/js/dataTables.bootstrap.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $("#mails-category-sidebar, #mails-sidebar").addClass("treeview active");
+
+    $('#mails-table').dataTable({
+        "bPaginate": true,
+        "bLengthChange": true,
+        "bFilter": true,
+        "bSort": true,
+        "bInfo": true,
+        "bAutoWidth": false,
+        "aoColumnDefs": [{
+                'bSortable': false,
+                'aTargets': [0]
+            }]
+    });
+</script>
+
+{% endblock %}

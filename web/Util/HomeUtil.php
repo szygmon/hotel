@@ -81,6 +81,7 @@ class HomeUtil {
         $mail->setEmail($post['email']);
         $mail->setPhone($post['phone']);
         $mail->setContent($post['content']);
+        $mail->setMailDate(new \DateTime());
 
         $this->em->persist($mail);
         $this->em->flush();
