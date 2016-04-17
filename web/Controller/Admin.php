@@ -20,15 +20,20 @@ class Admin {
     /** @var \HomeUtil */
     protected $homeUtil;
 
+    /** @var \HomeUtil */
+    protected $adminUtil;
+    
     /**
      * @param \User\Me $Me
      * @param \Doctrine\ORM\EntityManager $em
      * @param \HomeUtil $HomeUtil
+     * @param \AdminUtil $AdminUtil
      */
-    function __construct($Me, $em, $HomeUtil) {
+    function __construct($Me, $em, $HomeUtil, $AdminUtil) {
         $this->me = $Me;
         $this->em = $em;
         $this->homeUtil = $HomeUtil;
+        $this->adminUtil = $AdminUtil;
     }
 
     /**
@@ -256,7 +261,7 @@ class Admin {
             $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
         } else
             $reservation = null;
-        
+
         $users = $this->em->getRepository('\Model\User')->findAll();
 
         return array('reservation' => $reservation, 'users' => $users);
@@ -271,54 +276,39 @@ class Admin {
     public function users($Me, $Router, $action = null, $id = null) {
         if (!$Me->auth('admin') && !$Me->auth('receptionist'))
             $Router->redirect('Admin/admin');
-
-        if ($action == 'add') {
-            $user = new \Model\User();
-            $user->setUsername($_POST['username']);
-            $user->setGivenName($_POST['givenName']);
-            $user->setFamilyName($_POST['familyName']);
-            if ($_POST['password'] == '')
-                $user->setPassword('qwerty');
-            else
-                $user->setPassword($_POST['password']);
-            $user->setEmail($_POST['email']);
-            $user->setPhone($_POST['phone']);
-
-            $this->em->persist($user);
-            $this->em->flush();
-
-            \Notify::success('Dodano użytkownika.');
-        } else if ($action == 'updt' && is_numeric($id)) {
-            $user = $this->em->getRepository('\Model\User')->find($id);
-            $user->setUsername($_POST['username']);
-            $user->setGivenName($_POST['givenName']);
-            $user->setFamilyName($_POST['familyName']);
-            if ($_POST['password'] != '')
-                $user->setPassword($_POST['password']);
-            $user->setEmail($_POST['email']);
-            $user->setPhone($_POST['phone']);
-
-            $this->em->flush();
-
-            \Notify::success('Zaktualizowano dane użytkownika.');
+        switch ($action) {
+            case 'add':
+                $user = $this->em->getRepository('\Model\User')->findOneBy(array('username' => $_POST['username']));
+                if ($user != null) {
+                    \Notify::success('Użytkownik o podanej nazwie użytkownika już istnieje, wybierz inną nazwę.');
+                    $Router->redirect("Admin/editUser", array("id" => null, "user"=> $_POST));
+                }
+                $this->adminUtil->addUser($_POST);
+                break;
+            case 'updt':
+                $this->adminUtil->updateUser($_POST,$id);
+                break;
+            case 'del':
+                $this->adminUtil->deleteUser($id);
+                break;
+            default:
         }
 
-        $users = $this->em->getRepository('\Model\User')->findAll();
+        $users = $this->em->getRepository('\Model\User')->findBy(array('isActive' => '1'));
 
         return array('users' => $users);
     }
 
     /**
      * Użytkownicy - edycja
-     * @Route(/admin/edituser/{id})
+     * @Route("/admin/edituser/{id}")
      * @param \User\Me $Me
      * @param \Core\Router $Router
      */
-    public function editUser($Me, $Router, $id = null) {
+    public function editUser($Me, $Router, $id = null, $user = null) {
         if (!$Me->auth('admin') && !$Me->auth('receptionist'))
             $Router->redirect('Admin/admin');
-        $user = null;
-        if ($id) {
+        if (($user == null ) && $id) {
             $user = $this->em->getRepository('\Model\User')->find($id);
         }
 
