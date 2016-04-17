@@ -33,9 +33,9 @@ class Home {
      * @param \Core\Router $Router
      */
     public function index($Me, $Router) {
-        //(new \UserManager)->switchSchema('hotel');
-        //if ($Me->auth('user'))
-        //  return new Response([], 'Home/indexSchool');
+//(new \UserManager)->switchSchema('hotel');
+//if ($Me->auth('user'))
+//  return new Response([], 'Home/indexSchool');
 
         return array("salesPage" => !$Router->getSubdomain());
     }
@@ -46,7 +46,7 @@ class Home {
      */
     public function rooms() {
 
-        return array("salesPage" => true);
+        return array();
     }
 
     /**
@@ -69,8 +69,8 @@ class Home {
             $Router->redirect('Home/index');
 
         if (isset($_POST['username']))
-            $msg = $this->homeUtil->updateForm($_POST);
-        return array("salesPage" => true);
+            $this->homeUtil->updateForm($_POST);
+        return array();
     }
 
     /**
@@ -140,8 +140,18 @@ class Home {
      * @Route(/contact)
      */
     public function contact() {
+        if (!isset($_POST['email']))
+             return array();
+             
+        if ($_POST['email'] != 'E-mail'
+                && $_POST['name'] != 'Imię i nazwisko' 
+                && $_POST['content'] != "Wiadomość" ) {
+            if ($_POST['phone'] == 'Telefon')
+                $_POST['phone'] = '';
 
-        return array("salesPage" => true);
+            $this->homeUtil->AddContactMail($_POST);
+        }
+        return array();
     }
 
     /**
@@ -157,12 +167,11 @@ class Home {
      * @Route(/register)
      */
     public function register() {
-        if (isset($_POST['username']))
-        {
+        if (isset($_POST['username'])) {
             $user = $this->em->getRepository('\Model\User')->findOneBy(array('username' => $_POST['username']));
-            if($user != null)
-                return array("values" =>  $_POST,"usernameIsInDatabase" => true);
-            $msg = $this->homeUtil->registerForm($_POST);
+            if ($user != null)
+                return array("values" => $_POST, "usernameIsInDatabase" => true);
+            $this->homeUtil->registerForm($_POST);
         }
         return array();
     }
@@ -220,7 +229,7 @@ class Home {
                 ->getResult();
 
         $allCost = 0;
-        // dodanie rezerwacji do BD
+// dodanie rezerwacji do BD
         $re = new \Model\Reservation();
         $re->setFromDate(new \DateTime($_POST['fromDate']));
         $re->setToDate(new \DateTime($_POST['toDate']));
@@ -239,7 +248,7 @@ class Home {
         $this->em->flush();
 
 
-        // tpay.com
+// tpay.com
         $tid = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tid'))->value();
         $crc = $re->getId();
         $tkey = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tkey'))->value();
@@ -276,20 +285,20 @@ class Home {
      * @Route(/tpayconfirm)
      */
     public function tPayConfirm() {
-        // sprawdzenie adresu IP oraz występowania zmiennych POST
+// sprawdzenie adresu IP oraz występowania zmiennych POST
         if ($_SERVER['REMOTE_ADDR'] == '195.149.229.109' && !empty($_POST)) {
-            //$id_sprzedawcy = $_POST['id'];
+//$id_sprzedawcy = $_POST['id'];
             $status_transakcji = $_POST['tr_status'];
-            //$id_transakcji = $_POST['tr_id'];
-            //$kwota_transakcji = $_POST['tr_amount'];
-            //$kwota_zaplacona = $_POST['tr_paid'];
+//$id_transakcji = $_POST['tr_id'];
+//$kwota_transakcji = $_POST['tr_amount'];
+//$kwota_zaplacona = $_POST['tr_paid'];
             $blad = $_POST['tr_error'];
-            //$data_transakcji = $_POST['tr_date'];
-            //$opis_transakcji = $_POST['tr_desc'];
+//$data_transakcji = $_POST['tr_date'];
+//$opis_transakcji = $_POST['tr_desc'];
             $id = $_POST['tr_crc'];
-            //$email_klienta = $_POST['tr_email'];
-            //$suma_kontrolna = $_POST['md5sum'];
-            // sprawdzenie stanu transakcji
+//$email_klienta = $_POST['tr_email'];
+//$suma_kontrolna = $_POST['md5sum'];
+// sprawdzenie stanu transakcji
             if ($status_transakcji == 'TRUE' && $blad == 'none') {
                 $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
                 $reservation->setPaid(true);
@@ -300,7 +309,7 @@ class Home {
                 $this->em->flush();
             }
         }
-        //echo 'TRUE'; // odpowiedź dla serwera o odebraniu danych
+//echo 'TRUE'; // odpowiedź dla serwera o odebraniu danych
         return array();
     }
 

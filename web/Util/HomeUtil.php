@@ -75,4 +75,16 @@ class HomeUtil {
         return \Notify::error('Błędny login i/lub hasło.');
     }
 
+    public function addContactMail($post) {
+        $mail = new \Model\Mail();
+        $mail->setName($post['name']);
+        $mail->setEmail($post['email']);
+        $mail->setPhone($post['phone']);
+        $mail->setContent($post['content']);
+
+        $this->em->persist($mail);
+        $this->em->flush();
+
+        \Notify::success('Wiadomość została wysłana!');
+    }
 }

@@ -16,10 +16,11 @@
     <div class="container">
         <div class="register">
             {{ Notify.r }}
-            <div id="error-note" ></div>
-            {% if usernameIsInDatabase is not null %}
-                <li><b class="my-error-class">Niestety istnieje już użytkownik o podanym loginie. Wybierz inny login</b</li> 
-                {% endif %}
+            <div id="error-note" >
+                {% if usernameIsInDatabase is not null %}
+                    <li><b class="my-error-class">Niestety istnieje już użytkownik o podanym loginie. Wybierz inny login</b</li> 
+                    {% endif %}
+            </div>
             </br>
             <form method="post" id="registerform" name="registerform"> 
                 <div class="register-top-grid login-right">
