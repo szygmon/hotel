@@ -172,6 +172,9 @@ class Home {
             $user = $this->em->getRepository('\Model\User')->findOneBy(array('username' => $_POST['username']));
             if ($user != null)
                 return array("values" => $_POST, "usernameIsInDatabase" => true);
+            $user = $this->em->getRepository('\Model\User')->findOneBy(array('email' => $_POST['email']));
+            if ($user != null)
+                return array("values" => $_POST, "emailIsInDatabase" => true);
             $this->homeUtil->registerForm($_POST);
         }
         return array();
