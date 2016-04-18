@@ -29,24 +29,26 @@
                 <table id="users-table" class="table table-bordered table-hover dataTable">
                     <thead>
                         <tr>
-                            <th width="5%">#</th>
                             <th>Nazwisko</th>
                             <th>Imię</th>
                             <th>Nick</th>
                             <th>E-mail</th>
+                            <th>Telefon</th>
+                            <th width="1%">Opcje</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for u in users %}
                             <tr>
-                                <td>
-                                    <a href="{{ url('Admin/editUser', {'id': u.id}) }}" class="fa fa-edit"></a>
-                                    <a href="{{ url('Admin/users', {'action': 'del', 'id': u.id}) }}" class="fa fa-trash-o"></a>
-                                </td>
                                 <td>{{ u.familyName }}</td>
                                 <td>{{ u.givenName }}</td> 
                                 <td>{{ u.username }}</td>
                                 <td>{{ u.email }}</td>
+                                <td>{{ u.phone }}</td>
+                                <td class="no-wrap">
+                                    <a href="{{ url('Admin/editUser', {'id': u.id}) }}"><span class="badge bg-blue"><i class="fa fa-edit"></i></span></a>
+                                    <a href="{{ url('Admin/users', {'action': 'del', 'id': u.id}) }}"><span class="badge bg-red"><i class="fa fa-trash-o"></i></span></a>
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
