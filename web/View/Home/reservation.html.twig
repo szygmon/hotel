@@ -12,9 +12,7 @@
             <div class="row">
                 <h3>Rezerwacja</h3>
                 <div class="booking-form" style="margin:0;">
-
                     <div class="col-md-6">
-
 
                         <!---strat-date-piker---->
                         <link rel="stylesheet" href="{{ url('template') }}/css/jquery-ui.css" />
@@ -22,9 +20,9 @@
                         <!---/End-date-piker---->
 
                         <h5>IMIĘ I NAZWISKO</h5>
-                        <input type="text" name="name" value="{{ data.name }}">
+                        <input class="input-disabled" type="text" name="name" value="{{ data.name }}" {% if Me.isLogged() %} disabled {% endif %}>
                         <h5>NUMER TELEFONU</h5>
-                        <input name="phone" type="text" value="">
+                        <input class="input-disabled" name="phone" type="text" value="{{ data.phone }}" {% if Me.isLogged() %} disabled {% endif %}>
                         {% if Me.isLogged() %}
                             <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
                         {% endif %}
@@ -71,7 +69,7 @@
             <div class="row">
                 <div class="booking-form no-margin">
                     <div class="col-md-12">
-                        <input type="submit" class="pull-right" value="Rezerwuj" />
+                        <input type="submit" id="submit" name="submit" class="pull-right" value="Rezerwuj" />
                     </div>
                 </div>
             </div>
@@ -98,10 +96,12 @@
     $("#n-rooms").addClass("active");
     $(".banner").toggleClass("banner1");
 
-
-
-
-
+    /*var inputs = document.querySelectorAll("input[type='checkbox']:checked'");
+                if(inputs.length === 0)
+                    $("#submit").style.visibility = "hidden";
+                else
+                    $("#submit").style.visibility = "visible";               
+     */
     var num = 600; //number of pixels before modifying styles
 
     $(window).bind('scroll', function () {
