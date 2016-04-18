@@ -35,7 +35,8 @@ class Admin {
         $this->homeUtil = $HomeUtil;
         $this->adminUtil = $AdminUtil;
 
-        \Di::get('Template')->addTwigGlobals(['newMails' => $this->adminUtil->getMails()]);
+        \Di::get('Template')->addTwigGlobals(['newMails' => $this->adminUtil->getNewMails()]);
+        \Di::get('Template')->addTwigGlobals(['newOpinions' => $this->adminUtil->getNewOpinions()]);
     }
 
     /**

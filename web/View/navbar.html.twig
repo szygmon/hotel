@@ -45,25 +45,26 @@
                 <li class="dropdown notifications-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-bell-o"></i>
-
-                        <span class="label label-warning" id="notifscountern">5</span>
-
+                        {% if newOpinions|length > 0 %}
+                            <span class="label label-danger">{{ newOpinions|length }}</span>
+                        {% endif %}
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">Liczba powiadomień: <span id="notifscounter">5</span></li>
+                        <li class="header">Liczba nowych opinii: <span id="notifscounter">{{ newOpinions|length }}</span></li>
                         <li>
                             <!-- inner menu: contains the actual data -->
                             <ul class="menu">
-
-                                <li>
-                                    <a class="removeNotif" href="#" data-notifid="1">
-                                        <i class="fa fa-plus text-green"></i> Wiadokość
-                                    </a>
-                                </li>
+                                {% for opinion in newOpinions %}
+                                    <li>
+                                        <a href="{{ url('Admin/opinion', { 'id': opinion.id }) }}">
+                                            <i class="fa fa-info"></i>{{ opinion.content|slice(0, 50) }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
 
                             </ul>
                         </li>
-                        <li class="footer"><a href="#">Zobacz wszystkie</a></li>
+                        <li class="footer"><a href="{{ url('Admin/opinions') }}">Zobacz wszystkie</a></li>
                     </ul>
                 </li>
                 <!-- Tasks: style can be found in dropdown.less -->
@@ -178,24 +179,3 @@
         </div>
     </nav>
 </header>
-
-<script type="text/javascript" >
-    $('.removeNotif').on('click', function () {
-        var nid = $(this).attr('data-notifid');
-        $(this).parent().remove();
-        var url = '{{ url('Home/removeNotif') }}';
-
-        // Send the data using post
-        var posting = $.post(url, {id: nid});
-        posting.done(function () {
-            var c = $('#notifscounter').html();
-            var nc = c - 1;
-            $('#notifscounter').empty().append(nc);
-            if (nc == 0) {
-                $('#notifscountern').remove();
-            } else {
-                $('#notifscountern').empty().append(nc);
-            }
-        });
-    });
-</script>

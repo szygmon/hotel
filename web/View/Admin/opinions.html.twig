@@ -42,7 +42,7 @@
                             {% for o in opinions %}
                                 <tr>
                                     <td class="center"><a href="{{ url('Admin/opinion', { 'id': o.id }) }}">{% if o.isVerified %}<span class="badge bg-green"><i class="fa fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-close"></i></span>{% endif %}</a></td>
-                                    <td class="no-wrap"><a href="{{ url('Admin/opinion', { 'id': o.id }) }}">{% for i in 1..o.rating %}<i class="fa fa-star" style="color:orange"></i>{% endfor %}</a></td>
+                                    <td class="no-wrap"><a href="{{ url('Admin/opinion', { 'id': o.id }) }}">{% for i in 1..o.rating %}<i class="fa fa-star text-orange"></i>{% endfor %}</a></td>
                                     <td><a href="{{ url('Admin/opinion', { 'id': o.id }) }}">{{ o.content }}</a></td>
                                     <td>{{ o.date|date('Y-m-d') }}</td>
                                     <td>{{ o.user.givenName }} {{ o.user.familyName }}</td>

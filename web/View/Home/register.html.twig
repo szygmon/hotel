@@ -27,27 +27,27 @@
                     <h3>DANE UŻYTKOWNIKA</h3>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Imię<label>*</label></span>
-                        <input type="text" name="givenName" value={{ values.givenName}}> 
+                        <input type="text" name="givenName" value="{{ values.givenName}}" /> 
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>Nazwisko<label>*</label></span>
-                        <input type="text" name="familyName" value={{ values.familyName}}> 
+                        <input type="text" name="familyName" value="{{ values.familyName}}" /> 
                     </div>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Nazwa użytkownika<label>*</label></span>
-                        <input type="text" name="username" id="username" value={{ values.username}}> 
+                        <input type="text" name="username" id="username" value="{{ values.username}}" /> 
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>E-mail<label>*</label></span>
-                        <input type="text" id="email" name="email" value={{ values.email}}> 
+                        <input type="text" id="email" name="email" value="{{ values.email}}" /> 
                     </div>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Hasło<label>*</label></span>
-                        <input type="password" id="password" name="password" value={{ values.password}}>
+                        <input type="password" id="pass" name="pass" value="" />
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>Potwierdź hasło<label>*</label></span>
-                        <input type="password" id="repeatedpassword" name="repeatedpassword" value={{ values.repeatedpassword}}>
+                        <input type="password" id="repeatedpass" name="repeatedpass" value="" />
                     </div>
 
                     <div class="clearfix"> </div>
@@ -72,15 +72,15 @@
                 required: true,
                 minlength: 5,
             },
-            password: {
+            pass: {
                 required: true,
                 minlength: 8,
                 maxlength: 20,
                 containsAtLeastOneDigit: true
             },
-            repeatedpassword: {
+            repeatedpass: {
                 required: true,
-                equalTo: "#password"
+                equalTo: "#pass"
             },
             email: {
                 required: true,
@@ -89,8 +89,8 @@
         },
         messages: {
             username: "Podanie nazwy użytkownika jest wymagane (nazwa użytkownika musi zawierać co najmniej 5 znaków)",
-            password: "Hasło musi zawierać co najmniej 8 znaków (co najmniej 1 liczbę i 1 literę)",
-            repeatedpassword: "Hasło i powtórzone hasło muszą być takie same",
+            pass: "Hasło musi zawierać co najmniej 8 znaków (co najmniej 1 liczbę i 1 literę)",
+            repeatedpass: "Hasło i powtórzone hasło muszą być takie same",
             email: "Podany e-mail jest nieprawidłowy"
         }
     });

@@ -57,9 +57,15 @@ class AdminUtil {
         \Notify::success('Usunięto użytkownika.');
     }
     
-    public function getMails() {
+    public function getNewMails() {
         $mails = $this->em->getRepository('\Model\Mail')->findBy(array('isActive' => 1, 'isRead' => 0), array('id' => 'DESC'));
         
         return $mails;
+    }
+    
+    public function getNewOpinions() {
+        $opinions = $this->em->getRepository('\Model\Opinion')->findBy(array('isActive' => 1, 'isVerified' => 0));
+        
+        return $opinions;
     }
 }
