@@ -2228,3 +2228,7 @@ div#rooms div.single-top {
 .nav li.active, nav li:hover {
     height: 38px;
 }
+
+.input-disabled {
+    background: #EBEBE4 !important;
+}

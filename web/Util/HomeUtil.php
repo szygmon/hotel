@@ -88,4 +88,42 @@ class HomeUtil {
 
         \Notify::success('Wiadomość została wysłana!');
     }
+    
+    public function remindPassword($post){
+        $data = new \stdClass();
+        if (!isset($post['email'])) {
+            $data->showGetMail = true;
+            return $data;
+        }
+        $user = $this->em->getRepository('\Model\User')->findOneBy(array('email' => $post['email']));
+        
+        if ($user == null) {
+            \Notify::error('Nie znaleziono użytkownika o podanym adresie email w naszej bazie');
+            $data->showGetMail = true;
+            return $data;
+        }
+        $newPassword = $this->GenerateRandomPassword(10);
+        $user->setPassword($newPassword);
+        $this->em->flush();
+        $headers = 'From: ' . $this->settings('email');
+        mail($post['email'], "Przypomnienie hasła w hotelu", "Twoje nowe hasło dostępu w hotelu to " . $newPassword , $headers);
+        $data->showGetMail = false;
+        \Notify::success('Nowe hasło zostało wysłane na podanym adres email');
+        return $data;
+    }
+    
+    public function settings($name = null) {
+        if ($name != null) {
+            $settings = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => $name));
+            $return = $settings->value();
+        } else {
+            $return = $this->em->getRepository('\Model\Setting')->findAll();
+        }
+
+        return $return;
+    }
+    
+    private function GenerateRandomPassword($length) {
+        return substr(md5(date("d.m.Y.H.i.s").rand(1,1000000)) , 0 , $length);
+    }
 }

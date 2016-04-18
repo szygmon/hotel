@@ -3,6 +3,9 @@
 namespace Controller;
 
 use Core\Response;
+use Helper\PasswordHelper;
+use Helper;
+
 
 class Home {
 
@@ -141,11 +144,9 @@ class Home {
      */
     public function contact() {
         if (!isset($_POST['email']))
-             return array();
-             
-        if ($_POST['email'] != 'E-mail'
-                && $_POST['name'] != 'Imię i nazwisko' 
-                && $_POST['content'] != "Wiadomość" ) {
+            return array();
+
+        if ($_POST['email'] != 'E-mail' && $_POST['name'] != 'Imię i nazwisko' && $_POST['content'] != "Wiadomość") {
             if ($_POST['phone'] == 'Telefon')
                 $_POST['phone'] = '';
 
@@ -182,6 +183,17 @@ class Home {
      */
     public function reservation() {
 
+        if (!isset($_POST['fromDate'])) {
+            $_POST['name'] = $this->me->getModel()->getGivenName() . " " . $this->me->getModel()->getFamilyName();
+            $_POST['phone'] = $this->me->getModel()->getPhone();
+            $startReservationDate = new \DateTime();
+            $_POST['fromDate'] = $startReservationDate->format('Y-m-d');
+            $endReservationDate = new \DateTime();
+            $endReservationDate->modify('+14 day');
+            $_POST['toDate'] = $endReservationDate->format('Y-m-d');
+            //$reservation->setToDate($endReservationDate);
+            return array("data" => $_POST);
+        }
         return array("data" => $_POST);
     }
 
@@ -335,4 +347,12 @@ class Home {
         return array("info" => "brak");
     }
 
+    /**
+     * Przypomnienie hasła
+     * @Route(/passwordreminder)
+     */
+    public function passwordReminder() {
+        $data = $this->homeUtil->remindPassword($_POST);
+        return array("data" => $data);
+    }
 }
