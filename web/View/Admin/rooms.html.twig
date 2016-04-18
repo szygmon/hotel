@@ -18,43 +18,42 @@
     <!-- Main content -->
     <section class="content">
         {{ Notify.r }}
-        <!-- TO DO List -->
+
         <div class="box box-primary">
             <div class="box-header">
                 <i class="ion ion-clipboard"></i>
                 <h3 class="box-title">Pokoje</h3>
-            </div><!-- /.box-header -->
+            </div>
 
             <div class="box-body table-responsive">
                 <table id="rooms-table" class="table table-bordered table-hover dataTable">
                     <thead>
                         <tr>
-                            <th>Pokój</th>
+                            <th width="1%">Pokój</th>
                             <th>Nazwa</th>
                             <th>Miejsc</th>
                             <th>Cena</th>
-                            <th>Łazienka</th>
-                            <th>Balkon</th>
-                            <th>Opcje</th>
+                            <th width="1%">Łazienka</th>
+                            <th width="1%">Balkon</th>
+                            <th width="1%">Opcje</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <ul class="todo-list">
                         {% for r in rooms %}
-                             <tr>
-                                 <td>{{ r.number }}</td>
-                                    <td>{{ r.name}}</td>
-                                    <td>{{ r.users }}</td>
-                                    <td>{{ r.cost }}</td>
-                                    <td>{% if r.toilet %}<span class="badge bg-green"><i class="fa fa-fw fa-check"></i>{% else %}<span class="badge bg-red"><i class="fa fa-fw fa-warning"></i>{% endif %}</td>
-                                    <td>{% if r.balcony %}<span class="badge bg-green"><i class="fa fa-fw fa-check"></i>{% else %}<span class="badge bg-red"><i class="fa fa-fw fa-warning"></i>{% endif %}</td>
-                                    <td>
-                                        <a href="{{ url('Admin/editRoom', {'id': r.id}) }}" class="fa fa-edit"></a>
-                                        <a href="{{ url('Admin/rooms', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>{{ r.number }}</td>
+                                <td>{{ r.name}}</td>
+                                <td>{{ r.users }}</td>
+                                <td>{{ r.cost }}</td>
+                                <td class="center">{% if r.toilet %}<span class="badge bg-green"><i class="fa fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-close"></i></span>{% endif %}</td>
+                                <td class="center">{% if r.balcony %}<span class="badge bg-green"><i class="fa fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-close"></i></span>{% endif %}</td>
+                                <td class="no-wrap">
+                                    <a href="{{ url('Admin/editRoom', {'id': r.id}) }}"><span class="badge bg-blue"><i class="fa fa-edit"></i></span></a>
+                                    <a href="{{ url('Admin/rooms', {'action': 'del', 'id': r.id}) }}"><span class="badge bg-red"><i class="fa fa-trash-o"></i></span></a>
+                                </td>
+                            </tr>
                         {% endfor %}
-                        </tbody>
+                    </tbody>
                 </table>
             </div><!-- /.box-body -->
 
@@ -64,6 +63,8 @@
         </div><!-- /.box -->
     </section><!-- /.Left col -->
 
+    <script src="{{ url('template') }}/js/jquery.dataTables.js" type="text/javascript"></script>
+    <script src="{{ url('template') }}/js/dataTables.bootstrap.js" type="text/javascript"></script>
     <script type="text/javascript">
         $("#rooms-category-sidebar, #rooms-sidebar").addClass("treeview active");
 

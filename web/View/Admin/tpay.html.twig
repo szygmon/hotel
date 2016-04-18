@@ -23,13 +23,13 @@
             </div><!-- /.box-header -->
             <div class="box-body">
                 <form name="inputform" method="POST" action="{{ url('Admin/tpay', {'action': 'save'}) }}">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">ID:</label>
                             <input type="text" name="tid" value="{{ tid }}" class="form-control" />
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="recipient-name" class="control-label">Kod bezpieczeństwa:</label>
                             <input type="text" name="tkey" value="{{ tkey }}" class="form-control" />

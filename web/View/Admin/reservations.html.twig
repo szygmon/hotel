@@ -23,59 +23,56 @@
             <div class="box-header">
                 <i class="ion ion-clipboard"></i>
                 <h3 class="box-title">Lista rezerwacji</h3>
-            </div><!-- /.box-header -->
-
-            <div class="box-body">
-                <!-- /.box-header -->
-                <div class="box-body table-responsive">
-                    <table id="reservations-table" class="table table-bordered table-hover dataTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Użytkownik</th>
-                                <th>Od</th>
-                                <th>Do</th>
-                                <th>Zarezerwował</th>
-                                <th>Status</th>
-                                <th>Pokoje</th>
-                                {% if action != 'old' %}<th>Opcje</th>{% endif %}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for r in reservations %}
-                                <tr>
-                                    <td>{{ r.id }}</td>
-                                    <td>{% if r.uid %}{{ r.givenName}} {{ r.familyName }}{% else %}{{ r.guest }}{% endif %}</td>
-                                    <td>{{ r.fromDate|date('Y-m-d') }}</td>
-                                    <td>{{ r.toDate|date('Y-m-d') }}</td>
-                                    <td>{{ r.reservationDate|date('Y-m-d') }}</td>
-                                    <td class="center">{% if r.paid %}<a href="{{ url('Admin/reservations', {'action': 'noPaid', 'id': r.id}) }}"><span class="badge bg-green"><i class="fa fa-fw fa-check"></i></span></a>{% else %}<a href="{{ url('Admin/reservations', {'action': 'paidConfirm', 'id': r.id}) }}"><span class="badge bg-red"><i class="fa fa-fw fa-warning"></i></span></a>{% endif %}</td>
-                                    <td></td>
-                                    {% if action != 'old' %}
-                                    <td>
-                                        <a href="{{ url('Admin/editReservation', {'id': r.id}) }}" class="fa fa-edit"></a>
-                                        <a href="{{ url('Admin/reservations', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
-                                    </td>
-                                    {% endif %}
-                                </tr>
-
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.box-body -->
             </div>
-            <!-- /.box -->
-        </div>
-    </div>
 
-    <div class="box-footer clearfix no-border">
-        <a href="{{ url('Admin/editRoom') }}" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Dodaj nową</a>
-    </div>
-</section><!-- /.Left col -->
-<script src="{{ url('template') }}/js/jquery.dataTables.js" type="text/javascript"></script>
-<script src="{{ url('template') }}/js/dataTables.bootstrap.js" type="text/javascript"></script>
-<script type="text/javascript">
+            <div class="box-body table-responsive">
+                <table id="reservations-table" class="table table-bordered table-hover dataTable">
+                    <thead>
+                        <tr>
+                            <th width="1%">ID</th>
+                            <th>Użytkownik</th>
+                            <th>Od</th>
+                            <th>Do</th>
+                            <th>Zarezerwował</th>
+                            <th width="1%">Status</th>
+                            <th>Pokoje</th>
+                            <th width="1%">Opcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for r in reservations %}
+                            <tr>
+                                <td>{{ r.id }}</td>
+                                <td>{{ r.user.givenName }} {{ r.user.familyName }}</td>
+                                <td>{{ r.fromDate|date('Y-m-d') }}</td>
+                                <td>{{ r.toDate|date('Y-m-d') }}</td>
+                                <td>{{ r.reservationDate|date('Y-m-d') }}</td>
+                                <td class="center">{% if r.paid %}<a href="{{ url('Admin/reservations', {'action': 'noPaid', 'id': r.id}) }}"><span class="badge bg-green"><i class="fa fa-check"></i></span></a>{% else %}<a href="{{ url('Admin/reservations', {'action': 'paidConfirm', 'id': r.id}) }}"><span class="badge bg-red"><i class="fa fa-warning"></i></span></a>{% endif %}</td>
+                                <td>
+                                    {% for room in r.rooms %}
+                                        {{ room.number }}
+                                    {% endfor %}
+                                </td>
+                                <td class="no-wrap">
+                                    <a href="{{ url('Admin/editReservation', {'id': r.id}) }}"><span class="badge bg-blue"><i class="fa fa-edit"></i></span></span></a>
+                                    <a href="{{ url('Admin/reservations', {'action': 'del', 'id': r.id}) }}"><span class="badge bg-red"><i class="fa fa-trash-o"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer clearfix no-border">
+                <a href="{{ url('Admin/editRoom') }}" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Dodaj nową</a>
+            </div>
+        </div>
+
+
+
+    </section><!-- /.Left col -->
+    <script src="{{ url('template') }}/js/jquery.dataTables.js" type="text/javascript"></script>
+    <script src="{{ url('template') }}/js/dataTables.bootstrap.js" type="text/javascript"></script>
+    <script type="text/javascript">
         $("#reservations-category-sidebar, {% if action == 'old' %}#oldreservations-sidebar{% else %}#reservations-sidebar{% endif %}").addClass("treeview active");
 
         $('#reservations-table').dataTable({
@@ -90,6 +87,6 @@
                     'aTargets': [0]
                 }]
         });
-</script>
+    </script>
 
 {% endblock %}

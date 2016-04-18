@@ -4070,3 +4070,13 @@ Gradient Background colors
     white-space: normal!important;
   }
 }
+.center {
+    text-align: center;
+}
+.no-wrap {
+    white-space: nowrap;
+}
+
+.dataTables_wrapper {
+    padding: 0 5px;
+}

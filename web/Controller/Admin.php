@@ -136,29 +136,6 @@ class Admin {
         return array('room' => $room);
     }
 
-    /**
-     * Rules
-     * @Route(/admin/rules/{action})
-     * @param \User\Me $Me
-     * @param \Core\Router $Router
-     */
-    public function rules($Me, $Router, $action = null) {
-        if (!$Me->auth('admin'))
-            $Router->redirect('Admin/admin');
-
-        if ($action == 'save') {
-            $rules = $this->em->getRepository('\Model\Setting')->find('rules');
-            $rules->setValue($_POST['value']);
-            $this->em->flush();
-
-            \Notify::success('Zapisano regulamin.');
-        }
-
-        $rules = $this->em->getRepository('\Model\Setting')->find('rules');
-
-        return array('rules' => $rules);
-    }
-
     public function settings($name = null) {
         if ($name != null) {
             $settings = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => $name));
@@ -226,9 +203,8 @@ class Admin {
 
         if ($action == 'old') {
             $reservations = $this->em->createQueryBuilder()
-                    ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')
+                                        ->select('r')
                     ->from('\Model\Reservation', 'r')
-                    ->leftJoin('r.user', 'u')
                     ->where('r.fromDate < ?1')
                     ->setParameter(1, new \DateTime())
                     ->orderBy('r.fromDate', 'DESC')
@@ -236,9 +212,8 @@ class Admin {
                     ->getResult();
         } else {
             $reservations = $this->em->createQueryBuilder()
-                    ->select('r.id, r.fromDate, r.toDate, r.reservationDate, r.paid, r.guest, u.givenName, u.familyName, u.id as uid')
+                    ->select('r')
                     ->from('\Model\Reservation', 'r')
-                    ->leftJoin('r.user', 'u')
                     ->where('r.fromDate >= ?1')
                     ->setParameter(1, new \DateTime())
                     ->orderBy('r.fromDate')
@@ -371,15 +346,17 @@ class Admin {
             $Router->redirect('Admin/admin');
 
         $email = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'email'));
+        $rules = $this->em->getRepository('\Model\Setting')->find('rules');
 
         if (isset($_POST['save'])) {
             $email->setValue($_POST['email']);
+            $rules->setValue($_POST['value']);
             $this->em->flush();
 
             \Notify::success('Zapisano ustawienia.');
         }
 
-        return array('email' => $email->getValue());
+        return array('email' => $email->getValue(), 'rules' => $rules->getValue());
     }
 
 }
