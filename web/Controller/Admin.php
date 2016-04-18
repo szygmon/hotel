@@ -203,7 +203,7 @@ class Admin {
 
         if ($action == 'old') {
             $reservations = $this->em->createQueryBuilder()
-                                        ->select('r')
+                    ->select('r')
                     ->from('\Model\Reservation', 'r')
                     ->where('r.fromDate < ?1')
                     ->setParameter(1, new \DateTime())
@@ -306,7 +306,7 @@ class Admin {
             $mail = $this->em->getRepository('\Model\Mail')->find($id);
             $mail->setIsRead(1);
             $this->em->flush();
-        } 
+        }
 
         return array('mail' => $mail);
     }
@@ -326,10 +326,10 @@ class Admin {
             $mail = $this->em->getRepository('\Model\Mail')->find($id);
             $headers = 'From: ' . $this->settings('email');
             mail($_POST['emailto'], $_POST['subject'], $_POST['message'], $headers);
-            
+
             \Notify::success('Wiadomość została wysłana');
         }
-        
+
         $mails = $this->em->getRepository('\Model\Mail')->findBy(array(), array('id' => 'DESC'));
 
         return array('mail' => $mail, 'allMails' => $mails);
@@ -357,6 +357,50 @@ class Admin {
         }
 
         return array('email' => $email->getValue(), 'rules' => $rules->getValue());
+    }
+
+    /**
+     * Opinie
+     * @Route("/admin/opinions/{action}/{id}")
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function opinions($Me, $Router, $action = null, $id = null) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+
+        if ($action == 'accept' && is_numeric($id)) {
+            $opinion = $this->em->getRepository('\Model\Opinion')->find($id);
+            $opinion->setIsVerified(1);
+            $this->em->flush();
+
+            \Notify::success('Opublikowano');
+        } else if ($action == 'remove' && is_numeric($id)) {
+            $opinion = $this->em->getRepository('\Model\Opinion')->find($id);
+            $opinion->setIsActive(0);
+            $this->em->flush();
+
+            \Notify::success('Usunięto');
+        }
+
+        $opinions = $this->em->getRepository('\Model\Opinion')->findBy(array('isActive' => 1));
+
+        return array('opinions' => $opinions);
+    }
+
+    /**
+     * Opinia
+     * @Route("/admin/opinion/{id}")
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function opinion($Me, $Router, $id = null) {
+        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+            $Router->redirect('Admin/admin');
+
+        $opinion = $this->em->getRepository('\Model\Opinion')->find($id);
+
+        return array('opinion' => $opinion);
     }
 
 }

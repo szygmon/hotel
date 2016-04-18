@@ -32,11 +32,11 @@ class Opinion {
     protected $isVerified = false;
     
     /** @Column(type="boolean") */
-    protected $isActive = false;
+    protected $isActive = true;
     
     /**
      * @ManyToOne(targetEntity="User")
-     * @JoinColumn(name="user_opinion", referencedColumnName="id")
+     * @JoinColumn(referencedColumnName="id")
      */
     protected $user;
 }
