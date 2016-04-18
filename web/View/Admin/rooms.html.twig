@@ -1,10 +1,12 @@
 {% extends './base.html.twig' %}
 
 {% block title %}HOTEL JM - pokoje{% endblock %}
-
+{% block head %}
+    <link href="{{ url('template') }}/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block content %}
 
-    
+
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
@@ -23,31 +25,37 @@
                 <h3 class="box-title">Pokoje</h3>
             </div><!-- /.box-header -->
 
-            <div class="box-body">
-                <ul class="todo-list">
-                    {% for r in rooms %}
-                        <li>
-                            <!-- drag handle -->
-                            <span class="handle">
-                                <i class="fa fa-ellipsis-v"></i>
-                                <i class="fa fa-ellipsis-v"></i>
-                            </span>
-                            <!-- checkbox -->
-                            <input type="checkbox" value="" name=""/>
-                            <!-- todo text -->
-                            <span class="text">{{ r.number }}: {{ r.name }} ({{ r.users }})</span>
-                            <!-- General tools such as edit or delete-->
-                            <div class="tools">
-                                <a href="{{ url('Admin/editRoom', {'id': r.id}) }}" class="fa fa-edit"></a>
-                                <a href="{{ url('Admin/rooms', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
-                            </div>
-                        </li>
-                         {% else %}
-                        <li>
-                            <span class="text">Brak pokoi w bazie</span>
-                        </li>
-                    {% endfor %}
-                </ul>
+            <div class="box-body table-responsive">
+                <table id="rooms-table" class="table table-bordered table-hover dataTable">
+                    <thead>
+                        <tr>
+                            <th>Pokój</th>
+                            <th>Nazwa</th>
+                            <th>Miejsc</th>
+                            <th>Cena</th>
+                            <th>Łazienka</th>
+                            <th>Balkon</th>
+                            <th>Opcje</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <ul class="todo-list">
+                        {% for r in rooms %}
+                             <tr>
+                                 <td>{{ r.number }}</td>
+                                    <td>{{ r.name}}</td>
+                                    <td>{{ r.users }}</td>
+                                    <td>{{ r.cost }}</td>
+                                    <td>{% if r.toilet %}<span class="badge bg-green"><i class="fa fa-fw fa-check"></i>{% else %}<span class="badge bg-red"><i class="fa fa-fw fa-warning"></i>{% endif %}</td>
+                                    <td>{% if r.balcony %}<span class="badge bg-green"><i class="fa fa-fw fa-check"></i>{% else %}<span class="badge bg-red"><i class="fa fa-fw fa-warning"></i>{% endif %}</td>
+                                    <td>
+                                        <a href="{{ url('Admin/editRoom', {'id': r.id}) }}" class="fa fa-edit"></a>
+                                        <a href="{{ url('Admin/rooms', {'action': 'del', 'id': r.id}) }}" class="fa fa-trash-o"></a>
+                                    </td>
+                                </tr>
+                        {% endfor %}
+                        </tbody>
+                </table>
             </div><!-- /.box-body -->
 
             <div class="box-footer clearfix no-border">
@@ -58,6 +66,19 @@
 
     <script type="text/javascript">
         $("#rooms-category-sidebar, #rooms-sidebar").addClass("treeview active");
+
+        $('#rooms-table').dataTable({
+            "bPaginate": true,
+            "bLengthChange": true,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": true,
+            "bAutoWidth": false,
+            "aoColumnDefs": [{
+                    'bSortable': false,
+                    'aTargets': [0]
+                }]
+        });
     </script>
 
 {% endblock %}
