@@ -39,7 +39,7 @@ class HomeUtil {
             $user->setPassword($_POST['pass']);
         //$this->em->persist($user);
         $this->em->flush();
-
+        $this->loginForm($_POST); 
         return \Notify::success('Dane zaktualizowano');
     }
 

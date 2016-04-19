@@ -64,7 +64,20 @@ class Home {
             $Router->redirect('Home/index');
 
         if (isset($_POST['username']))
+        {
+            $userInDatabase = $this->em->createQueryBuilder()->select('user')
+                    ->from('\Model\User', 'user')
+                    ->where('user.id != ?1 and user.email = ?2')
+                    ->setParameters(array(1 => $this->me->getModel()->getId(), 2 => $_POST['email']))
+                    ->getQuery()
+                    ->getResult();
+            if($userInDatabase != null)
+            {
+                \Notify::error("Użytkownik o podanym adresie email: " . $_POST['email'] . " istnieje już w naszej bazie");
+                return array();
+            }
             $this->homeUtil->updateAccount($_POST);
+        }
         return array();
     }
 

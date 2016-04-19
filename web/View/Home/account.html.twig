@@ -1,7 +1,9 @@
 {% extends './baseSP.html.twig' %}
 
 {% block title %}Hotel JM{% endblock %}
-
+{% block head %}
+    <script src="{{ url('template') }}/js/jquery.validate.min.js" type="text/javascript"></script> 
+{% endblock %}
 {% block body %}
     <script type="text/javascript">
         $("#n-signin").addClass("active");
@@ -14,7 +16,10 @@
     <div class="container">
         <div class="register">
             {{ Notify.r }}
-            <form method="post"> 
+            <div id="error-note">
+            </div>
+            </br>
+            <form method="post" id="accountform" name="accountform"> 
                 <div class="register-top-grid login-right">
                     <h3>DANE UŻYTKOWNIKA</h3>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
@@ -35,11 +40,11 @@
                     </div>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Nowe hasło<label>*</label></span>
-                        <input type="password" name="pass">
+                        <input type="password" id="pass" name="pass">
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>Potwierdź nowe hasło<label>*</label></span>
-                        <input type="password" name="passconfirm">
+                        <input type="password" id="passconfirm" name="passconfirm">
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>Telefon<label>*</label></span>
@@ -55,4 +60,42 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+
+    $.validator.addMethod("confirmPasswordEqualsPassword", function (value) {
+        var passwordValue = $("#pass").val();
+        passwordValue = passwordValue.replace(/./g, '*');
+        value = value.replace(/./g, '*');
+        if (value.length == 0 && passwordValue.length == 0)
+            return true;
+        if (value == passwordValue)
+            return true;
+        return false;
+    }, 'Hasło i powtórzone hasło muszą być takie same');
+    $.validator.addMethod("emptyOrcontainsAtLeastOneDigitAndLetter", function (value) {
+        if (value.length === 0)
+            return true;
+        if (value.length < 8)
+            return false;
+        return /[a-z].*[0-9]|[0-9].*[a-z]/i.test(value);
+    }, 'Hasło musi zawierać co najmniej 1 liczbę i 1 literę');
+    $('#accountform').validate({// initialize the plugin
+        errorClass: "my-error-class",
+        errorLabelContainer: "#error-note",
+        wrapper: "li",
+        rules: {
+            pass: {
+                emptyOrcontainsAtLeastOneDigitAndLetter: true
+            },
+            passconfirm: {
+                confirmPasswordEqualsPassword: true
+            }
+        },
+        messages: {
+            pass: "Hasło musi zawierać co najmniej 8 znaków (co najmniej 1 liczbę i 1 literę)",
+            passconfirm: "Hasło i powtórzone hasło muszą być takie same"
+        }
+    });
+
+</script>
 {% endblock %}

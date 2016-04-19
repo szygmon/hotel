@@ -20,9 +20,9 @@
                         <!---/End-date-piker---->
 
                         <h5>IMIĘ I NAZWISKO</h5>
-                        <input class="input-disabled" type="text" name="name" value="{{ data.name }}" {% if Me.isLogged() %} disabled {% endif %}>
+                        <input type="text" name="name" value="{{ data.name }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %}>
                         <h5>NUMER TELEFONU</h5>
-                        <input class="input-disabled" name="phone" type="text" value="{{ data.phone }}" {% if Me.isLogged() %} disabled {% endif %}>
+                        <input name="phone" type="text" value="{{ data.phone }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %}>
                         {% if Me.isLogged() %}
                             <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
                         {% endif %}
@@ -85,16 +85,35 @@
         $(".datepickerR").datepicker({
             onSelect: function () {
                 $("#rooms").empty();
-                $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
-                $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
+                $("#rooms").append('<div id="busyIndicator" class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
+                $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'),
+                        function () {
+                            $("#busyIndicator").remove();
+                            if ($("#rooms").is(":empty"))
+                            {
+                                $("#submit").hide();
+                            } else
+                            {
+                                $("#submit").show();
+                            }
+                        });
             }
         });
         $(".properties").change(function () {
 //if (this.checked) {
             $("#rooms").empty();
-            $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
-            $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
-//}
+            $("#rooms").append('<div id="busyIndicator" class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
+            $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'),
+                    function () {
+                        $("#busyIndicator").remove();
+                        if ($("#rooms").is(":empty"))
+                        {
+                            $("#submit").hide();
+                        } else
+                        {
+                            $("#submit").show();
+                        }
+                    });
         });
     });
     $("#n-rooms").addClass("active");
