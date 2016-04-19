@@ -79,8 +79,7 @@
 
 <script type="text/javascript">
     $(function () {
-        var url = $(location).attr('hostname');
-        url = "http://" + url + "/getrooms/";
+        url = "{{ url('Home/getRooms') }}/";
         $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
         $(".datepickerR").datepicker({
             onSelect: function () {
@@ -90,7 +89,6 @@
             }
         });
         $(".properties").change(function () {
-//if (this.checked) {
             $("#rooms").empty();
             $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
             $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
@@ -99,12 +97,6 @@
     $("#n-rooms").addClass("active");
     $(".banner").toggleClass("banner1");
 
-    /*var inputs = document.querySelectorAll("input[type='checkbox']:checked'");
-     if(inputs.length === 0)
-     $("#submit").style.visibility = "hidden";
-     else
-     $("#submit").style.visibility = "visible";               
-     */
     var num = 600; //number of pixels before modifying styles
 
     $(window).bind('scroll', function () {
@@ -114,8 +106,5 @@
             $('#filters').removeClass('filters-menu');
         }
     });
-
-
-
 </script>
 {% endblock %}

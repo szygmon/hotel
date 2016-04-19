@@ -335,7 +335,7 @@ class Admin {
      * @param \Core\Router $Router
      */
     public function users($Me, $Router, $action = null, $id = null) {
-        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+        if (!$Me->auth('admin'))
             $Router->redirect('Admin/admin');
         switch ($action) {
             case 'add':
@@ -367,7 +367,7 @@ class Admin {
      * @param \Core\Router $Router
      */
     public function editUser($Me, $Router, $id = null, $user = null) {
-        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+        if (!$Me->auth('admin'))
             $Router->redirect('Admin/admin');
 
         if (($user == null ) && $id) {
@@ -409,7 +409,7 @@ class Admin {
         $mail = null;
         if (isset($_POST['reply']) && $action == 'reply' && is_numeric($id)) {
             $mail = $this->em->getRepository('\Model\Mail')->find($id);
-            $headers = 'From: ' . $this->settings('email');
+            $headers = 'From: ' . $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'email'))->getValue();
             mail($_POST['emailto'], $_POST['subject'], $_POST['message'], $headers);
 
             \Notify::success('Wiadomość została wysłana');
