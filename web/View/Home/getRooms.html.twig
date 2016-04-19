@@ -26,7 +26,7 @@
                     <div class="sinbt">
                         <span class="button-checkbox">
                             <button type="button" class="btn btn-xs" data-color="primary">Wybieram</button>
-                            <input type="checkbox" name="room[]" class="hidden" value="{{ r.id }}" />
+                            <input type="checkbox" name="room[]" class="hidden roomcheckbox" value="{{ r.id }}" />
                         </span>
                     </div>
                 </div>
@@ -101,6 +101,15 @@
                 }
                 init();
             });
+        });
+        $('.roomcheckbox').change(function () {
+            console.log("asdaaaaa");
+            if ($(".roomcheckbox:checked").length) {
+                console.log($(".roomcheckbox:checked").length);
+                $("#submit").show();
+            } else {
+                $("#submit").hide();
+            }
         });
     </script>
 </body>
