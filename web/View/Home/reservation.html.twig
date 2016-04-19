@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-md-9">
                     <div id="rooms">
-
+                        <div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>
                     </div>
                 </div>
             </div>
@@ -84,11 +84,15 @@
         $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
         $(".datepickerR").datepicker({
             onSelect: function () {
+                $("#rooms").empty();
+                $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
                 $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
             }
         });
         $(".properties").change(function () {
 //if (this.checked) {
+            $("#rooms").empty();
+            $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
             $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
 //}
         });
@@ -97,10 +101,10 @@
     $(".banner").toggleClass("banner1");
 
     /*var inputs = document.querySelectorAll("input[type='checkbox']:checked'");
-                if(inputs.length === 0)
-                    $("#submit").style.visibility = "hidden";
-                else
-                    $("#submit").style.visibility = "visible";               
+     if(inputs.length === 0)
+     $("#submit").style.visibility = "hidden";
+     else
+     $("#submit").style.visibility = "visible";               
      */
     var num = 600; //number of pixels before modifying styles
 

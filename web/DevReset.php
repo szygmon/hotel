@@ -25,6 +25,9 @@ class DevReset {
         $adminRole = new \Model\Role;
         $adminRole->setName('admin');
         $this->em->persist($adminRole);
+        $receptionistRole = new \Model\Role;
+        $receptionistRole->setName('receptionist');
+        $this->em->persist($receptionistRole);
 
         // Admin
         $user = new \Model\User();
@@ -35,7 +38,6 @@ class DevReset {
         $user->setFamilyName('Test');
         $user->addRole($adminRole);
         $this->em->persist($user);
-        $this->em->flush();
 
         // Settings
         $settings[0] = new \Model\Setting();
@@ -54,6 +56,8 @@ class DevReset {
         $settings[3]->setName('email');
         $settings[3]->setValue('');
         $this->em->persist($settings[3]);
+        
+        
         $this->em->flush();
 
         return $r;

@@ -24,6 +24,12 @@ class AdminUtil {
             $user->setPassword($post['password']);
         $user->setEmail($post['email']);
         $user->setPhone($post['phone']);
+        if (isset($post['roles'][0])) {
+            foreach ($post['roles'] as $r) {
+                $role = $this->em->getRepository('\Model\Role')->findOneBy(array('name' => $r));
+                $user->addRole($role);
+            }
+        }
 
         $this->em->persist($user);
         $this->em->flush();
@@ -42,6 +48,15 @@ class AdminUtil {
             $user->setPassword($post['password']);
         $user->setEmail($post['email']);
         $user->setPhone($post['phone']);
+        $user->getRoles()->clear();
+        if (isset($post['roles'][0])) {
+            foreach ($post['roles'] as $r) {
+                $role = $this->em->getRepository('\Model\Role')->findOneBy(array('name' => $r));
+                if (!$user->getRoles()->contains($role)) 
+                    $user->addRole($role);
+            }
+        }
+        
         $this->em->flush();
 
         \Notify::success('Zaktualizowano dane użytkownika');

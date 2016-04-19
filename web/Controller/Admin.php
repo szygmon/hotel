@@ -62,7 +62,40 @@ class Admin {
         $reservationsConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 1')->getQuery()->getSingleScalarResult();
         $reservationsNotConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 0')->getQuery()->getSingleScalarResult();
         $rooms = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Room', 'r')->getQuery()->getSingleScalarResult();
-        return array('users' => $users, 'reservationsConfirm' => $reservationsConfirm, 'reservationsNotConfirm' => $reservationsNotConfirm, 'rooms' => $rooms);
+
+
+        $date = new \DateTime(date('Y-m-d'));
+        $qb = $this->em->createQueryBuilder();
+        $reserved = $qb
+                ->select('rr.id, rr.name, rr.number')
+                ->from('\Model\Reservation', 're')
+                ->join('re.rooms', 'rr')
+                ->where('(re.fromDate = ?1) OR (re.toDate > ?1 AND re.fromDate < ?1)')
+                ->setParameters(array(1 => $date))
+                ->getQuery()
+                ->getResult();
+        
+        //var_dump($reserved);
+
+        if (isset($reserved[0])) {
+            $available = $this->em->createQueryBuilder()->select('ro')
+                    ->from('\Model\Room', 'ro')
+                    ->where($qb->expr()->notIn('ro.id', array_column($reserved, 'id')))
+                    ->getQuery()
+                    ->getResult();
+        } else {
+            $available = $this->em->getRepository('\Model\Room')->findAll();
+        }
+
+
+        return array(
+            'users' => $users,
+            'reservationsConfirm' => $reservationsConfirm,
+            'reservationsNotConfirm' => $reservationsNotConfirm,
+            'rooms' => $rooms,
+            'reserved' => $reserved,
+            'available' => $available
+        );
     }
 
     /**
@@ -79,7 +112,7 @@ class Admin {
             $room = $this->em->getRepository('\Model\Room')->find($id);
             $room->setIsActive(0);
             $this->em->flush();
-            
+
             \Notify::success('Pokój został usunięty z bazy danych');
         } else if ($action == 'add' && isset($_POST)) {
             $room = new \Model\Room();
@@ -185,8 +218,8 @@ class Admin {
             $reservations = $this->em->createQueryBuilder()
                     ->select('r')
                     ->from('\Model\Reservation', 'r')
-                    ->where('r.fromDate < ?1')
-                    ->setParameter(1, new \DateTime())
+                    ->where('r.toDate < ?1')
+                    ->setParameter(1, new \DateTime(date('Y-m-d')))
                     ->orderBy('r.fromDate', 'DESC')
                     ->getQuery()
                     ->getResult();
@@ -194,8 +227,8 @@ class Admin {
             $reservations = $this->em->createQueryBuilder()
                     ->select('r')
                     ->from('\Model\Reservation', 'r')
-                    ->where('r.fromDate >= ?1')
-                    ->setParameter(1, new \DateTime())
+                    ->where('r.toDate >= ?1')
+                    ->setParameter(1, new \DateTime(date('Y-m-d')))
                     ->orderBy('r.fromDate')
                     ->getQuery()
                     ->getResult();
@@ -265,7 +298,7 @@ class Admin {
     public function editUser($Me, $Router, $id = null, $user = null) {
         if (!$Me->auth('admin') && !$Me->auth('receptionist'))
             $Router->redirect('Admin/admin');
-        
+
         if (($user == null ) && $id) {
             $user = $this->em->getRepository('\Model\User')->find($id);
         }

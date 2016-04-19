@@ -2232,3 +2232,9 @@ div#rooms div.single-top {
 .input-disabled {
     background: #EBEBE4 !important;
 }
+
+.load-icon {
+    min-height: 100px;
+    margin-top: 50px;
+    font-size: 30px;
+}

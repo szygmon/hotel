@@ -2,11 +2,6 @@
 
 namespace Controller;
 
-use Core\Response;
-use Helper\PasswordHelper;
-use Helper;
-
-
 class Home {
 
     /** @var \User\Me */
@@ -30,17 +25,14 @@ class Home {
     }
 
     /**
-     * Index Site
+     * Strona główna
      * @Route()
      * @param \User\Me $Me
      * @param \Core\Router $Router
      */
     public function index($Me, $Router) {
-//(new \UserManager)->switchSchema('hotel');
-//if ($Me->auth('user'))
-//  return new Response([], 'Home/indexSchool');
 
-        return array("salesPage" => !$Router->getSubdomain());
+        return array();
     }
 
     /**
@@ -58,7 +50,7 @@ class Home {
      */
     public function rooms_oldcopy() {
 
-        return array("salesPage" => true);
+        return array();
     }
 
     /**
@@ -87,7 +79,7 @@ class Home {
         if (isset($_POST['username']))
             $msg = $this->homeUtil->loginForm($_POST);
 
-        return array("salesPage" => true, 'msg' => $msg);
+        return array('msg' => $msg);
     }
 
     /**
@@ -96,7 +88,7 @@ class Home {
      */
     public function offert() {
 
-        return array("salesPage" => true);
+        return array();
     }
 
     /**
@@ -114,7 +106,7 @@ class Home {
             $this->em->persist($opinion);
             $this->em->flush();
 
-            \Notify::success('Twoja opinia zostanie dodana do księgi gości zaraz po weryfikacji.');
+            \Notify::success('Twoja opinia zostanie dodana do księgi gości zaraz po weryfikacji');
         }
         $opinions = $this->em->getRepository('\Model\Opinion')->findBy(array('isActive' => '1', 'isVerified' => '1'));
         return array("opinions" => $opinions);
@@ -126,7 +118,7 @@ class Home {
      */
     public function tp() {
 
-        return array("salesPage" => true);
+        return array();
     }
 
     /**
@@ -135,7 +127,7 @@ class Home {
      */
     public function details() {
 
-        return array("salesPage" => true);
+        return array();
     }
 
     /**
@@ -160,7 +152,7 @@ class Home {
      * @Route(/discover)
      */
     public function discover() {
-        return array("salesPage" => true);
+        return array();
     }
 
     /**
@@ -347,7 +339,7 @@ class Home {
         $this->em->remove($n);
         $this->em->flush();
 
-        return array("info" => "brak");
+        return array();
     }
 
     /**
