@@ -1,0 +1,99 @@
+{% for r in rooms %}
+    {% if ((toilet and r.toilet == 1) or (toilet == "false" or toilet == null)) and ((balcony and r.balcony == 1) or (balcony == null or balcony == "false"))%}
+
+        <div class="col-md-3">
+            <div class="info-box bg-green">
+                <span class="info-box-icon"><i class="fa fa-bed"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">{{ r.name }}</span>
+                    <span class="info-box-number">{{ r.number }}</span>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 20%"></div>
+                    </div>
+                    <span class="progress-description">
+                        <span class="badge badge-primary"><i class="glyphicon glyphicon-user room-info"></i> {{ r.users }}</span>
+                        <div class="sinbt" style="float:right">
+                            <span class="button-checkbox">
+                                <button type="button" class="btn btn-xs" data-color="warning">Wybieram</button>
+                                <input type="checkbox" name="room[]" class="hidden" value="{{ r.id }}" {% for rroom in reservation.rooms %}{% if rroom.id == r.id %}checked{% endif %}{% endfor %} />
+                            </span>
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+
+    {% endif %}
+{% endfor %}
+<script type="text/javascript">
+    $(function () {
+        $('.button-checkbox').each(function () {
+
+            // Settings
+            var $widget = $(this),
+                    $button = $widget.find('button'),
+                    $checkbox = $widget.find('input:checkbox'),
+                    color = $button.data('color'),
+                    settings = {
+                        on: {
+                            icon: 'glyphicon glyphicon-check',
+                            color: '#fff'
+                        },
+                        off: {
+                            icon: 'glyphicon glyphicon-unchecked',
+                            color: '#555'
+                        }
+                    };
+
+            // Event Handlers
+            $button.on('click', function () {
+                $checkbox.prop('checked', !$checkbox.is(':checked'));
+                $checkbox.triggerHandler('change');
+                updateDisplay();
+            });
+            $checkbox.on('change', function () {
+                updateDisplay();
+            });
+
+            // Actions
+            function updateDisplay() {
+                var isChecked = $checkbox.is(':checked');
+
+                // Set the button's state
+                $button.data('state', (isChecked) ? "on" : "off");
+
+                // Set the button's icon
+                $button.find('.state-icon')
+                        .removeClass()
+                        .addClass('state-icon ' + settings[$button.data('state')].icon)
+                        .css('color', settings[$button.data('state')].color);
+
+                // Update the button's color
+                if (isChecked) {
+                    $button
+                            .removeClass('btn-default')
+                            .addClass('btn-' + color + ' active');
+                } else {
+                    $button
+                            .removeClass('btn-' + color + ' active')
+                            .addClass('btn-default');
+                }
+            }
+
+            // Initialization
+            function init() {
+
+                updateDisplay();
+
+                // Inject the icon if applicable
+                if ($button.find('.state-icon').length == 0) {
+                    $button.prepend('<i class="state-icon ' + settings[$button.data('state')].icon + '" style="color:#555"></i> ');
+                }
+            }
+            init();
+        });
+    });
+</script>

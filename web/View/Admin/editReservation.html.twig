@@ -1,7 +1,11 @@
 {% extends './base.html.twig' %}
 
 {% block title %}HOTEL JM - edycja rezerwacji{% endblock %}
-
+{% block head %}
+    <link href="{{ url('template') }}/css/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+    <link href="{{ url('template') }}/css/datepicker3.css" rel="stylesheet" type="text/css" />
+    <link href="{{ url('template') }}/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block content %}
 
 
@@ -12,15 +16,6 @@
             <small>Edycja rezerwacje</small>
         </h1>
     </section>
-    <link rel="stylesheet" href="{{ url('template') }}/css/jquery-ui.css" />
-    <script src="{{ url('template') }}/js/jquery-ui.js"></script>
-    <script>
-        $(function () {
-            $("#datepicker,#datepicker1,#datepicker2").datepicker({
-                dateFormat: 'yy-mm-dd'
-            });
-        });
-    </script>
     <!-- Main content -->
     <section class="content">
         {{ Notify.r }}
@@ -51,43 +46,32 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Status:</label>
-                                    <input type="text" name="name" value="{{ reservation.paid }}" class="form-control" />
+                                    <label for="recipient-name" class="control-label">Status:</label><br />
+                                    <input id="switch-offColor" name="paid" value="1" type="checkbox" data-label-width="100" data-label-text="Opłacona" data-off-color="danger" data-on-color="success" data-on-text="TAK" data-off-text="NIE" {% if reservation.paid %}checked{% endif %} />
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 dropdown-button">           			
                                 <div class="book_date form-group">
-                                    <label for="recipient-name" class="control-label">Data początkowa:</label>
-                                    <input class="date form-control" id="datepicker" name="fromDate" type="text" value="{{ reservation.fromDate|date('Y-m-d') }}" placeholder="Od dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                        this.value = 'Od dnia';
-                                                    }" required>
+                                    <label for="recipient-name" class="control-label">Data:</label>
+                                    <input class="date form-control" id="daterange" name="date" type="text" value="{{ reservation.fromDate|date('Y-m-d') }}/{{ reservation.toDate|date('Y-m-d') }}" placeholder="Od dnia" required>
                                 </div>		
                             </div>
                             <div class="col-md-6 dropdown-button">           			
                                 <div class="book_date form-group">
                                     <label for="recipient-name" class="control-label">Data zarezerwowania:</label>
-                                    <input class="date form-control" id="datepicker2" name="reservationDate" type="text" value="{{ reservation.reservationDate|date('Y-m-d') }}" placeholder="Data rezerwacji" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                        this.value = 'Data rezerwacji';
-                                                    }" required>
+                                    <input class="date form-control" name="reservationDate" type="text" value="{% if reservation.reservationDate|date('Y-m-d') %}{{ reservation.reservationDate|date('Y-m-d') }}{% else %}{{ "now"|date('Y-m-d')}}{% endif %}" placeholder="Data rezerwacji" disabled>
                                 </div>		
                             </div>	
                         </div>
                         <div class="row">
-                            <div class="col-md-6 dropdown-button">           			
-                                <div class="book_date form-group">
-                                    <label for="recipient-name" class="control-label">Data końcowa:</label>
-                                    <input class="date form-control" id="datepicker1" name="toDate" type="text" value="{{ reservation.toDate|date('Y-m-d') }}" placeholder="Do dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                                        this.value = 'Do dnia';
-                                                    }" required>
-                                </div>		
+                            <div class="col-md-12">
+                                <label for="recipient-name" class="control-label">Pokoje:</label>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="recipient-name" class="control-label">Pokoje:</label>
-                                    <input type="text" name="name" value="{{ room.name }}" class="form-control" />
-                                </div>
+
+                            <div id="rooms">
+                                <div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>
                             </div>
                         </div>
 
@@ -106,10 +90,42 @@
 
 
     </section><!-- /.Left col -->
+    <script src="{{ url('template') }}/js/daterangepicker.js" type="text/javascript"></script>
+    <script src="{{ url('template') }}/js/bootstrap-switch.min.js" type="text/javascript"></script>
+    <script src="{{ url('template') }}/js/highlight.js" type="text/javascript"></script>
+    <script src="{{ url('template') }}/js/main.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(function () {
+            var url = $(location).attr('hostname');
+            url = "{{ url('Admin/getRooms', {'rid': reservation.id}) }}/";
+            $("#rooms").load(url + $("#daterange").val());
+            $('.daterangepicker .applyBtn').click(function () {
+                console.log(url + $("input[name='daterangepicker_start']").val() + "/" + $("input[name='daterangepicker_end']").val());
+                $("#rooms").empty();
+                $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
+                $("#rooms").load(url + $("input[name='daterangepicker_start']").val() + "/" + $("input[name='daterangepicker_end']").val());
 
-</div><!-- /.row (main row) -->
-<script type="text/javascript">
-    $("#reservations-category-sidebar, #editreservations-sidebar").addClass("treeview active");
-</script>
+            });
+        });
+
+
+        $("#reservations-category-sidebar, #editreservations-sidebar").addClass("treeview active");
+        $('#daterange').daterangepicker({
+            format: 'YYYY-MM-DD',
+            separator: '/',
+            locale: {
+                applyLabel: 'Zapisz',
+                cancelLabel: 'Anuluj',
+                fromLabel: 'Od',
+                toLabel: 'Do',
+                customRangeLabel: 'Własne',
+                daysOfWeek: ['Nd', 'Po', 'Wt', 'Śr', 'Czw', 'Pt', 'So'],
+                monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+                firstDay: 1
+            }
+        });
+
+
+    </script>
 
 {% endblock %}

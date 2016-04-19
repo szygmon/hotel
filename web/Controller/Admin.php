@@ -74,7 +74,7 @@ class Admin {
                 ->setParameters(array(1 => $date))
                 ->getQuery()
                 ->getResult();
-        
+
         //var_dump($reserved);
 
         if (isset($reserved[0])) {
@@ -201,7 +201,42 @@ class Admin {
             $res = $this->em->getRepository('\Model\Reservation')->find($id);
             $this->em->remove($res);
             $this->em->flush();
+            
             \Notify::success('Usunięto rezerwację');
+        } else if ($action == 'updt' && is_numeric($id)) {
+            $res = $this->em->getRepository('\Model\Reservation')->find($id);
+            $res->getRooms()->clear();
+            foreach ($_POST['room'] as $r) {
+                $room = $this->em->getRepository('\Model\Room')->find($r);
+                $res->addRoom($room);
+            }
+            $tmp = explode("/", $_POST['date']);
+            $res->setFromDate(new \DateTime($tmp[0]));
+            $res->setToDate(new \DateTime($tmp[1]));
+            $res->setPaid($_POST['paid']);
+            $user = $this->em->getRepository('\Model\User')->find($_POST['user']);
+            $res->setUser($user);
+            
+            $this->em->flush();
+            \Notify::success('Zapisano zmiany');
+        } else if ($action == 'add') {
+            $res = new \Model\Reservation;
+            foreach ($_POST['room'] as $r) {
+                $room = $this->em->getRepository('\Model\Room')->find($r);
+                $res->addRoom($room);
+            }
+            $tmp = explode("/", $_POST['date']);
+            $res->setFromDate(new \DateTime($tmp[0]));
+            $res->setToDate(new \DateTime($tmp[1]));
+            $res->setPaid($_POST['paid']);
+            $user = $this->em->getRepository('\Model\User')->find($_POST['user']);
+            $res->setUser($user);
+            $res->setReservationDate(new \DateTime(date('Y-m-d')));
+            
+            $this->em->persist($res);
+            $this->em->flush();
+            
+            \Notify::success('Dodano rezerwację');
         } else if ($action == 'noPaid' && is_numeric($id)) {
             $res = $this->em->getRepository('\Model\Reservation')->find($id);
             $res->setPaid(0);
@@ -214,7 +249,8 @@ class Admin {
             $this->em->flush();
 
             \Notify::success('Zaktualizowano status na rezerwacje opłaconą');
-        } else if ($action == 'old') {
+        } 
+        if ($action == 'old') {
             $reservations = $this->em->createQueryBuilder()
                     ->select('r')
                     ->from('\Model\Reservation', 'r')
@@ -252,9 +288,42 @@ class Admin {
         } else
             $reservation = null;
 
-        $users = $this->em->getRepository('\Model\User')->findAll();
+        $users = $this->em->getRepository('\Model\User')->findBy(array('isActive' => 1));
 
         return array('reservation' => $reservation, 'users' => $users);
+    }
+
+    /**
+     * Pobieranie pokoi
+     * @Route(/admin/getrooms/{rid}/{from}/{to}/{param})
+     */
+    public function getRooms($rid = null, $from = null, $to = null, $param = null) {
+        if ($from != null && $to != null) {
+            $from = new \DateTime($from);
+            $to = new \DateTime($to);
+            $qb = $this->em->createQueryBuilder();
+            $reservations = $qb
+                    ->select('rr.id')
+                    ->from('\Model\Reservation', 're')
+                    ->join('re.rooms', 'rr')
+                    ->where('((re.fromDate >= ?1 AND re.fromDate < ?2) OR (re.toDate >= ?2 AND re.fromDate < ?2) OR (re.fromDate < ?1 AND re.toDate > ?1)) AND re.id != ?3')
+                    ->setParameters(array(1 => $from, 2 => $to, 3 => $rid))
+                    ->getQuery()
+                    ->getResult();
+        }
+        if (isset($reservations[0])) {
+            $rooms = $this->em->createQueryBuilder()->select('ro')
+                    ->from('\Model\Room', 'ro')
+                    ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
+                    ->getQuery()
+                    ->getResult();
+        } else {
+            $rooms = $this->em->getRepository('\Model\Room')->findAll();
+        }
+        
+        $reservation = $this->em->getRepository('\Model\Reservation')->find($rid);
+
+        return array("reservation" => $reservation, "rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
     }
 
     /**
