@@ -28,7 +28,7 @@ class AdminUtil {
         $this->em->persist($user);
         $this->em->flush();
 
-        \Notify::success('Dodano użytkownika.');
+        \Notify::success('Dodano użytkownika');
     }
 
     public function updateUser($post, $id = null) {
@@ -44,12 +44,12 @@ class AdminUtil {
         $user->setPhone($post['phone']);
         $this->em->flush();
 
-        \Notify::success('Zaktualizowano dane użytkownika.');
+        \Notify::success('Zaktualizowano dane użytkownika');
     }
 
     public function deleteUser($id) {
         if (!is_numeric($id)) {
-            \Notify::error("Błąd.");
+            \Notify::error("Błąd");
             return;
         }
         if ($this->Me->getModel()->getId() == $id) {
@@ -61,7 +61,7 @@ class AdminUtil {
         $user->setIsActive(false);
         $this->em->flush();
 
-        \Notify::success('Usunięto użytkownika.');
+        \Notify::success('Usunięto użytkownika');
     }
     
     public function getNewMails() {

@@ -2,13 +2,6 @@
 
 namespace Controller;
 
-use Model\Object;
-use Core\Response;
-
-/**
- * organizacja szkoły
- * klasy, przedmioty, sale lekcyjne, godziny zajęć, plan lekcji
- */
 class Admin {
 
     /** @var \User\Me */
@@ -40,7 +33,7 @@ class Admin {
     }
 
     /**
-     * Login site
+     * Logowanie do panelu administracyjnego
      * @Route(/admin)
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -49,14 +42,14 @@ class Admin {
         if (isset($_POST['username']))
             $msg = $this->homeUtil->loginForm($_POST);
 
-        if ($Me->auth('admin'))
+        if ($Me->auth('admin') || $Me->auth('receptionist'))
             $Router->redirect('Admin/index');
 
-        return array("salesPage" => !$Router->getSubdomain(), 'msg' => $msg);
+        return array('msg' => $msg);
     }
 
     /**
-     * index
+     * Kokpit
      * @Route(/admin/index)
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -65,7 +58,7 @@ class Admin {
         if (!$Me->auth('admin') && !$Me->auth('receptionist'))
             $Router->redirect('Admin/admin');
 
-        $users = $this->em->createQueryBuilder()->select('COUNT(u.id)')->from('\Model\User', 'u')->getQuery()->getSingleScalarResult();
+        $users = $this->em->createQueryBuilder()->select('COUNT(u.id)')->from('\Model\User', 'u')->where('u.isActive = 1')->getQuery()->getSingleScalarResult();
         $reservationsConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 1')->getQuery()->getSingleScalarResult();
         $reservationsNotConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 0')->getQuery()->getSingleScalarResult();
         $rooms = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Room', 'r')->getQuery()->getSingleScalarResult();
@@ -73,7 +66,7 @@ class Admin {
     }
 
     /**
-     * Rooms
+     * Pokoje - lista i akcje dodawania/edycji/usuwania
      * @Route(/admin/rooms/{action}/{id})
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -84,9 +77,10 @@ class Admin {
 
         if ($action == 'del' && is_numeric($id)) {
             $room = $this->em->getRepository('\Model\Room')->find($id);
-            $this->em->remove($room);
+            $room->setIsActive(0);
             $this->em->flush();
-            \Notify::success('Pokój został usunięty z bazy danych.');
+            
+            \Notify::success('Pokój został usunięty z bazy danych');
         } else if ($action == 'add' && isset($_POST)) {
             $room = new \Model\Room();
             $room->setNumber($_POST['number']);
@@ -111,7 +105,7 @@ class Admin {
             $room->setToilet($_POST['toilet']);
             $this->em->flush();
 
-            \Notify::success('Zaktualizowano pokój w bazie danych.');
+            \Notify::success('Zaktualizowano pokój w bazie danych');
         }
 
         $rooms = $this->em->getRepository('\Model\Room')->findAll();
@@ -120,7 +114,7 @@ class Admin {
     }
 
     /**
-     * Add rooms
+     * Edycja pokoju
      * @Route(/admin/editroom/{id})
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -137,19 +131,8 @@ class Admin {
         return array('room' => $room);
     }
 
-    public function settings($name = null) {
-        if ($name != null) {
-            $settings = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => $name));
-            $return = $settings->value();
-        } else {
-            $return = $this->em->getRepository('\Model\Setting')->findAll();
-        }
-
-        return $return;
-    }
-
     /**
-     * tpay
+     * Ustawienia tPay.com
      * @Route(/admin/tpay/{action})
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -158,21 +141,21 @@ class Admin {
         if (!$Me->auth('admin'))
             $Router->redirect('Admin/admin');
 
+        $tid = $this->em->getRepository('\Model\Setting')->find('tid');
+        $tkey = $this->em->getRepository('\Model\Setting')->find('tkey');
         if ($action == 'save') {
-            $tid = $this->em->getRepository('\Model\Setting')->find('tid');
             $tid->setValue($_POST['tid']);
-            $tkey = $this->em->getRepository('\Model\Setting')->find('tkey');
             $tkey->setValue($_POST['tkey']);
             $this->em->flush();
 
-            \Notify::success('Zapisano ustawienia tpay.com.');
+            \Notify::success('Zapisano ustawienia tPay.com');
         }
 
-        return array('tid' => $this->settings('tid'), 'tkey' => $this->settings('tkey'));
+        return array('tid' => $tid->getValue(), 'tkey' => $tkey->getValue());
     }
 
     /**
-     * Rezerwacje
+     * Rezerwacje - lista i akcje dodania/edycji/usuwania/zmiany stanu opłacenia
      * @Route(/admin/reservations/{action}/{id})
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -186,23 +169,19 @@ class Admin {
             $this->em->remove($res);
             $this->em->flush();
             \Notify::success('Usunięto rezerwację');
-        }
-
-        if ($action == 'noPaid' && is_numeric($id)) {
+        } else if ($action == 'noPaid' && is_numeric($id)) {
             $res = $this->em->getRepository('\Model\Reservation')->find($id);
             $res->setPaid(0);
             $this->em->flush();
 
-            \Notify::success('Zaktualizowano.');
+            \Notify::success('Zaktualizowano status na rezerwacje nieopłaconą');
         } else if ($action == 'paidConfirm' && is_numeric($id)) {
             $res = $this->em->getRepository('\Model\Reservation')->find($id);
             $res->setPaid(1);
             $this->em->flush();
 
-            \Notify::success('Zaktualizowano.');
-        }
-
-        if ($action == 'old') {
+            \Notify::success('Zaktualizowano status na rezerwacje opłaconą');
+        } else if ($action == 'old') {
             $reservations = $this->em->createQueryBuilder()
                     ->select('r')
                     ->from('\Model\Reservation', 'r')
@@ -226,7 +205,7 @@ class Admin {
     }
 
     /**
-     * Add rooms
+     * Edycja rezerwacji
      * @Route(/admin/editreservation/{id})
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -246,7 +225,7 @@ class Admin {
     }
 
     /**
-     * Użytkownicy
+     * Użytkownicy - lista i akcje dodania/edycji/usunięcia
      * @Route(/admin/users/{action}/{id})
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -258,7 +237,7 @@ class Admin {
             case 'add':
                 $user = $this->em->getRepository('\Model\User')->findOneBy(array('username' => $_POST['username']));
                 if ($user != null) {
-                    \Notify::success('Użytkownik o podanej nazwie użytkownika już istnieje, wybierz inną nazwę.');
+                    \Notify::error('Użytkownik o podanej nazwie użytkownika już istnieje, wybierz inną nazwę.');
                     $Router->redirect("Admin/editUser", array("id" => null, "user" => $_POST));
                 }
                 $this->adminUtil->addUser($_POST);
@@ -278,7 +257,7 @@ class Admin {
     }
 
     /**
-     * Użytkownicy - edycja
+     * Edycja użytkownika
      * @Route("/admin/edituser/{id}")
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -286,6 +265,7 @@ class Admin {
     public function editUser($Me, $Router, $id = null, $user = null) {
         if (!$Me->auth('admin') && !$Me->auth('receptionist'))
             $Router->redirect('Admin/admin');
+        
         if (($user == null ) && $id) {
             $user = $this->em->getRepository('\Model\User')->find($id);
         }
@@ -294,7 +274,7 @@ class Admin {
     }
 
     /**
-     * Wiadomości
+     * Widok czytanej wiadomości
      * @Route("/admin/mail/{id}")
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -313,7 +293,7 @@ class Admin {
     }
 
     /**
-     * Wiadomości
+     * Wiadomości - lista i akcja odpowiedzi
      * @Route("/admin/mails/{action}/{id}")
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -354,14 +334,14 @@ class Admin {
             $rules->setValue($_POST['value']);
             $this->em->flush();
 
-            \Notify::success('Zapisano ustawienia.');
+            \Notify::success('Zapisano ustawienia');
         }
 
         return array('email' => $email->getValue(), 'rules' => $rules->getValue());
     }
 
     /**
-     * Opinie
+     * Opinie - lista i akcje akceptacji/usunięcia
      * @Route("/admin/opinions/{action}/{id}")
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -390,7 +370,7 @@ class Admin {
     }
 
     /**
-     * Opinia
+     * Opinia - widok treści
      * @Route("/admin/opinion/{id}")
      * @param \User\Me $Me
      * @param \Core\Router $Router

@@ -48,5 +48,8 @@ class Room {
     public function __construct() {
         $this->reservations = new Collection();
     }
+    
+    /** @Column(type="boolean") */
+    protected $isActive = true;
 
 }

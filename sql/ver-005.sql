@@ -1,0 +1,1 @@
+ALTER TABLE rooms ADD isActive TINYINT(1) NOT NULL;
