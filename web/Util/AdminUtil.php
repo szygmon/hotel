@@ -48,8 +48,15 @@ class AdminUtil {
     }
 
     public function deleteUser($id) {
-        if (!is_numeric($id))
+        if (!is_numeric($id)) {
+            \Notify::error("Błąd.");
             return;
+        }
+        if ($this->Me->getModel()->getId() == $id) {
+            \Notify::error("Nie można usunąć samego siebie!");
+            return;
+        }
+            
         $user = $this->em->getRepository('\Model\User')->find($id);
         $user->setIsActive(false);
         $this->em->flush();
