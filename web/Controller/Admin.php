@@ -130,6 +130,8 @@ class Admin {
             $room->setCost($_POST['cost']);
             $room->setBalcony($_POST['balcony']);
             $room->setToilet($_POST['toilet']);
+            $room->setSmoking($_POST['smoking']);
+            $room->setDoubleBed($_POST['doubleBed']);
             $this->em->persist($room);
             $this->em->flush();
 
@@ -143,6 +145,8 @@ class Admin {
             $room->setCost($_POST['cost']);
             $room->setBalcony($_POST['balcony']);
             $room->setToilet($_POST['toilet']);
+            $room->setSmoking($_POST['smoking']);
+            $room->setDoubleBed($_POST['doubleBed']);
             $this->em->flush();
 
             \Notify::success('Zaktualizowano pokój w bazie danych');

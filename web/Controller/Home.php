@@ -226,7 +226,7 @@ class Home {
                     ->select('rr.id')
                     ->from('\Model\Reservation', 're')
                     ->join('re.rooms', 'rr')
-                    ->where('(re.fromDate >= ?1 AND re.fromDate <= ?2) OR (re.toDate >= ?2 AND re.fromDate < ?2) OR (re.fromDate < ?1 AND re.toDate > ?1)')
+                    ->where('(re.fromDate >= ?1 AND re.fromDate < ?2) OR (re.toDate >= ?2 AND re.fromDate < ?2) OR (re.fromDate < ?1 AND re.toDate > ?1)')
                     ->setParameters(array(1 => $from, 2 => $to))
                     ->getQuery()
                     ->getResult();
@@ -242,7 +242,7 @@ class Home {
             $rooms = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
         }
 
-        return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
+        return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony'], "smoking" => $_GET['smoking'], "doubleBed" => $_GET['doubleBed']);
     }
 
     /**

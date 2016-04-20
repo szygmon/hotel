@@ -1,0 +1,1 @@
+ALTER TABLE rooms ADD smoking TINYINT(1) NOT NULL, ADD doubleBed TINYINT(1) NOT NULL;

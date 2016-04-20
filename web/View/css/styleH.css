@@ -2165,10 +2165,12 @@ h2.typoh2{
         padding: 3em 0 0;
     }
 }
-.filters-menu {
-    position: fixed;
-    top: 5px;
-    width: 17%
+@media(min-width:992px){
+    .filters-menu {
+        position: fixed;
+        top: 5px;
+        width: 17%
+    }
 }
 .details span.badge {
     color: #fff;
@@ -2240,28 +2242,28 @@ div#rooms div.single-top {
 }
 
 ul li ul {
-  padding: 0;
-  position: absolute;
-  top: 48px;
-  left: 0;
-  width: 150px;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-  display: none;
-  opacity: 0;
-  visibility: hidden;
-  -webkit-transiton: opacity 0.2s;
-  -moz-transition: opacity 0.2s;
-  -ms-transition: opacity 0.2s;
-  -o-transition: opacity 0.2s;
-  -transition: opacity 0.2s;
+    padding: 0;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    width: 150px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transiton: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    -transition: opacity 0.2s;
 }
 ul li ul li { 
-  background: #fff; 
-  display: block; 
-  color: #000;
-  text-shadow: 0 -1px 0 #000;
+    background: #fff; 
+    display: block; 
+    color: #000;
+    text-shadow: 0 -1px 0 #000;
 }
 ul li ul li:hover { 
     background: #FF353D; 
@@ -2278,9 +2280,9 @@ ul li ul li a:hover {
 }
 
 ul li:hover ul {
-  display: block;
-  opacity: 1;
-  visibility: visible;
+    display: block;
+    opacity: 1;
+    visibility: visible;
 }
 
 .no-wrap {

@@ -40,6 +40,8 @@
                     <div class="well" id="filters">
                         <p><input type="checkbox" id="balcony" class="properties" name="balcony" value="1" /> Balkon</p>
                         <p><input type="checkbox" id="toilet" class="properties" name="toilet" value="1" /> Toaleta</p>
+                        <p><input type="checkbox" id="smoking" class="properties" name="smoking" value="1" /> Dla palących</p>
+                        <p><input type="checkbox" id="doubleBed" class="properties" name="doubleBed" value="1" /> Podwójne łóżko</p>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -63,12 +65,12 @@
     $(function () {
         var dates = $('#daterange').val().replace(' - ', '/');
         var url = "{{ url('Home/getRooms') }}/";
-        $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
+        $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked') + "&doubleBed=" + $("#doubleBed").prop('checked') + "&smoking=" + $("#smoking").prop('checked'));
         $('.daterangepicker .applyBtn').click(function () {
             dates = $('#daterange').val().replace(' - ', '/');
             $("#rooms").empty();
             $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
-            $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
+            $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked') + "&doubleBed=" + $("#doubleBed").prop('checked') + "&smoking=" + $("#smoking").prop('checked'));
 
         });
 
@@ -78,7 +80,7 @@
             toDate = dates[1];
             $("#rooms").empty();
             $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
-            $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
+            $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked') + "&doubleBed=" + $("#doubleBed").prop('checked') + "&smoking=" + $("#smoking").prop('checked'));
         });
     });
     $("#n-rooms").addClass("active");
