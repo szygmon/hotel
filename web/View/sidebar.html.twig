@@ -12,35 +12,22 @@
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
         </div>
-        <!-- search form -->
-        {#<form action="#" method="get" class="sidebar-form">
-            <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="Szukaj..."/>
-                <span class="input-group-btn">
-                    <button type='submit' name='search' id='search-btn' class="btn btn-flat"><i class="fa fa-search"></i></button>
-                </span>
-            </div>
-        </form>#}
-        <!-- /.search form -->
-        <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
+            <li class="header">ADMINISTRATOR</li>
+            <li class="treeview" id="dashboard-category-sidebar">
+                <a href="{{ url('Admin/index') }}">
+                    <i class="fa fa-dashboard"></i> <span>Kokpit</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+            </li>
+            <li class="treeview" id="mails-category-sidebar">
+                <a href="#">
+                    <i class="fa fa-envelope"></i> <span>Wiadomości</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li id="mails-sidebar"><a href="{{ url('Admin/mails') }}"><i class="fa fa-circle-o"></i> Lista wiadomości</a></li>
+                </ul>
+            </li>
             {% if Me.auth('admin') %}
-                <li class="header">ADMINISTRATOR</li>
-                <li class="treeview" id="dashboard-category-sidebar">
-                    <a href="{{ url('Admin/index') }}">
-                        <i class="fa fa-dashboard"></i> <span>Kokpit</span> <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                </li>
-                <li class="treeview" id="mails-category-sidebar">
-                    <a href="#">
-                        <i class="fa fa-envelope"></i> <span>Wiadomości</span> <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li id="mails-sidebar"><a href="{{ url('Admin/mails') }}"><i class="fa fa-circle-o"></i> Lista wiadomości</a></li>
-                        {#<li id="editreservations-sidebar"><a href={{ url('Admin/editReservation') }}><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
-                        <li id="oldreservations-sidebar"><a href="{{ url('Admin/reservations', {'action': 'old'}) }}"><i class="fa fa-circle-o"></i> Stare rezerwacje</a></li>#}
-                    </ul>
-                </li>
                 <li class="treeview" id="rooms-category-sidebar">
                     <a href="#">
                         <i class="fa fa-bed"></i> <span>Pokoje</span> <i class="fa fa-angle-left pull-right"></i>
@@ -50,16 +37,18 @@
                         <li id="editroom-sidebar"><a href="{{ url('Admin/editRoom') }}"><i class="fa fa-circle-o"></i> Dodaj pokój</a></li>
                     </ul>
                 </li>
-                <li class="treeview" id="reservations-category-sidebar">
-                    <a href="#">
-                        <i class="fa fa-calendar"></i> <span>Rezerwacje</span> <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li id="reservations-sidebar"><a href="{{ url('Admin/reservations') }}"><i class="fa fa-circle-o"></i> Lista rezerwacji</a></li>
-                        <li id="editreservations-sidebar"><a href={{ url('Admin/editReservation') }}><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
-                        <li id="oldreservations-sidebar"><a href="{{ url('Admin/reservations', {'action': 'old'}) }}"><i class="fa fa-circle-o"></i> Stare rezerwacje</a></li>
-                    </ul>
-                </li>
+            {% endif %}
+            <li class="treeview" id="reservations-category-sidebar">
+                <a href="#">
+                    <i class="fa fa-calendar"></i> <span>Rezerwacje</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li id="reservations-sidebar"><a href="{{ url('Admin/reservations') }}"><i class="fa fa-circle-o"></i> Lista rezerwacji</a></li>
+                    <li id="editreservations-sidebar"><a href={{ url('Admin/editReservation') }}><i class="fa fa-circle-o"></i> Dodaj rezerwację</a></li>
+                    <li id="oldreservations-sidebar"><a href="{{ url('Admin/reservations', {'action': 'old'}) }}"><i class="fa fa-circle-o"></i> Stare rezerwacje</a></li>
+                </ul>
+            </li>
+            {% if Me.auth('admin') %}
                 <li class="treeview" id="users-category-sidebar">
                     <a href="#">
                         <i class="fa fa-users"></i> <span>Użytkownicy</span> <i class="fa fa-angle-left pull-right"></i>
@@ -69,14 +58,16 @@
                         <li id="edituser-sidebar"><a href="{{ url('Admin/editUser') }}"><i class="fa fa-circle-o"></i> Dodaj użytkownika</a></li>
                     </ul>
                 </li>
-                <li class="treeview" id="opinions-category-sidebar">
-                    <a href="#">
-                        <i class="fa fa-thumbs-up"></i> <span>Opinie</span> <i class="fa fa-angle-left pull-right"></i>
-                    </a>
-                    <ul class="treeview-menu">
-                        <li id="opinions-sidebar"><a href="{{ url('Admin/opinions') }}"><i class="fa fa-circle-o"></i> Lista opinii</a></li>
-                    </ul>
-                </li>
+            {% endif %}
+            <li class="treeview" id="opinions-category-sidebar">
+                <a href="#">
+                    <i class="fa fa-thumbs-up"></i> <span>Opinie</span> <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li id="opinions-sidebar"><a href="{{ url('Admin/opinions') }}"><i class="fa fa-circle-o"></i> Lista opinii</a></li>
+                </ul>
+            </li>
+            {% if Me.auth('admin') %}
                 <li class="treeview" id="settings-category-sidebar">
                     <a href="#">
                         <i class="fa fa-gear"></i> <span>Ustawienia</span> <i class="fa fa-angle-left pull-right"></i>
@@ -86,7 +77,6 @@
                         <li id="tpay-sidebar"><a href="{{ url('Admin/tpay') }}"><i class="fa fa-circle-o"></i> tpay.com</a></li>
                     </ul>
                 </li>
-
             {% endif %}
 
 

@@ -1,7 +1,14 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine On
+        RewriteCond %{SERVER_PORT} 80 
+        RewriteRule ^(.*)$ https://hoteljm.szygmon.pl/$1 [R,L]
 	RewriteRule ^/index\.php$ - [L]
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule . /index.php [L]
+
+
+php_flag display_startup_errors on
+php_flag display_errors on
+php_flag html_errors on
 </IfModule>

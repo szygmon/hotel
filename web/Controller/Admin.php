@@ -61,7 +61,7 @@ class Admin {
         $users = $this->em->createQueryBuilder()->select('COUNT(u.id)')->from('\Model\User', 'u')->where('u.isActive = 1')->getQuery()->getSingleScalarResult();
         $reservationsConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 1')->getQuery()->getSingleScalarResult();
         $reservationsNotConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 0')->getQuery()->getSingleScalarResult();
-        $rooms = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Room', 'r')->getQuery()->getSingleScalarResult();
+        $rooms = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Room', 'r')->where('r.isActive = 1')->getQuery()->getSingleScalarResult();
 
 
         $date = new \DateTime(date('Y-m-d'));
@@ -70,7 +70,7 @@ class Admin {
                 ->select('rr.id, rr.name, rr.number')
                 ->from('\Model\Reservation', 're')
                 ->join('re.rooms', 'rr')
-                ->where('(re.fromDate = ?1) OR (re.toDate > ?1 AND re.fromDate < ?1)')
+                ->where('((re.fromDate = ?1) OR (re.toDate > ?1 AND re.fromDate < ?1)) AND rr.isActive = 1')
                 ->setParameters(array(1 => $date))
                 ->getQuery()
                 ->getResult();
@@ -81,10 +81,11 @@ class Admin {
             $available = $this->em->createQueryBuilder()->select('ro')
                     ->from('\Model\Room', 'ro')
                     ->where($qb->expr()->notIn('ro.id', array_column($reserved, 'id')))
+                    ->andWhere('ro.isActive = 1')
                     ->getQuery()
                     ->getResult();
         } else {
-            $available = $this->em->getRepository('\Model\Room')->findAll();
+            $available = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
         }
 
 
@@ -141,7 +142,7 @@ class Admin {
             \Notify::success('Zaktualizowano pokój w bazie danych');
         }
 
-        $rooms = $this->em->getRepository('\Model\Room')->findAll();
+        $rooms = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
 
         return array('rooms' => $rooms);
     }
@@ -315,10 +316,11 @@ class Admin {
             $rooms = $this->em->createQueryBuilder()->select('ro')
                     ->from('\Model\Room', 'ro')
                     ->where($qb->expr()->notIn('ro.id', array_column($reservations, 'id')))
+                    ->andWhere('ro.isActive = 1')
                     ->getQuery()
                     ->getResult();
         } else {
-            $rooms = $this->em->getRepository('\Model\Room')->findAll();
+            $rooms = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
         }
         
         $reservation = $this->em->getRepository('\Model\Reservation')->find($rid);
@@ -333,7 +335,7 @@ class Admin {
      * @param \Core\Router $Router
      */
     public function users($Me, $Router, $action = null, $id = null) {
-        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+        if (!$Me->auth('admin'))
             $Router->redirect('Admin/admin');
         switch ($action) {
             case 'add':
@@ -365,7 +367,7 @@ class Admin {
      * @param \Core\Router $Router
      */
     public function editUser($Me, $Router, $id = null, $user = null) {
-        if (!$Me->auth('admin') && !$Me->auth('receptionist'))
+        if (!$Me->auth('admin'))
             $Router->redirect('Admin/admin');
 
         if (($user == null ) && $id) {
@@ -407,7 +409,7 @@ class Admin {
         $mail = null;
         if (isset($_POST['reply']) && $action == 'reply' && is_numeric($id)) {
             $mail = $this->em->getRepository('\Model\Mail')->find($id);
-            $headers = 'From: ' . $this->settings('email');
+            $headers = 'From: ' . $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'email'))->getValue();
             mail($_POST['emailto'], $_POST['subject'], $_POST['message'], $headers);
 
             \Notify::success('Wiadomość została wysłana');
