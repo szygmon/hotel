@@ -1,6 +1,6 @@
 {% extends './base.html.twig' %}
 
-{% block title %}HOTEL JM - pokoje{% endblock %}
+{% block title %}{{ settings.sitename }} - pokoje{% endblock %}
 {% block head %}
     <link href="{{ url('template') }}/css/dataTables.bootstrap.css" rel="stylesheet" type="text/css" />
 {% endblock %}
@@ -35,6 +35,8 @@
                             <th>Cena</th>
                             <th width="1%">Łazienka</th>
                             <th width="1%">Balkon</th>
+                            <th width="1%" class="no-wrap">Dla palących</th>
+                            <th width="1%" class="no-wrap">Podwójne łóżko</th>
                             <th width="1%">Opcje</th>
                         </tr>
                     </thead>
@@ -47,6 +49,8 @@
                                 <td>{{ r.cost }}</td>
                                 <td class="center">{% if r.toilet %}<span class="badge bg-green"><i class="fa fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-close"></i></span>{% endif %}</td>
                                 <td class="center">{% if r.balcony %}<span class="badge bg-green"><i class="fa fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-close"></i></span>{% endif %}</td>
+                                <td class="center">{% if r.smoking %}<span class="badge bg-green"><i class="fa fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-close"></i></span>{% endif %}</td>
+                                <td class="center">{% if r.doubleBed %}<span class="badge bg-green"><i class="fa fa-check"></i></span>{% else %}<span class="badge bg-red"><i class="fa fa-close"></i></span>{% endif %}</td>
                                 <td class="no-wrap">
                                     <a href="{{ url('Admin/editRoom', {'id': r.id}) }}"><span class="badge bg-blue"><i class="fa fa-edit"></i></span></a>
                                     <a href="{{ url('Admin/rooms', {'action': 'del', 'id': r.id}) }}"><span class="badge bg-red"><i class="fa fa-trash-o"></i></span></a>

@@ -1,7 +1,9 @@
 {% extends './baseSP.html.twig' %}
 
-{% block title %}Hotel JM - rezerwacja{% endblock %}
-
+{% block title %}{{ settings.sitename }} - rezerwacja{% endblock %}
+{% block head %}
+    <link href="{{ url('template') }}/css/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block body %}
 </div>		
 <!-- banner -->
@@ -13,40 +15,20 @@
                 <h3>Rezerwacja</h3>
                 <div class="booking-form" style="margin:0;">
                     <div class="col-md-6">
-
-                        <!---strat-date-piker---->
-                        <link rel="stylesheet" href="{{ url('template') }}/css/jquery-ui.css" />
-                        <script src="{{ url('template') }}/js/jquery-ui.js"></script>
-                        <!---/End-date-piker---->
-
                         <h5>IMIĘ I NAZWISKO</h5>
-                        <input type="text" name="name" value="{{ data.name }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %}>
-                        <h5>NUMER TELEFONU</h5>
-                        <input name="phone" type="text" value="{{ data.phone }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %}>
+                        <input type="text" name="name" value="{{ data.name }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %} required>
+                        <h5>E-MAIL</h5>
+                        <input type="text" name="email" value="{{ data.email }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %} required>
                         {% if Me.isLogged() %}
                             <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
                         {% endif %}
                     </div>
 
-                    <div class="col-md-6">		
-
-                        <h5>OD DNIA</h5>
-                        <input class="datepickerR" name="fromDate" id="fromDate" type="text" placeholder="Od dnia" value="{{ data.fromDate }}" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                    this.value = 'Do dnia';
-                                }">
-                        <h5>DO DNIA</h5>
-                        <input class="datepickerR" name="toDate" id="toDate" type="text" placeholder="Do dnia" value="{{ data.toDate }}" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                    this.value = 'Do dnia';
-                                }">
-                        {#<h5>DODATKOWE OPCJE</h5>
-                        
-                        <div class="clearfix">&nbsp;</div>
-                        <h5 class="mem">Ilość osób</h5>
-                        <input min="1" type="number" id="quantity" name="quantity" value="1" class="form-control input-small">
-                        <h5>Informacje dla hotelu</h5>
-                        <textarea value=""></textarea>
-                        <input type="submit" value="Submit">
-                        <input type="reset" value="Reset">#}
+                    <div class="col-md-6">	
+                        <h5>NUMER TELEFONU</h5>
+                        <input name="phone" type="text" value="{{ data.phone }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %}>
+                        <h5>OD DNIA - DO DNIA</h5>
+                        <input class="datepickerR" name="date" id="daterange" type="text" placeholder="Data" value="{{ data.date }}">
                     </div>
 
                 </div>
@@ -58,6 +40,8 @@
                     <div class="well" id="filters">
                         <p><input type="checkbox" id="balcony" class="properties" name="balcony" value="1" /> Balkon</p>
                         <p><input type="checkbox" id="toilet" class="properties" name="toilet" value="1" /> Toaleta</p>
+                        <p><input type="checkbox" id="smoking" class="properties" name="smoking" value="1" /> Dla palących</p>
+                        <p><input type="checkbox" id="doubleBed" class="properties" name="doubleBed" value="1" /> Podwójne łóżko</p>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -76,22 +60,27 @@
         </form>
     </div>
 </div>
-
+<script src="{{ url('template') }}/js/daterangepicker.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(function () {
-        url = "{{ url('Home/getRooms') }}/";
-        $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
-        $(".datepickerR").datepicker({
-            onSelect: function () {
-                $("#rooms").empty();
-                $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
-                $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
-            }
-        });
-        $(".properties").change(function () {
+        var dates = $('#daterange').val().replace(' - ', '/');
+        var url = "{{ url('Home/getRooms') }}/";
+        $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked') + "&doubleBed=" + $("#doubleBed").prop('checked') + "&smoking=" + $("#smoking").prop('checked'));
+        $('.daterangepicker .applyBtn').click(function () {
+            dates = $('#daterange').val().replace(' - ', '/');
             $("#rooms").empty();
             $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
-            $("#rooms").load(url + $("#fromDate").val() + "/" + $("#toDate").val() + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked'));
+            $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked') + "&doubleBed=" + $("#doubleBed").prop('checked') + "&smoking=" + $("#smoking").prop('checked'));
+
+        });
+
+        $(".properties").change(function () {
+            dates = $('#daterange').val().replace(' - ', '/');
+            fromDate = dates[0];
+            toDate = dates[1];
+            $("#rooms").empty();
+            $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
+            $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked') + "&doubleBed=" + $("#doubleBed").prop('checked') + "&smoking=" + $("#smoking").prop('checked'));
         });
     });
     $("#n-rooms").addClass("active");
@@ -104,6 +93,21 @@
             $('#filters').addClass('filters-menu');
         } else {
             $('#filters').removeClass('filters-menu');
+        }
+    });
+
+    $('#daterange').daterangepicker({
+        format: 'YYYY-MM-DD',
+        minDate: '{{ "now"|date('Y-m-d') }}',
+        locale: {
+            applyLabel: 'Zapisz',
+            cancelLabel: 'Anuluj',
+            fromLabel: 'Od',
+            toLabel: 'Do',
+            customRangeLabel: 'Własne',
+            daysOfWeek: ['Nd', 'Po', 'Wt', 'Śr', 'Czw', 'Pt', 'So'],
+            monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+            firstDay: 1
         }
     });
 </script>

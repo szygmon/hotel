@@ -1,9 +1,8 @@
 {% extends './base.html.twig' %}
 
-{% block title %}HOTEL JM - edycja rezerwacji{% endblock %}
+{% block title %}{{ settings.sitename }} - edycja rezerwacji{% endblock %}
 {% block head %}
     <link href="{{ url('template') }}/css/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
-    <link href="{{ url('template') }}/css/datepicker3.css" rel="stylesheet" type="text/css" />
     <link href="{{ url('template') }}/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
 {% endblock %}
 {% block content %}
@@ -33,13 +32,17 @@
                         {% endif %}
 
                         <div class="row">
+                            {{ id }}
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="recipient-name" class="control-label">Klient:</label>
                                     <select name="user" class="form-control">
                                         <option value="0">-brak-</option>
+                                        {% if reservation.id %}
+                                            <option value="{{ reservation.user.id }}" selected>{{ reservation.user.givenName }} {{ reservation.user.familyName }}</option>
+                                        {% endif %}
                                         {% for u in users %}
-                                            <option value="{{ u.id }}" {% if reservation.user.id == u.id %}selected{% endif %}>{{ u.givenName }} {{ u.familyName }}</option>
+                                            <option value="{{ u.id }}">{{ u.givenName }} {{ u.familyName }}</option>
                                         {% endfor %}
                                     </select>
                                 </div>
@@ -55,7 +58,7 @@
                             <div class="col-md-6 dropdown-button">           			
                                 <div class="book_date form-group">
                                     <label for="recipient-name" class="control-label">Data:</label>
-                                    <input class="date form-control" id="daterange" name="date" type="text" value="{{ reservation.fromDate|date('Y-m-d') }}/{{ reservation.toDate|date('Y-m-d') }}" placeholder="Od dnia" required>
+                                    <input class="date form-control" id="daterange" name="date" type="text" value="{{ reservation.fromDate|date('Y-m-d') }} - {{ reservation.toDate|date('Y-m-d') }}" placeholder="Od dnia" required>
                                 </div>		
                             </div>
                             <div class="col-md-6 dropdown-button">           			
@@ -96,11 +99,10 @@
     <script src="{{ url('template') }}/js/main.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
-            var url = $(location).attr('hostname');
-            url = "{{ url('Admin/getRooms', {'rid': reservation.id}) }}/";
-            $("#rooms").load(url + $("#daterange").val());
+            var dates = $('#daterange').val().replace(' - ', '/');
+            var url = "{{ url('Admin/getRooms', {'rid': reservation.id}) }}/";
+            $("#rooms").load(url + dates);
             $('.daterangepicker .applyBtn').click(function () {
-                console.log(url + $("input[name='daterangepicker_start']").val() + "/" + $("input[name='daterangepicker_end']").val());
                 $("#rooms").empty();
                 $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
                 $("#rooms").load(url + $("input[name='daterangepicker_start']").val() + "/" + $("input[name='daterangepicker_end']").val());
@@ -112,7 +114,7 @@
         $("#reservations-category-sidebar, #editreservations-sidebar").addClass("treeview active");
         $('#daterange').daterangepicker({
             format: 'YYYY-MM-DD',
-            separator: '/',
+            minDate: '{{ "now"|date('Y-m-d') }}',
             locale: {
                 applyLabel: 'Zapisz',
                 cancelLabel: 'Anuluj',

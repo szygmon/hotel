@@ -1,7 +1,9 @@
 {% extends './baseSP.html.twig' %}
 
-{% block title %}Hotel JM{% endblock %}
-
+{% block title %}{{ settings.sitename }}{% endblock %}
+{% block head %}
+    <link href="{{ url('template') }}/css/daterangepicker-bs3.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block body %}
     <script type="text/javascript">
         $("#n-index").addClass("active");
@@ -12,42 +14,20 @@
                 <form action="{{ url('Home/reservation') }}#rooms-list" method="POST">
                     <div class="col-md-10 dropdown-buttons">  
 
-                        <div class="col-md-3 dropdown-button">           			
+                        <div class="col-md-6 dropdown-button">           			
                             <div class="input-group">
                                 <input class="form-control has-dark-background" name="name" id="slider-name" placeholder="Imię i nazwisko" type="text" required="" value="{% if Me.isLogged() and not Me.auth('admin') %}{{ Me.getModel.givenName }} {{ Me.getModel.familyName }}{% endif %}">
                             </div>
                         </div>
-                        <!---strat-date-piker---->
-                        <link rel="stylesheet" href="{{ url('template') }}/css/jquery-ui.css" />
-                        <script src="{{ url('template') }}/js/jquery-ui.js"></script>
-                        <script>
-        $(function () {
-            $("#datepicker,#datepicker1").datepicker({
-                dateFormat: 'yy-mm-dd'
-            });
-        });
-                        </script>
-                        <!---/End-date-piker---->
 
-                        <div class="col-md-3 dropdown-button">           			
-                            <div class="book_date">
+                        <div class="col-md-6 dropdown-button">           			
+                            <div class="input-group">
 
-                                <input class="date" id="datepicker" name="fromDate" type="text" placeholder="Od dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                            this.value = 'Od dnia';
-                                        }" required>
+                                <input class="form-control has-dark-background" id="daterange" name="date" type="text" placeholder="Od dnia - do dnia" required>
 
                             </div>		
                         </div>
-                        <div class="col-md-3 dropdown-button">           			
-                            <div class="book_date">
-
-                                <input class="date1" id="datepicker1" name="toDate" type="text" placeholder="Do dnia" onfocus="this.value = '';" onblur="if (this.value == '') {
-                                            this.value = 'Do dnia';
-                                        }" required>
-
-                            </div>		
-                        </div>
-                        <div class="col-md-3 dropdown-button">
+                        {#<div class="col-md-3 dropdown-button">
                             <div class="section_1">
                                 <select id="country" onchange="change_country(this.value)" class="frm-field required">
                                     <option value="null">Pokój dwuosobowy</option>
@@ -56,7 +36,7 @@
                                     <option value="AX">Pokój gościnny</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>#}
                         <div class="clearfix"> </div>
                     </div> 
                     <div class="col-md-2 submit_button"> 
@@ -226,4 +206,24 @@
         <div class="clearfix"></div>
     </div>
 </div> -->
+
+
+<script src="{{ url('template') }}/js/daterangepicker.js" type="text/javascript"></script>
+<script type="text/javascript">
+        $('#daterange').daterangepicker({
+            format: 'YYYY-MM-DD',
+            minDate: '{{ "now"|date('Y-m-d') }}',
+            locale: {
+                applyLabel: 'Zapisz',
+                cancelLabel: 'Anuluj',
+                fromLabel: 'Od',
+                toLabel: 'Do',
+                customRangeLabel: 'Własne',
+                daysOfWeek: ['Nd', 'Po', 'Wt', 'Śr', 'Czw', 'Pt', 'So'],
+                monthNames: ['Styczeń', 'Luty', 'Marzec', 'Kwiecień', 'Maj', 'Czerwiec', 'Lipiec', 'Sierpień', 'Wrzesień', 'Październik', 'Listopad', 'Grudzień'],
+                firstDay: 1
+            }
+        });
+</script>
+
 {% endblock %}

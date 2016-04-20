@@ -27,7 +27,7 @@ class Room {
 
     /** @Column(type="integer") */
     protected $users;
-    
+
     /** @Column(type="float") */
     protected $cost;
 
@@ -40,6 +40,12 @@ class Room {
     /** @Column(type="boolean") */
     protected $toilet;
 
+    /** @Column(type="boolean") */
+    protected $smoking;
+
+    /** @Column(type="boolean") */
+    protected $doubleBed;
+
     /** @ManyToMany(targetEntity="\Model\Reservation" , mappedBy="rooms")
      * @JoinTable(name="reservations_rooms") 
      */
@@ -48,7 +54,7 @@ class Room {
     public function __construct() {
         $this->reservations = new Collection();
     }
-    
+
     /** @Column(type="boolean") */
     protected $isActive = true;
 

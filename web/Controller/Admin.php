@@ -16,20 +16,26 @@ class Admin {
     /** @var \AdminUtil */
     protected $adminUtil;
 
+    /** @var \GlobalUtil */
+    protected $globalUtil;
+
     /**
      * @param \User\Me $Me
      * @param \Doctrine\ORM\EntityManager $em
      * @param \HomeUtil $HomeUtil
      * @param \AdminUtil $AdminUtil
+     * @param \GlobalUtil $GlobalUtil
      */
-    function __construct($Me, $em, $HomeUtil, $AdminUtil) {
+    function __construct($Me, $em, $HomeUtil, $AdminUtil, $GlobalUtil) {
         $this->me = $Me;
         $this->em = $em;
         $this->homeUtil = $HomeUtil;
         $this->adminUtil = $AdminUtil;
+        $this->globalUtil = $GlobalUtil;
 
         \Di::get('Template')->addTwigGlobals(['newMails' => $this->adminUtil->getNewMails()]);
         \Di::get('Template')->addTwigGlobals(['newOpinions' => $this->adminUtil->getNewOpinions()]);
+        \Di::get('Template')->addTwigGlobals(['settings' => $this->globalUtil->getSettings()]);
     }
 
     /**
@@ -122,6 +128,8 @@ class Admin {
             $room->setCost($_POST['cost']);
             $room->setBalcony($_POST['balcony']);
             $room->setToilet($_POST['toilet']);
+            $room->setSmoking($_POST['smoking']);
+            $room->setDoubleBed($_POST['doubleBed']);
             $this->em->persist($room);
             $this->em->flush();
 
@@ -135,6 +143,8 @@ class Admin {
             $room->setCost($_POST['cost']);
             $room->setBalcony($_POST['balcony']);
             $room->setToilet($_POST['toilet']);
+            $room->setSmoking($_POST['smoking']);
+            $room->setDoubleBed($_POST['doubleBed']);
             $this->em->flush();
 
             \Notify::success('Zaktualizowano pokój w bazie danych');
@@ -200,7 +210,7 @@ class Admin {
             $res = $this->em->getRepository('\Model\Reservation')->find($id);
             $this->em->remove($res);
             $this->em->flush();
-            
+
             \Notify::success('Usunięto rezerwację');
         } else if ($action == 'updt' && is_numeric($id)) {
             $res = $this->em->getRepository('\Model\Reservation')->find($id);
@@ -209,13 +219,13 @@ class Admin {
                 $room = $this->em->getRepository('\Model\Room')->find($r);
                 $res->addRoom($room);
             }
-            $tmp = explode("/", $_POST['date']);
+            $tmp = explode(" - ", $_POST['date']);
             $res->setFromDate(new \DateTime($tmp[0]));
             $res->setToDate(new \DateTime($tmp[1]));
             $res->setPaid($_POST['paid']);
             $user = $this->em->getRepository('\Model\User')->find($_POST['user']);
             $res->setUser($user);
-            
+
             $this->em->flush();
             \Notify::success('Zapisano zmiany');
         } else if ($action == 'add') {
@@ -224,17 +234,17 @@ class Admin {
                 $room = $this->em->getRepository('\Model\Room')->find($r);
                 $res->addRoom($room);
             }
-            $tmp = explode("/", $_POST['date']);
+            $tmp = explode(" - ", $_POST['date']);
             $res->setFromDate(new \DateTime($tmp[0]));
             $res->setToDate(new \DateTime($tmp[1]));
             $res->setPaid($_POST['paid']);
             $user = $this->em->getRepository('\Model\User')->find($_POST['user']);
             $res->setUser($user);
             $res->setReservationDate(new \DateTime(date('Y-m-d')));
-            
+
             $this->em->persist($res);
             $this->em->flush();
-            
+
             \Notify::success('Dodano rezerwację');
         } else if ($action == 'noPaid' && is_numeric($id)) {
             $res = $this->em->getRepository('\Model\Reservation')->find($id);
@@ -248,7 +258,7 @@ class Admin {
             $this->em->flush();
 
             \Notify::success('Zaktualizowano status na rezerwacje opłaconą');
-        } 
+        }
         if ($action == 'old') {
             $reservations = $this->em->createQueryBuilder()
                     ->select('r')
@@ -320,7 +330,7 @@ class Admin {
         } else {
             $rooms = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
         }
-        
+
         $reservation = $this->em->getRepository('\Model\Reservation')->find($rid);
 
         return array("reservation" => $reservation, "rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
@@ -428,18 +438,23 @@ class Admin {
         if (!$Me->auth('admin'))
             $Router->redirect('Admin/admin');
 
-        $email = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'email'));
-        $rules = $this->em->getRepository('\Model\Setting')->find('rules');
-
+        $sitename = $this->globalUtil->getSetting('sitename');
+        $siteurl = $this->globalUtil->getSetting('siteurl');
+        $email = $this->globalUtil->getSetting('email');
+        $rules = $this->globalUtil->getSetting('rules');
+        
         if (isset($_POST['save'])) {
+            $sitename->setValue($_POST['sitename']);
+            $siteurl->setValue($_POST['siteurl']);
             $email->setValue($_POST['email']);
-            $rules->setValue($_POST['value']);
+            $rules->setValue($_POST['rules']);
             $this->em->flush();
 
             \Notify::success('Zapisano ustawienia');
+            $Router->redirect('Admin/siteSettings');
         }
 
-        return array('email' => $email->getValue(), 'rules' => $rules->getValue());
+        return array();
     }
 
     /**

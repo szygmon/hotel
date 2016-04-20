@@ -1,6 +1,6 @@
 {% extends './base.html.twig' %}
 
-{% block title %}HOTEL JM - regulamin{% endblock %}
+{% block title %}{{ settings.sitename }} - ustawienia{% endblock %}
 
 {% block content %}
     <!-- Content Header (Page header) -->
@@ -25,14 +25,24 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="input-group">
-                                <span class="input-group-addon" >E-mail:</span>
-                                <input type="text" name="email" class="form-control" value="{{ email }}"></textarea>
+                            <div class="form-group">
+                                <label>Nazwa strony:</label>
+                                <input type="text" name="sitename" value="{{ settings.sitename }}" class="form-control" />
                             </div>
-                            </br>
-                            <div class="input-group">
-                                <span class="input-group-addon" >Regulamin</span>
-                                <textarea name="value" class="form-control" style="resize: none" rows="10" cols="50">{{ rules }}</textarea>
+                            <div class="form-group">
+                                <label>Adres strony:</label>
+                                <input type="text" name="siteurl" value="{{ settings.siteurl }}" class="form-control" />
+                            </div>
+                            <div class="form-group">
+                                <label>E-mail:</label>
+                                <input type="text" name="email" class="form-control" value="{{ settings.email }}"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="form-group">
+                                <label>Regulamin</label>
+                                <textarea name="rules" class="form-control" rows="10" cols="50">{{ settings.rules }}</textarea>
                             </div>
                         </div>
                     </div>

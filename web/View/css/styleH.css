@@ -1498,7 +1498,7 @@ h2.typoh2{
         padding: 9px 10px;
         margin-top: 28px;
         margin-bottom: 0px;
-        margin-right: 334px;
+        margin-right: 5px;
         margin-top: -37px;
         background-color: transparent;
     }
@@ -1700,7 +1700,7 @@ h2.typoh2{
         padding: 9px 10px;
         margin-top: 28px;
         margin-bottom: 0px;
-        margin-right: 334px;
+        margin-right: 5px;
         margin-top: -37px;
         background-color: transparent;
     }
@@ -1764,7 +1764,7 @@ h2.typoh2{
 /*-- responsive-mediaquries --*/
 @media(max-width:667px){
     .navbar-toggle {
-        margin-right: 265px;
+        margin-right: 5px;
     }
 }
 /*-- responsive-mediaquries --*/
@@ -1788,7 +1788,7 @@ h2.typoh2{
         min-height: 450px;
     }
     .navbar-toggle {
-        margin-right: 273px;
+        margin-right: 5px;
         margin-top: -37px;
     }
     .tels h4 {
@@ -1836,14 +1836,14 @@ h2.typoh2{
 /*-- responsive-mediaquries --*/
 @media(max-width:600px){
     .navbar-toggle {
-        margin-right: 220px;
+        margin-right: 5px;
         margin-top: -37px;
     }
 }
 /*-- responsive-mediaquries --*/
 @media(max-width:568px){
     .navbar-toggle {
-        margin-right: 215px;
+        margin-right: 5px;
     }
 }
 /*-- responsive-mediaquries --*/
@@ -1899,7 +1899,7 @@ h2.typoh2{
         margin: 0 0 2em;
     }
     .navbar-toggle {
-        margin-right: 95px;
+        margin-right: 5px;
     }
     .details-1 {
         padding: 0em 0;
@@ -1959,25 +1959,25 @@ h2.typoh2{
 /*-- responsive-mediaquries --*/
 @media(max-width:414px){
     .navbar-toggle {
-        margin-right: 128px;
+        margin-right: 5px;
     }
 }
 /*-- responsive-mediaquries --*/
 @media(max-width:384px){
     .navbar-toggle {
-        margin-right: 105px;
+        margin-right: 5px;
     }
 }
 /*-- responsive-mediaquries --*/
 @media(max-width:375px){
     .navbar-toggle {
-        margin-right: 96px;
+        margin-right: 5px;
     }
 }
 /*-- responsive-mediaquries --*/
 @media(max-width:320px){
     .navbar-toggle {
-        margin-right: 50px;
+        margin-right: 5px;
         margin-top: -38px;
     }
     .logo h1 a {
@@ -2165,10 +2165,12 @@ h2.typoh2{
         padding: 3em 0 0;
     }
 }
-.filters-menu {
-    position: fixed;
-    top: 5px;
-    width: 17%
+@media(min-width:992px){
+    .filters-menu {
+        position: fixed;
+        top: 5px;
+        width: 17%
+    }
 }
 .details span.badge {
     color: #fff;
@@ -2237,4 +2239,56 @@ div#rooms div.single-top {
     min-height: 100px;
     margin-top: 50px;
     font-size: 30px;
+}
+
+ul li ul {
+    padding: 0;
+    position: absolute;
+    top: 48px;
+    left: 0;
+    width: 150px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transiton: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    -transition: opacity 0.2s;
+}
+ul li ul li { 
+    background: #fff; 
+    display: block; 
+    color: #000;
+    text-shadow: 0 -1px 0 #000;
+}
+ul li ul li:hover { 
+    background: #FF353D; 
+    margin: 0 !important;
+    height: 26px;
+    color: #fff !important;
+}
+ul li ul li a:hover {
+    border-bottom: 0 !important;
+    padding: 3px 20px !important;
+    margin: 0 !important;
+    background: #FF353D !important;
+    color: #fff !important;
+}
+
+ul li:hover ul {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+.no-wrap {
+    white-space: nowrap;
+}
+
+.logo {
+    min-width: 210px;
 }

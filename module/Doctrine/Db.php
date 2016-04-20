@@ -25,7 +25,7 @@ class Db {
                     ++$lines;
                 }
             } catch (Exception $e) {
-                if (strpos(strtolower($e->getMessage()), 'already exists') === false && strpos(strtolower($e->getMessage()), 'drop foreign key') === false) {
+                if (strpos(strtolower($e->getMessage()), 'already exists') === false && strpos(strtolower($e->getMessage()), 'drop foreign key') === false && strpos(strtolower($e->getMessage()),'can\'t drop') === false) {
                     $r[$file]['line'] = $lines;
                     $r[$file]['message'] = $e->getMessage();
                 }

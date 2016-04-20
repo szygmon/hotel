@@ -56,8 +56,15 @@ class DevReset {
         $settings[3]->setName('email');
         $settings[3]->setValue('');
         $this->em->persist($settings[3]);
-        
-        
+        $settings[4] = new \Model\Setting();
+        $settings[4]->setName('sitename');
+        $settings[4]->setValue('');
+        $this->em->persist($settings[4]);
+        $settings[5] = new \Model\Setting();
+        $settings[5]->setName('siteurl');
+        $settings[5]->setValue('');
+        $this->em->persist($settings[5]);
+
         $this->em->flush();
 
         return $r;

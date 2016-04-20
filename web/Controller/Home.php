@@ -13,15 +13,22 @@ class Home {
     /** @var \HomeUtil */
     protected $homeUtil;
 
+    /** @var \GlobalUtil */
+    protected $globalUtil;
+
     /**
      * @param \User\Me $Me
      * @param \Doctrine\ORM\EntityManager $em
      * @param \HomeUtil $HomeUtil
+     * @param \GlobalUtil $GlobalUtil
      */
-    function __construct($Me, $em, $HomeUtil) {
+    function __construct($Me, $em, $HomeUtil, $GlobalUtil) {
         $this->me = $Me;
         $this->em = $em;
         $this->homeUtil = $HomeUtil;
+        $this->globalUtil = $GlobalUtil;
+
+        \Di::get('Template')->addTwigGlobals(['settings' => $this->globalUtil->getSettings()]);
     }
 
     /**
@@ -63,16 +70,14 @@ class Home {
         if (!$Me->auth('user'))
             $Router->redirect('Home/index');
 
-        if (isset($_POST['username']))
-        {
+        if (isset($_POST['username'])) {
             $userInDatabase = $this->em->createQueryBuilder()->select('user')
                     ->from('\Model\User', 'user')
                     ->where('user.id != ?1 and user.email = ?2')
                     ->setParameters(array(1 => $this->me->getModel()->getId(), 2 => $_POST['email']))
                     ->getQuery()
                     ->getResult();
-            if($userInDatabase != null)
-            {
+            if ($userInDatabase != null) {
                 \Notify::error("Użytkownik o podanym adresie email: " . $_POST['email'] . " istnieje już w naszej bazie");
                 return array();
             }
@@ -192,16 +197,19 @@ class Home {
     public function reservation() {
 
         if (!isset($_POST['fromDate'])) {
-            $_POST['name'] = $this->me->getModel()->getGivenName() . " " . $this->me->getModel()->getFamilyName();
-            $_POST['phone'] = $this->me->getModel()->getPhone();
             $startReservationDate = new \DateTime();
             $_POST['fromDate'] = $startReservationDate->format('Y-m-d');
             $endReservationDate = new \DateTime();
             $endReservationDate->modify('+14 day');
             $_POST['toDate'] = $endReservationDate->format('Y-m-d');
-            //$reservation->setToDate($endReservationDate);
-            return array("data" => $_POST);
         }
+
+        if ($this->me->getModel() != NULL) {
+            $_POST['email'] = $this->me->getModel()->getEmail();
+            $_POST['name'] = $this->me->getModel()->getGivenName() . " " . $this->me->getModel()->getFamilyName();
+            $_POST['phone'] = $this->me->getModel()->getPhone();
+        }
+
         return array("data" => $_POST);
     }
 
@@ -218,7 +226,7 @@ class Home {
                     ->select('rr.id')
                     ->from('\Model\Reservation', 're')
                     ->join('re.rooms', 'rr')
-                    ->where('(re.fromDate >= ?1 AND re.fromDate <= ?2) OR (re.toDate >= ?2 AND re.fromDate < ?2) OR (re.fromDate < ?1 AND re.toDate > ?1)')
+                    ->where('(re.fromDate >= ?1 AND re.fromDate < ?2) OR (re.toDate >= ?2 AND re.fromDate < ?2) OR (re.fromDate < ?1 AND re.toDate > ?1)')
                     ->setParameters(array(1 => $from, 2 => $to))
                     ->getQuery()
                     ->getResult();
@@ -234,7 +242,7 @@ class Home {
             $rooms = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
         }
 
-        return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony']);
+        return array("rooms" => $rooms, "toilet" => $_GET['toilet'], "balcony" => $_GET['balcony'], "smoking" => $_GET['smoking'], "doubleBed" => $_GET['doubleBed']);
     }
 
     /**
@@ -242,41 +250,58 @@ class Home {
      * @Route(/reservationpay)
      */
     public function reservationPay() {
+        if (isset($_POST['submit'])) {
+            $rooms = $this->em->createQueryBuilder()->select('ro')
+                    ->from('\Model\Room', 'ro')
+                    ->where($this->em->createQueryBuilder()->expr()->in('ro.id', $_POST['room']))
+                    ->getQuery()
+                    ->getResult();
 
-        $rooms = $this->em->createQueryBuilder()->select('ro')
-                ->from('\Model\Room', 'ro')
-                ->where($this->em->createQueryBuilder()->expr()->in('ro.id', $_POST['room']))
-                ->getQuery()
-                ->getResult();
-
-        $allCost = 0;
+            if ($this->me->isLogged()) {
+                $user = $this->me->getModel();
+            } else {
+                
+                $username = microtime();
+                while ($this->em->getRepository('\Model\User')->findOneBy(array('username' => $username)) != NULL) {
+                    $username = microtime();
+                }
+                $user = new \Model\User();
+                $user->setUsername($username);
+                $user->setGivenName($_POST['name']);
+                $user->setEmail($_POST['email']);
+                $user->setPhone($_POST['phone']);
+                $user->setPassword(substr(md5(date('d.H.S')), 0, 10));
+                $user->setIsActive(0);
+                $this->em->persist($user);
+                $this->em->flush();
+            }
+            $allCost = 0;
 // dodanie rezerwacji do BD
-        $re = new \Model\Reservation();
-        $re->setFromDate(new \DateTime($_POST['fromDate']));
-        $re->setToDate(new \DateTime($_POST['toDate']));
-        $re->setReservationDate(new \DateTime());
-        foreach ($rooms as $room) {
-            $re->addRoom($room);
-            $allCost += $room->getCost();
-        }
-        if (isset($_POST['userId']) && is_numeric($_POST['userId'])) {
-            $user = $this->em->getRepository('\Model\\User')->find($_POST['userId']);
+            $re = new \Model\Reservation();
+            $date = explode(" - ", $_POST['date']);
+            $re->setFromDate(new \DateTime($date[0]));
+            $re->setToDate(new \DateTime($date[1]));
+            $re->setReservationDate(new \DateTime());
+            foreach ($rooms as $room) {
+                $re->addRoom($room);
+                $allCost += $room->getCost();
+            }
             $re->setUser($user);
-        } else {
-            $re->setGuest($_POST['name']);
-        }
-        $this->em->persist($re);
-        $this->em->flush();
+
+            $this->em->persist($re);
+            $this->em->flush();
 
 
 // tpay.com
-        $tid = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tid'))->value();
-        $crc = $re->getId();
-        $tkey = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tkey'))->value();
-        $md5 = md5($tid . $allCost . $crc . $tkey);
+            $tid = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tid'))->value();
+            $crc = $re->getId();
+            $tkey = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tkey'))->value();
+            $md5 = md5($tid . $allCost . $crc . $tkey);
+        } else {
+            \Notify::error('Błąd!');
+        }
 
-
-        return array("data" => $_POST, 'rooms' => $rooms, 'rid' => $re->getId(), 'cost' => $allCost, 'md5' => $md5, 'crc' => $crc);
+        return array("data" => $_POST, 'rooms' => $rooms, 'rid' => $re->getId(), 'cost' => $allCost, 'md5' => $md5, 'crc' => $crc, 'user' => $user);
     }
 
     /**
@@ -364,4 +389,5 @@ class Home {
         $data = $this->homeUtil->remindPassword($_POST);
         return array("data" => $data);
     }
+
 }
