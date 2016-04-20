@@ -260,10 +260,18 @@ class Home {
             if ($this->me->isLogged()) {
                 $user = $this->me->getModel();
             } else {
+                
+                $username = microtime();
+                while ($this->em->getRepository('\Model\User')->findOneBy(array('username' => $username)) != NULL) {
+                    $username = microtime();
+                }
                 $user = new \Model\User();
+                $user->setUsername($username);
                 $user->setGivenName($_POST['name']);
                 $user->setEmail($_POST['email']);
                 $user->setPhone($_POST['phone']);
+                $user->setPassword(substr(md5(date('d.H.S')), 0, 10));
+                $user->setIsActive(0);
                 $this->em->persist($user);
                 $this->em->flush();
             }

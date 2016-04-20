@@ -16,9 +16,9 @@
                 <div class="booking-form" style="margin:0;">
                     <div class="col-md-6">
                         <h5>IMIĘ I NAZWISKO</h5>
-                        <input type="text" name="name" value="{{ data.name }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %}>
+                        <input type="text" name="name" value="{{ data.name }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %} required>
                         <h5>E-MAIL</h5>
-                        <input type="text" name="email" value="{{ data.email }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %}>
+                        <input type="text" name="email" value="{{ data.email }}" {% if Me.isLogged() %} class="input-disabled" disabled {% endif %} required>
                         {% if Me.isLogged() %}
                             <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
                         {% endif %}

@@ -34,9 +34,6 @@ class Reservation {
      */
     protected $user;
 
-    /** @Column(type="string", nullable=true) */
-    protected $guest;
-
     /** @ManyToMany(targetEntity="\Model\Room", inversedBy="reservations")) 
      * @JoinTable(name="reservations_rooms")
      */
