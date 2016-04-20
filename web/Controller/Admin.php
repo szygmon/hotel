@@ -58,7 +58,7 @@ class Admin {
         if (!$Me->auth('admin') && !$Me->auth('receptionist'))
             $Router->redirect('Admin/admin');
 
-        $users = $this->em->createQueryBuilder()->select('COUNT(u.id)')->from('\Model\User', 'u')->where('u.isActive = 1')->getQuery()->getSingleScalarResult();
+        $users = $this->em->getRepository('\Model\User')->findBy(array('isActive' => 1));
         $reservationsConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 1')->getQuery()->getSingleScalarResult();
         $reservationsNotConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 0')->getQuery()->getSingleScalarResult();
         $rooms = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Room', 'r')->where('r.isActive = 1')->getQuery()->getSingleScalarResult();
@@ -75,7 +75,6 @@ class Admin {
                 ->getQuery()
                 ->getResult();
 
-        //var_dump($reserved);
 
         if (isset($reserved[0])) {
             $available = $this->em->createQueryBuilder()->select('ro')
@@ -87,7 +86,6 @@ class Admin {
         } else {
             $available = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
         }
-
 
         return array(
             'users' => $users,

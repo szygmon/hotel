@@ -22,19 +22,12 @@
             <h3>SKONTAKTUJ SIĘ Z NAMI</h3>
         </div>
         <div class="contact-bottom">
-            <form method="post" id="contactform" name="contactform"> 
-                <input type="text" value="Imię i nazwisko" name="name" id="name" onfocus="if (this.value == 'Imię i nazwisko')this.value = '';" onblur="if (this.value == '') {
-                            this.value = 'Imię i nazwisko';
-                        }" />
-                <input type="text" value="E-mail" name="email" id="email" onfocus="if (this.value == 'E-mail')this.value = '';" onblur="if (this.value == '') {
-                            this.value = 'E-mail';
-                        }" />
-                <input type="text" value="Telefon" name="phone" id="phone" onfocus="if (this.value == 'Telefon')this.value = '';" onblur="if (this.value == '') {
-                            this.value = 'Telefon';
-                        }" />
-                <textarea value="Wiadomość" name="content" id="content" onfocus="if (this.value == 'Wiadomość')this.value = '';" onblur="if (this.value == '') {
-                            this.value = 'Wiadomość';
-                        }">Wiadomość</textarea>
+            <form   method="post" id="contactform" name="contactform"> 
+                <input placeholder="Imię i nazwisko"  type="text" name="name" id="name"  />
+                <input placeholder="E-mail" type="text" name="email" id="email" />
+                <input type="text" placeholder="Telefon" name="phone" id="phone" />
+                <textarea style="resize:none" placeholder="Wiadomość" name="content" id="content">
+                </textarea>
                 <div class="clearfix"> </div>
                 <div class="submit-btn">
                     <input class="submit-btn" type="submit" value="Wyślij">
@@ -55,7 +48,7 @@
         rules: {
             name: {
                 required: true,
-                minlength: 5,
+                minlength: 4,
                 notEqual: "Imię i nazwisko"
             },
             content: {
@@ -70,7 +63,7 @@
             }
         },
         messages: {
-            name: "Podanie nazwy użytkownika jest wymagane (nazwa użytkownika musi zawierać co najmniej 5 znaków)",
+            name: "Podanie nazwy użytkownika jest wymagane (nazwa użytkownika musi zawierać co najmniej 4 znaki)",
             content: "Pole wiadomość jest wymagane, może zawierać maksymalnie 500 znaków",
             email: "Podany e-mail jest nieprawidłowy"
         }
