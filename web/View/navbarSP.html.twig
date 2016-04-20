@@ -2,13 +2,15 @@
     <div class="header">
         <div class="container">
             <div class="logo">
-                <h1>
-                    <a style="margin-left:3%" href="{{ url('Home/index') }}">Hotel JM</a><br />
-                    <i class="fa fa-star icon--yellow-exclusive"></i>
-                    <i class="fa fa-star icon--yellow-exclusive"></i>
-                    <i class="fa fa-star icon--yellow-exclusive"></i>
-                    <i class="fa fa-star icon--yellow-exclusive"></i>
-                    <i class="fa fa-star-half-full icon--yellow-exclusive"></i>
+                <h1 class="center">
+                    <a href="{{ url('Home/index') }}" class="no-wrap">{{ settings.sitename }}</a><br />
+                    <div class="no-wrap">
+                        <i class="fa fa-star icon--yellow-exclusive"></i>
+                        <i class="fa fa-star icon--yellow-exclusive"></i>
+                        <i class="fa fa-star icon--yellow-exclusive"></i>
+                        <i class="fa fa-star icon--yellow-exclusive"></i>
+                        <i class="fa fa-star-half-full icon--yellow-exclusive"></i>
+                    </div>
                 </h1>
             </div>
             <nav class="navbar navbar-default" role="navigation">
@@ -29,15 +31,13 @@
                         <li id="n-discover"><a href="{{ url('Home/discover') }}">Dojazd</a></li>
                         <li id="n-offert"><a href="{{ url('Home/tp') }}">Typ</a></li>
                             {% if Me.isLogged() %}
-                                {% if Me.auth('admin') %}   
-                                <li id="n-signin"><a href="{{ url('Admin/index') }}">Panel</a></li>
-                                {% elseif Me.auth('receptionist') %}
+                                {% if Me.auth('admin') or Me.auth('receptionist') %}   
                                 <li id="n-signin"><a href="{{ url('Admin/index') }}">Panel</a></li>
                                 {% else %}
                                 <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown">
+                                    <a href="#">
                                         Konto
-                                        <span class="caret"></span></a>
+                                        <span class="caret text-yellow"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ url('Home/account') }}">Ustawienia</a></li>
                                         <li><a href="#">Moje rezerwacje</a></li>
