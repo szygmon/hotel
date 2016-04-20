@@ -16,20 +16,17 @@
                 <div class="col-md-6">
 
                     <h5>IMIĘ I NAZWISKO</h5>
-                    <p>{{ data.name }}</p>
-                    <h5>NUMER TELEFONU</h5>
-                    <p>{{ data.phone }}</p>
-                    {% if Me.isLogged() %}
-                        <input type="hidden" name="userId" value="{{ Me.getModel.id }}" />
-                    {% endif %}
+                    <p>{{ user.givenName }} {{ user.familyName }}</p>
+                    <h5>E-MAIL</h5>
+                    <p>{{ user.email }}</p>
+                    <input type="hidden" name="userId" value="{{ user.id }}" />
                 </div>
 
                 <div class="col-md-6">		
-
-                    <h5>OD DNIA</h5>
-                    <p>{{ data.fromDate }}</p>
-                    <h5>DO DNIA</h5>
-                    <p>{{ data.toDate }}</p>
+                    <h5>NUMER TELEFONU</h5>
+                    <p>{{ user.phone }}</p>
+                    <h5>OD DNIA - DO DNIA</h5>
+                    <p>{{ data.date }}</p>
 
                 </div>
 
@@ -66,8 +63,9 @@
                         <input type="hidden" name="wyn_url" value="{{ url('Home/tPayConfirm') }}" />
                         <input type="hidden" name="pow_url" value="{{ url('Home/reservationPayConfirm') }}/{{ rid }}" />
                         <input type="hidden" name="pow_url_blad" value="{{ url('Home/reservationPayErr') }}/{{ rid }}" />
-                        <input type="hidden" name="nazwisko" value="{{ data.name }}" />
-                        <input type="hidden" name="telefon" value="{{ data.phone }}" />
+                        <input type="hidden" name="nazwisko" value="{{ user.givenName }} {{ user.familyName }}" />
+                        <input type="hidden" name="email" value="{{ user.email }}" />
+                        <input type="hidden" name="telefon" value="{{ user.phone }}" />
                         <input type="hidden" name="jezyk" value="pl" />
                         <input type="hidden" name="md5sum" value="{{ md5 }}">
                         <input type="hidden" name="online" value="1">

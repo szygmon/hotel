@@ -54,7 +54,7 @@
                             <div class="col-md-6 dropdown-button">           			
                                 <div class="book_date form-group">
                                     <label for="recipient-name" class="control-label">Data:</label>
-                                    <input class="date form-control" id="daterange" name="date" type="text" value="{{ reservation.fromDate|date('Y-m-d') }}/{{ reservation.toDate|date('Y-m-d') }}" placeholder="Od dnia" required>
+                                    <input class="date form-control" id="daterange" name="date" type="text" value="{{ reservation.fromDate|date('Y-m-d') }} - {{ reservation.toDate|date('Y-m-d') }}" placeholder="Od dnia" required>
                                 </div>		
                             </div>
                             <div class="col-md-6 dropdown-button">           			
@@ -95,11 +95,10 @@
     <script src="{{ url('template') }}/js/main.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
-            var url = $(location).attr('hostname');
-            url = "{{ url('Admin/getRooms', {'rid': reservation.id}) }}/";
-            $("#rooms").load(url + $("#daterange").val());
+            var dates = $('#daterange').val().replace(' - ', '/');
+            var url = "{{ url('Admin/getRooms', {'rid': reservation.id}) }}/";
+            $("#rooms").load(url + dates);
             $('.daterangepicker .applyBtn').click(function () {
-                console.log(url + $("input[name='daterangepicker_start']").val() + "/" + $("input[name='daterangepicker_end']").val());
                 $("#rooms").empty();
                 $("#rooms").append('<div class="overlay center load-icon"><i class="fa fa-refresh fa-spin"></i></div>');
                 $("#rooms").load(url + $("input[name='daterangepicker_start']").val() + "/" + $("input[name='daterangepicker_end']").val());
@@ -111,7 +110,7 @@
         $("#reservations-category-sidebar, #editreservations-sidebar").addClass("treeview active");
         $('#daterange').daterangepicker({
             format: 'YYYY-MM-DD',
-            separator: '/',
+            minDate: '{{ "now"|date('Y-m-d') }}',
             locale: {
                 applyLabel: 'Zapisz',
                 cancelLabel: 'Anuluj',

@@ -217,7 +217,7 @@ class Admin {
                 $room = $this->em->getRepository('\Model\Room')->find($r);
                 $res->addRoom($room);
             }
-            $tmp = explode("/", $_POST['date']);
+            $tmp = explode(" - ", $_POST['date']);
             $res->setFromDate(new \DateTime($tmp[0]));
             $res->setToDate(new \DateTime($tmp[1]));
             $res->setPaid($_POST['paid']);
@@ -232,7 +232,7 @@ class Admin {
                 $room = $this->em->getRepository('\Model\Room')->find($r);
                 $res->addRoom($room);
             }
-            $tmp = explode("/", $_POST['date']);
+            $tmp = explode(" - ", $_POST['date']);
             $res->setFromDate(new \DateTime($tmp[0]));
             $res->setToDate(new \DateTime($tmp[1]));
             $res->setPaid($_POST['paid']);
