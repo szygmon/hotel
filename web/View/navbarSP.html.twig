@@ -29,13 +29,23 @@
                         <li id="n-discover"><a href="{{ url('Home/discover') }}">Dojazd</a></li>
                         <li id="n-offert"><a href="{{ url('Home/tp') }}">Typ</a></li>
                             {% if Me.isLogged() %}
-                                {% if Me.auth('admin') %}
-                                <li id="n-signin"><a href="{{ url('Admin/index') }}">Admin</a></li>
+                                {% if Me.auth('admin') %}   
+                                <li id="n-signin"><a href="{{ url('Admin/index') }}">Panel</a></li>
+                                {% elseif Me.auth('receptionist') %}
+                                <li id="n-signin"><a href="{{ url('Admin/index') }}">Panel</a></li>
                                 {% else %}
-                                <li id="n-signin"><a href="{{ url('Home/account') }}">Konto</a></li>
-                                <li id="n-signin"><a href="{{ url('Home/logout') }}">Wyloguj</a></li>
-                                {% endif %}
-                            {% else %}
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown">
+                                        Konto
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{{ url('Home/account') }}">Ustawienia</a></li>
+                                        <li><a href="#">Moje rezerwacje</a></li>
+                                        <li><a href="{{ url('Home/logout') }}">Wyloguj</a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% else %}
                             <li id="n-signin"><a href="{{ url('Home/signin') }}">Zaloguj</a></li>
                             {% endif %}              
                         <li id="n-reviews"><a href="{{ url('Home/reviews') }}">Księga gości</a></li>     
