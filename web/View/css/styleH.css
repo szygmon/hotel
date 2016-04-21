@@ -1177,7 +1177,7 @@ address {
 .contact-bottom input[type="text"] {
     width: 32.62%;
     margin: 0px;
-    color: #999;
+    color: #555;
     background: none;
     padding: 15px 10px;
     outline: none;
@@ -1185,7 +1185,7 @@ address {
 }
 .contact-bottom textarea {
     width: 100%;
-    color: #999;
+    color: #555;
     resize: none;
     background: none;
     height: 12.7em;
