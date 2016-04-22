@@ -2263,7 +2263,6 @@ ul li ul li {
     background: #fff; 
     display: block; 
     color: #000;
-    text-shadow: 0 -1px 0 #000;
 }
 ul li ul li:hover { 
     background: #FF353D; 

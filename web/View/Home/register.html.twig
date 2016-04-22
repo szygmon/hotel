@@ -30,11 +30,11 @@
                     <h3>DANE UŻYTKOWNIKA</h3>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Imię<label>*</label></span>
-                        <input type="text" name="givenName" value="{{ values.givenName}}" /> 
+                        <input type="text" id="givenName" name="givenName" value="{{ values.givenName}}" /> 
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
                         <span>Nazwisko<label>*</label></span>
-                        <input type="text" name="familyName" value="{{ values.familyName}}" /> 
+                        <input type="text" if="familyName" name="familyName" value="{{ values.familyName}}" /> 
                     </div>
                     <div class="wow fadeInLeft" data-wow-delay="0.4s">
                         <span>Nazwa użytkownika<label>*</label></span>
@@ -71,6 +71,12 @@
         errorLabelContainer: "#error-note",
         wrapper: "li",
         rules: {
+            givenName: {
+                required: true
+            },
+            familyName: {
+                required: true
+            },
             username: {
                 required: true,
                 minlength: 5,

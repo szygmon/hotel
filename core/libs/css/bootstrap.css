@@ -2579,7 +2579,6 @@ output {
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
-  background-color: #eee;
   opacity: 1;
 }
 .form-control[disabled],
@@ -2588,6 +2587,7 @@ fieldset[disabled] .form-control {
 }
 textarea.form-control {
   height: auto;
+  background-color: red;
 }
 input[type="search"] {
   -webkit-appearance: none;

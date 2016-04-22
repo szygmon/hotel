@@ -52,11 +52,11 @@ class AdminUtil {
         if (isset($post['roles'][0])) {
             foreach ($post['roles'] as $r) {
                 $role = $this->em->getRepository('\Model\Role')->findOneBy(array('name' => $r));
-                if (!$user->getRoles()->contains($role)) 
+                if (!$user->getRoles()->contains($role))
                     $user->addRole($role);
             }
         }
-        
+
         $this->em->flush();
 
         \Notify::success('Zaktualizowano dane użytkownika');
@@ -71,23 +71,40 @@ class AdminUtil {
             \Notify::error("Nie można usunąć samego siebie!");
             return;
         }
-            
+
         $user = $this->em->getRepository('\Model\User')->find($id);
         $user->setIsActive(false);
         $this->em->flush();
 
         \Notify::success('Usunięto użytkownika');
     }
-    
+
     public function getNewMails() {
         $mails = $this->em->getRepository('\Model\Mail')->findBy(array('isActive' => 1, 'isRead' => 0), array('id' => 'DESC'));
-        
+
         return $mails;
     }
-    
+
     public function getNewOpinions() {
         $opinions = $this->em->getRepository('\Model\Opinion')->findBy(array('isActive' => 1, 'isVerified' => 0));
-        
+
         return $opinions;
     }
+
+    public function sendMail($post) {
+        if (!isset($post['sendMail'])) {
+            return;
+        }
+        
+        if ($post['emailto'] == '0') {
+            \Notify::error('Wybierz adres email');
+            return;
+        }
+        
+        $headers = 'From: ' . $this->globalUtil->getSetting('email')->getValue();
+        mail($post['emailto'], $post['subject'], $post['message'], $headers);
+
+        \Notify::success('Wiadomość została wysłana');
+    }
+
 }

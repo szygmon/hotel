@@ -64,6 +64,8 @@ class Admin {
         if (!$Me->auth('admin') && !$Me->auth('receptionist'))
             $Router->redirect('Admin/admin');
 
+        $this->adminUtil->sendMail($_POST);
+        
         $users = $this->em->getRepository('\Model\User')->findBy(array('isActive' => 1));
         $reservationsConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 1')->getQuery()->getSingleScalarResult();
         $reservationsNotConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 0')->getQuery()->getSingleScalarResult();
@@ -442,7 +444,7 @@ class Admin {
         $siteurl = $this->globalUtil->getSetting('siteurl');
         $email = $this->globalUtil->getSetting('email');
         $rules = $this->globalUtil->getSetting('rules');
-        
+
         if (isset($_POST['save'])) {
             $sitename->setValue($_POST['sitename']);
             $siteurl->setValue($_POST['siteurl']);
