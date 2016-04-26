@@ -101,7 +101,7 @@ class AdminUtil {
             return;
         }
         
-        $headers = 'From: ' . $this->globalUtil->getSetting('email')->getValue();
+        $headers = 'From: ' . $this->em->getRepository('\Model\Setting')->find('email')->getValue();
         mail($post['emailto'], $post['subject'], $post['message'], $headers);
 
         \Notify::success('Wiadomość została wysłana');
