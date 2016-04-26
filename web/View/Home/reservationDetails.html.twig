@@ -16,16 +16,16 @@
                 <div class="col-md-6">
 
                     <h5>IMIĘ I NAZWISKO</h5>
-                    <p>{{ user.givenName }} {{ user.familyName }}</p>
+                    <p>{{ Me.getModel.givenName }} {{ Me.getModel.familyName }}</p>
                     <h5>E-MAIL</h5>
-                    <p>{{ user.email }}</p>
+                    <p>{{ Me.getModel.email }}</p>
                 </div>
 
                 <div class="col-md-6">		
                     <h5>NUMER TELEFONU</h5>
-                    <p>{{ user.phone }}</p>
+                    <p>{{ Me.getModel.phone }}</p>
                     <h5>OD DNIA - DO DNIA</h5>
-                    <p>{{ data.date }}</p>
+                    <p>{{ reservation.fromDate|date('Y-m-d') }} - {{ reservation.toDate|date('Y-m-d') }}</p>
 
                 </div>
 
@@ -34,7 +34,7 @@
         <div class="clearfix margin-bottom">&nbsp;</div>
         <div class="row">
             <h3 id="rooms-list">Wybrane pokoje</h3>
-            {% for r in rooms %}
+            {% for r in reservation.rooms %}
                 <div class="single-top">
                     <div class="col-md-6 single-left">
                         <a href="#"><img src="{{ url('template') }}/images/14.jpg" class="img-responsive" alt=""></a>
@@ -49,33 +49,32 @@
             {% endfor %}
         </div>
 
-
-        <div class="row">
-            <div class="booking-form no-margin">
-                <div class="col-md-12">
-                    <h3>Razem do zapłaty: {{ cost }} zł</h3>  
-                    {% if canPay != false %}
+        {% if canPay != false %}
+            <div class="row">
+                <div class="booking-form no-margin">
+                    <div class="col-md-12">
+                        <h3>Razem do zapłaty: {{ cost }} zł</h3>  
                         <form action="https://secure.tpay.com" method="post"> 
                             <input type="hidden" name="id" value="{{ settings.tid }}" />
                             <input type="hidden" name="kwota" value="{{ cost }}" />
                             <input type="hidden" name="opis" value="Rezerwacja pokoi hotelowych" />
-                            <input type="hidden" name="crc" value="{{ crc }}" />
+                            <input type="hidden" name="crc" value="{{ reservation.id }}" />
                             <input type="hidden" name="wyn_url" value="{{ url('Home/tPayConfirm') }}" />
-                            <input type="hidden" name="pow_url" value="{{ url('Home/reservationPayConfirm') }}/{{ rid }}" />
-                            <input type="hidden" name="pow_url_blad" value="{{ url('Home/reservationPayErr') }}/{{ rid }}" />
-                            <input type="hidden" name="nazwisko" value="{{ user.givenName }} {{ user.familyName }}" />
-                            <input type="hidden" name="email" value="{{ user.email }}" />
-                            <input type="hidden" name="telefon" value="{{ user.phone }}" />
+                            <input type="hidden" name="pow_url" value="{{ url('Home/reservationPayConfirm') }}/{{ reservation.id }}" />
+                            <input type="hidden" name="pow_url_blad" value="{{ url('Home/reservationPayErr') }}/{{ reservation.id }}" />
+                            <input type="hidden" name="nazwisko" value="{{ Me.getModel.givenName }} {{ Me.getModel.familyName }}" />
+                            <input type="hidden" name="email" value="{{ Me.getModel.email }}" />
+                            <input type="hidden" name="telefon" value="{{ Me.getModel.phone }}" />
                             <input type="hidden" name="jezyk" value="pl" />
                             <input type="hidden" name="md5sum" value="{{ md5 }}">
                             <input type="hidden" name="online" value="1">
                             <input type="image" class="center-block" src="https://tpay.com/img/banners/tpaycom_zaplac-z-200x135.png" alt="Submit">
                         </form>
-                    {% endif %}
+
+                    </div>
                 </div>
             </div>
-        </div>
-
+        {% endif %}
     </div>
 </div>
 

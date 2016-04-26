@@ -41,7 +41,7 @@
                                 {% endfor %}
                             </td>
                             <td>{% if r.paid == true %}Opłacona{% else %}NIEOPŁACONA{% endif %}</td>
-                            <td>{% if r.paid == false %}<a href="#">Opłać</a> | {% endif %}<a href="#">Szczegóły</a></td>
+                            <td>{% if r.paid == false %}<a href="{{ url('Home/reservationDetails', {'id': r.id}) }}">Opłać</a> | {% endif %}<a href="{{ url('Home/reservationDetails', {'id': r.id}) }}">Szczegóły</a></td>
                         </tr>
                     {% endfor %}
                 </tbody>

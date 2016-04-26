@@ -422,4 +422,32 @@ class Home {
         return array('reservations' => $reservations);
     }
 
+    /**
+     * Szczegóły rezerwacji
+     * @Route(/reservation/{id})
+     */
+    public function reservationDetails($id = null) {
+        if ($id) {
+            $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
+            $cost = 0;
+            foreach ($reservation->getRooms() as $room) {
+                $cost += $room->getCost();
+            }
+            $tid = $this->globalUtil->getSettings()['tid'];
+            $crc = $reservation->getId();
+            $tkey = $this->globalUtil->getSettings()['tkey'];
+            $md5 = md5($tid . $cost . $crc . $tkey);
+
+            if ($reservation->getPaid())
+                $canPay = false;
+            else
+                $canPay = true;
+        } else {
+            \Notify::error('Błąd!');
+            return array();
+        }
+
+        return array('reservation' => $reservation, 'md5' => $md5, 'canPay' => $canPay, 'cost' => $cost);
+    }
+
 }
