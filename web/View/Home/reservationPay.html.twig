@@ -8,7 +8,7 @@
 
 <div class="details">
     <div class="container">
-
+        {{ Notify.r }}
         <div class="row">
             <h3>Rezerwacja - płatność</h3>
             <div class="booking-form no-margin">
@@ -54,23 +54,25 @@
         <div class="row">
             <div class="booking-form no-margin">
                 <div class="col-md-12">
-                    <h3>Razem do zapłaty: {{ cost }} zł</h3>                    
-                    <form action="https://secure.tpay.com" method="post"> 
-                        <input type="hidden" name="id" value="22856" />
-                        <input type="hidden" name="kwota" value="{{ cost }}" />
-                        <input type="hidden" name="opis" value="Rezerwacja pokoi hotelowych" />
-                        <input type="hidden" name="crc" value="{{ crc }}" />
-                        <input type="hidden" name="wyn_url" value="{{ url('Home/tPayConfirm') }}" />
-                        <input type="hidden" name="pow_url" value="{{ url('Home/reservationPayConfirm') }}/{{ rid }}" />
-                        <input type="hidden" name="pow_url_blad" value="{{ url('Home/reservationPayErr') }}/{{ rid }}" />
-                        <input type="hidden" name="nazwisko" value="{{ user.givenName }} {{ user.familyName }}" />
-                        <input type="hidden" name="email" value="{{ user.email }}" />
-                        <input type="hidden" name="telefon" value="{{ user.phone }}" />
-                        <input type="hidden" name="jezyk" value="pl" />
-                        <input type="hidden" name="md5sum" value="{{ md5 }}">
-                        <input type="hidden" name="online" value="1">
-                        <input type="image" class="center-block" src="https://tpay.com/img/banners/tpaycom_zaplac-z-200x135.png" alt="Submit">
-                    </form>
+                    <h3>Razem do zapłaty: {{ cost }} zł</h3>  
+                    {% if canPay != false %}
+                        <form action="https://secure.tpay.com" method="post"> 
+                            <input type="hidden" name="id" value="{{ settings.tid }}" />
+                            <input type="hidden" name="kwota" value="{{ cost }}" />
+                            <input type="hidden" name="opis" value="Rezerwacja pokoi hotelowych" />
+                            <input type="hidden" name="crc" value="{{ crc }}" />
+                            <input type="hidden" name="wyn_url" value="{{ url('Home/tPayConfirm') }}" />
+                            <input type="hidden" name="pow_url" value="{{ url('Home/reservationPayConfirm') }}/{{ rid }}" />
+                            <input type="hidden" name="pow_url_blad" value="{{ url('Home/reservationPayErr') }}/{{ rid }}" />
+                            <input type="hidden" name="nazwisko" value="{{ user.givenName }} {{ user.familyName }}" />
+                            <input type="hidden" name="email" value="{{ user.email }}" />
+                            <input type="hidden" name="telefon" value="{{ user.phone }}" />
+                            <input type="hidden" name="jezyk" value="pl" />
+                            <input type="hidden" name="md5sum" value="{{ md5 }}">
+                            <input type="hidden" name="online" value="1">
+                            <input type="image" class="center-block" src="https://tpay.com/img/banners/tpaycom_zaplac-z-200x135.png" alt="Submit">
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -79,9 +81,6 @@
 </div>
 
 <script type="text/javascript">
-
-    $("#n-rooms").addClass("active");
     $(".banner").toggleClass("banner1");
-
 </script>
 {% endblock %}

@@ -10,7 +10,7 @@
 
 <div class="details">
     <div class="container">
-        <form action="{{ url('Home/reservationPay') }}#rooms-list" method="POST">
+        <form action="{{ url('Home/reservationPay') }}" method="POST">
             <div class="row">
                 <h3>Rezerwacja</h3>
                 <div class="booking-form" style="margin:0;">
@@ -83,7 +83,7 @@
             $("#rooms").load(url + dates + "/?balcony=" + $("#balcony").prop('checked') + "&toilet=" + $("#toilet").prop('checked') + "&doubleBed=" + $("#doubleBed").prop('checked') + "&smoking=" + $("#smoking").prop('checked'));
         });
     });
-    $("#n-rooms").addClass("active");
+
     $(".banner").toggleClass("banner1");
 
     var num = 600; //number of pixels before modifying styles

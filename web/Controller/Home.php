@@ -259,20 +259,25 @@ class Home {
             if ($this->me->isLogged()) {
                 $user = $this->me->getModel();
             } else {
-
-                $username = microtime();
-                while ($this->em->getRepository('\Model\User')->findOneBy(array('username' => $username)) != NULL) {
+                // sprawdzanie usera o podanym adresie e-mail
+                $isInDB = $this->em->getRepository('\Model\User')->findOneBy(array('email' => $_POST['email']));
+                if ($isInDB == null) {
                     $username = microtime();
+                    while ($this->em->getRepository('\Model\User')->findOneBy(array('username' => $username)) != NULL) {
+                        $username = microtime();
+                    }
+                    $user = new \Model\User();
+                    $user->setUsername($username);
+                    $user->setGivenName($_POST['name']);
+                    $user->setEmail($_POST['email']);
+                    $user->setPhone($_POST['phone']);
+                    $user->setPassword(substr(md5(date('d.H.S')), 0, 10));
+                    $user->setIsActive(0);
+                    $this->em->persist($user);
+                    $this->em->flush();
+                } else {
+                    $user = $isInDB;
                 }
-                $user = new \Model\User();
-                $user->setUsername($username);
-                $user->setGivenName($_POST['name']);
-                $user->setEmail($_POST['email']);
-                $user->setPhone($_POST['phone']);
-                $user->setPassword(substr(md5(date('d.H.S')), 0, 10));
-                $user->setIsActive(0);
-                $this->em->persist($user);
-                $this->em->flush();
             }
             $allCost = 0;
 // dodanie rezerwacji do BD
@@ -290,17 +295,21 @@ class Home {
             $this->em->persist($re);
             $this->em->flush();
 
-
-// tpay.com
-            $tid = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tid'))->value();
+            $tid = $this->globalUtil->getSettings()['tid'];
             $crc = $re->getId();
-            $tkey = $this->em->getRepository('\Model\Setting')->findOneBy(array('name' => 'tkey'))->value();
+            $tkey = $this->globalUtil->getSettings()['tkey'];
             $md5 = md5($tid . $allCost . $crc . $tkey);
+            
+            $canPay = true;
+            if (isset($isInDB) && $isInDB != null) {
+                \Notify::error('Użytkownik o takim adresie e-mail jest już zarejestrowany. <a href="signin">Zaloguj się</a>, aby dokonać płatności.');
+                $canPay = false;
+            }
         } else {
             \Notify::error('Błąd!');
         }
 
-        return array("data" => $_POST, 'rooms' => $rooms, 'rid' => $re->getId(), 'cost' => $allCost, 'md5' => $md5, 'crc' => $crc, 'user' => $user);
+        return array("data" => $_POST, 'rooms' => $rooms, 'rid' => $re->getId(), 'cost' => $allCost, 'md5' => $md5, 'crc' => $crc, 'user' => $user, 'canPay' => $canPay);
     }
 
     /**
