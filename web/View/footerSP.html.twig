@@ -1,44 +1,40 @@
 <div class="footer">
-		<div class="container">
-			<div class="col-md-2 deco">
-				<h4>Nawigacja</h4>
-				<li><a href="{{ url('Home/index') }}">Strona główna</a></li>
-				<li><a href="{{ url('Home/rooms') }}">Pokoje</a></li>
-				<li><a href="{{ url('Home/signin') }}">Zaloguj się</a></li> 
-				<li><a href="{{ url('Home/contact') }}">Kontakt</a></li>
-			</div>
-			<div class="col-md-2 deco">
-				<h4>Linki</h4> 
-                                <li><a href="#">Qui Sommes-Nous ?</a></li>
-                                <li><a href="#">Mentions Légales </a></li>
-				<li><a href="#">Conditions D'Utilisation </a></li>
-			</div>
-			<div class="col-md-3 deco">
-            </div>
-			<div class="col-md-2 deco">
-				<h4>Social</h4>
-				<div class="soci">
-					<li><a href="#"><i class="f-1"> </i></a></li>
-					<li><a href="#"><i class="t-1"> </i></a></li>
-					<li><a href="#"><i class="g-1"> </i></a></li>
-				</div>
-			</div>
-			<div class="col-md-3 cardss">
-				<h4>Płatności</h4>
-				<li><i class="visa"></i></li>
-				<li><i class="ma"></i></li>
-				<li><i class="paypal"></i></li>
-				<div class="clearfix"> </div>
-			</div>
-		</div>
-	</div>
-	<div class="footer-bottom">
-			<div class="container">
-				<p>
-                    <strong>Copyright &copy; 2016 <a href="http://{{ settings.siteurl }}">{{ settings.siteurl }}</a>.</strong> All rights reserved.
-                </p>
-			</div>
-		</div>
-	<!-- footer -->
+    <div class="container">
+        <div class="col-md-3 deco">
+            <h4>Nawigacja</h4>
+            <li><a href="{{ url('Home/index') }}">Strona główna</a></li>
+            <li><a href="{{ url('Home/rooms') }}">Pokoje</a></li>
+            <li><a href="{{ url('Home/offert') }}">Oferta</a></li> 
+
+        </div>
+        <div class="col-md-3 deco">
+            <h4>Użytkownik</h4> 
+            <li><a href="{{ url('Home/signin') }}">Zaloguj się</a></li> 
+            <li><a href="{{ url('Home/discover') }}">Dojazd</a></li>
+            <li><a href="{{ url('Home/contact') }}">Kontakt</a></li>
+        </div>
+        <div class="col-md-3 deco">
+            <h4>HOTEL JM</h4>
+            <p style="color:#eee;">795 Folsom Ave, Suite 600</p>
+            <p style="color:#eee;">San Francisco, CA 94107</p>
+            <p style="color:#eee;">Tel.: (123) 456-7890</p>
+        </div>
+        <div class="col-md-3 cardss">
+            <h4>Płatności obsługuje</h4>
+            <a href="http://tpay.com" target="_blank">
+                <img src="{{ url('template') }}/images/tpay.png" class="img-responsive" alt="tpay.com" />
+            </a>
+            <div class="clearfix"> </div>
+        </div>
+    </div>
+</div>
+<div class="footer-bottom">
+    <div class="container">
+        <p>
+            <strong>Copyright &copy; 2016 <a href="http://{{ settings.siteurl }}">{{ settings.siteurl }}</a>.</strong> All rights reserved.
+        </p>
+    </div>
+</div>
+<!-- footer -->
 </body>
 </html>

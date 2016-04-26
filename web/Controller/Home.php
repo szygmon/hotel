@@ -198,10 +198,9 @@ class Home {
 
         if (!isset($_POST['fromDate'])) {
             $startReservationDate = new \DateTime();
-            $_POST['fromDate'] = $startReservationDate->format('Y-m-d');
             $endReservationDate = new \DateTime();
             $endReservationDate->modify('+14 day');
-            $_POST['toDate'] = $endReservationDate->format('Y-m-d');
+            $_POST['date'] = $startReservationDate->format('Y-m-d') . ' - ' . $endReservationDate->format('Y-m-d');
         }
 
         if ($this->me->getModel() != NULL) {
@@ -395,7 +394,7 @@ class Home {
      * @Route(/rules)
      */
     public function rules() {
-        
+
         return array();
     }
 

@@ -29,7 +29,6 @@
                         <li id="n-rooms"><a href="{{ url('Home/rooms') }}">Pokoje</a></li>                      
                         <li id="n-offert"><a href="{{ url('Home/offert') }}">Oferta</a></li>               
                         <li id="n-discover"><a href="{{ url('Home/discover') }}">Dojazd</a></li>
-                        <li id="n-offert"><a href="{{ url('Home/tp') }}">Typ</a></li>
                             {% if Me.isLogged() %}
                                 {% if Me.auth('admin') or Me.auth('receptionist') %}   
                                 <li id="n-signin"><a href="{{ url('Admin/index') }}">Panel</a></li>
@@ -50,7 +49,6 @@
                             {% endif %}              
                         <li id="n-reviews"><a href="{{ url('Home/reviews') }}">Księga gości</a></li>     
                         <li id="n-contact"><a href="{{ url('Home/contact') }}">Kontakt</a></li>  
-                        <li id="n-rooms_oldcopy" ><a href="{{ url('Home/rooms_oldcopy') }}">Pokoje old</a></li>
                     </ul>
                 </div>
                 <!--/.navbar-collapse-->
