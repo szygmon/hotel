@@ -53,6 +53,11 @@
                         <input type="password" id="repeatedpass" name="repeatedpass" value="" />
                     </div>
                     <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <span>Telefon<label>*</label></span>
+                        <input type="text" id="phone" name="phone" value="" required />
+                    </div>
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <br />
                         <input type="checkbox" id="rules" name="rules" value="1" required />
                         Akceptuję <a href="{{ url('Home/rules') }}">regiulamin serwisu</a>.<label>*</label>
                         
@@ -101,6 +106,9 @@
             },
             rules: {
                 required: true
+            },
+            phone: {
+                required: true
             }
         },
         messages: {
@@ -110,7 +118,8 @@
             email: "Podany e-mail jest nieprawidłowy",
             rules: "Akceptacja regulaminu serwisu jest wymagana",
             givenName: "Podanie imienia jest wymagane",
-            familyName: "Podanie nazwiska jest wymagane"
+            familyName: "Podanie nazwiska jest wymagane",
+            phone: "Podanie telefonu jest wymagane"
         }
     });
 

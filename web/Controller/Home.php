@@ -182,9 +182,14 @@ class Home {
             $user = $this->em->getRepository('\Model\User')->findOneBy(array('username' => $_POST['username']));
             if ($user != null)
                 return array("values" => $_POST, "usernameIsInDatabase" => true);
-            $user = $this->em->getRepository('\Model\User')->findOneBy(array('email' => $_POST['email']));
+            $user = $this->em->getRepository('\Model\User')->findOneBy(array('email' => $_POST['email'], 'isActive' => 1));
             if ($user != null)
                 return array("values" => $_POST, "emailIsInDatabase" => true);
+            $user = $this->em->getRepository('\Model\User')->findOneBy(array('email' => $_POST['email'], 'isActive' => 0));
+            if ($user != null) {
+                $user->setEmail($user->getEmail() . microtime());
+                $this->em->flush();
+            }
             $this->homeUtil->registerForm($_POST);
         }
         return array();
@@ -299,7 +304,7 @@ class Home {
             $crc = $re->getId();
             $tkey = $this->globalUtil->getSettings()['tkey'];
             $md5 = md5($tid . $allCost . $crc . $tkey);
-            
+
             $canPay = true;
             if (isset($isInDB) && $isInDB != null) {
                 \Notify::error('Użytkownik o takim adresie e-mail jest już zarejestrowany. <a href="signin">Zaloguj się</a>, aby dokonać płatności.');
@@ -405,6 +410,16 @@ class Home {
     public function rules() {
 
         return array();
+    }
+
+    /**
+     * Moje rezerwacje
+     * @Route(/myreservations)
+     */
+    public function myReservations() {
+        $reservations = $this->em->getRepository('\Model\Reservation')->findBy(array('user' => $this->me->getModel()), array('id' => 'DESC'));
+
+        return array('reservations' => $reservations);
     }
 
 }

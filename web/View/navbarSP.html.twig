@@ -33,13 +33,13 @@
                                 {% if Me.auth('admin') or Me.auth('receptionist') %}   
                                 <li id="n-signin"><a href="{{ url('Admin/index') }}">Panel</a></li>
                                 {% else %}
-                                <li class="dropdown">
+                                <li id="account" class="dropdown">
                                     <a href="#">
                                         Konto
                                         <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li><a href="{{ url('Home/account') }}">Ustawienia</a></li>
-                                        <li><a href="#">Moje rezerwacje</a></li>
+                                        <li><a href="{{ url('Home/myReservations') }}">Moje rezerwacje</a></li>
                                         <li><a href="{{ url('Home/logout') }}">Wyloguj</a></li>
                                     </ul>
                                 </li>

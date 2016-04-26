@@ -1,0 +1,52 @@
+{% extends './baseSP.html.twig' %}
+
+{% block title %}{{ settings.sitename }} - moje rezerwacje{% endblock %}
+
+{% block body %}
+    <script type="text/javascript">
+        $("#account").addClass("active");
+        $(".banner").toggleClass("banner1");
+    </script>
+</div>		
+<!-- banner -->
+
+<div class="typo">
+    <div class="container">
+        <h3 class="title">Moje rezerwacje</h3>
+
+        <div class="bs-docs-example">
+            <p>Uwaga! Status może się zmienić dopiero kilka minut po opłaceniu - wymagane potwierdzenie od systemu płatności.</p>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Data rezerwacji</th>
+                        <th>Od dnia</th>
+                        <th>Do dnia</th>
+                        <th>Pokoje</th>
+                        <th>Status</th>
+                        <th>Opcje</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reservations %}
+                        <tr>
+                            <td>{{ r.id }}</td>
+                            <td>{{ r.reservationDate|date('Y-m-d') }}</td>
+                            <td>{{ r.fromDate|date('Y-m-d') }}</td>
+                            <td>{{ r.toDate|date('Y-m-d') }}</td>
+                            <td>
+                                {% for room in r.rooms %}
+                                    {{ room.number }}&nbsp;
+                                {% endfor %}
+                            </td>
+                            <td>{% if r.paid == true %}Opłacona{% else %}NIEOPŁACONA{% endif %}</td>
+                            <td>{% if r.paid == false %}<a href="#">Opłać</a> | {% endif %}<a href="#">Szczegóły</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
