@@ -1,0 +1,24 @@
+{% extends './baseSP.html.twig' %}
+
+{% block title %}{{ settings.sitename }} - regulamin{% endblock %}
+{% block body %}
+    <script type="text/javascript">
+        $("#n-contact").addClass("active");
+        $(function () {
+            $(".banner").toggleClass("banner1");
+        });
+    </script>
+
+</div>		
+<div class="contact">
+    <div class="container">
+        <h3 class="title">Regulamin serwisu</h3>
+
+        <div class="grid_3 grid_4">
+            <div class="col-md-12">
+                {{ settings.rules }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

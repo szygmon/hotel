@@ -260,7 +260,7 @@ class Home {
             if ($this->me->isLogged()) {
                 $user = $this->me->getModel();
             } else {
-                
+
                 $username = microtime();
                 while ($this->em->getRepository('\Model\User')->findOneBy(array('username' => $username)) != NULL) {
                     $username = microtime();
@@ -388,6 +388,15 @@ class Home {
     public function passwordReminder() {
         $data = $this->homeUtil->remindPassword($_POST);
         return array("data" => $data);
+    }
+
+    /**
+     * Regulamin
+     * @Route(/rules)
+     */
+    public function rules() {
+        
+        return array();
     }
 
 }

@@ -52,7 +52,11 @@
                         <span>Potwierdź hasło<label>*</label></span>
                         <input type="password" id="repeatedpass" name="repeatedpass" value="" />
                     </div>
-
+                    <div class="wow fadeInRight" data-wow-delay="0.4s">
+                        <input type="checkbox" id="rules" name="rules" value="1" required />
+                        Akceptuję <a href="{{ url('Home/rules') }}">regiulamin serwisu</a>.<label>*</label>
+                        
+                    </div>
                     <div class="clearfix"> </div>
                     <input type="submit" value="Zarejestruj" />
                     <div class="clearfix"> </div>
@@ -94,13 +98,19 @@
             email: {
                 required: true,
                 email: true
+            },
+            rules: {
+                required: true
             }
         },
         messages: {
             username: "Podanie nazwy użytkownika jest wymagane (nazwa użytkownika musi zawierać co najmniej 5 znaków)",
-            pass: "Hasło musi zawierać co najmniej 8 znaków (co najmniej 1 liczbę i 1 literę)",
+            pass: "Hasło musi zawierać co najmniej 8 znaków (w tym co najmniej 1 liczbę i 1 literę)",
             repeatedpass: "Hasło i powtórzone hasło muszą być takie same",
-            email: "Podany e-mail jest nieprawidłowy"
+            email: "Podany e-mail jest nieprawidłowy",
+            rules: "Akceptacja regulaminu serwisu jest wymagana",
+            givenName: "Podanie imienia jest wymagane",
+            familyName: "Podanie nazwiska jest wymagane"
         }
     });
 
