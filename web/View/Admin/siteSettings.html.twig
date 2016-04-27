@@ -47,8 +47,8 @@
                                 <label>Czas trzymania nieopłaconej rezerwacji:</label>
                                 <select class="form-control" name="c_reservation_time">
                                     <option value="0">Wyłączone</option>
-                                        <option value="-1 day">1 dzień</option>
-                                        <option value="-2 days">2 dni</option>
+                                    <option value="-1 day" {% if settings.c_reservation_time == "-1 day" %}selected{% endif %}>1 dzień</option>
+                                        <option value="-2 days" {% if settings.c_reservation_time == "-2 days" %}selected{% endif %}>2 dni</option>
                                 </select>
                             </div>
                         </div>
