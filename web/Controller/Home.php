@@ -48,7 +48,7 @@ class Home {
      */
     public function rooms() {
         $rooms = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
-        
+
         return array('rooms' => $rooms);
     }
 
@@ -159,8 +159,7 @@ class Home {
         if (!isset($_POST['email']))
             return array();
 
-        if ($_POST['email'] != 'E-mail' && $_POST['name'] != 'Imię i nazwisko' 
-                && $_POST['content'] != "Wiadomość") {
+        if ($_POST['email'] != 'E-mail' && $_POST['name'] != 'Imię i nazwisko' && $_POST['content'] != "Wiadomość") {
             if ($_POST['phone'] == 'Telefon')
                 $_POST['phone'] = '';
 
@@ -197,7 +196,7 @@ class Home {
      */
     public function reservation() {
 
-        if (!isset($_POST['fromDate'])) {
+        if (!isset($_POST['date'])) {
             $startReservationDate = new \DateTime();
             $endReservationDate = new \DateTime();
             $endReservationDate->modify('+14 day');
@@ -280,21 +279,26 @@ class Home {
                     $user = $isInDB;
                 }
             }
-            $allCost = 0;
-// dodanie rezerwacji do BD
+
+            // dodanie rezerwacji do BD
             $re = new \Model\Reservation();
             $date = explode(" - ", $_POST['date']);
             $re->setFromDate(new \DateTime($date[0]));
             $re->setToDate(new \DateTime($date[1]));
             $re->setReservationDate(new \DateTime());
+            
+            $allCost = 0;
+            $nights = floor(strtotime($date[1]) - strtotime($date[0])) / (60 * 60 * 24);
             foreach ($rooms as $room) {
                 $re->addRoom($room);
-                $allCost += $room->getCost();
+                $allCost += ($room->getCost() * $nights);
             }
             $re->setUser($user);
 
             $this->em->persist($re);
             $this->em->flush();
+
+            
 
             $tid = $this->globalUtil->getSettings()['tid'];
             $crc = $re->getId();
