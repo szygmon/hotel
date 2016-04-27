@@ -52,16 +52,7 @@ class Home {
     }
 
     /**
-     * Pokoje
-     * @Route(/rooms_oldcopy)
-     */
-    public function rooms_oldcopy() {
-
-        return array();
-    }
-
-    /**
-     * Pokoje
+     * Ustawienia konta
      * @param \User\Me $Me
      * @param \Core\Router $Router
      * @Route(/account)
@@ -87,12 +78,15 @@ class Home {
     }
 
     /**
-     * Pokoje
+     * Logowanie
      * @param \User\Me $Me
      * @param \Core\Router $Router
      * @Route(/signin)
      */
-    public function signin() {
+    public function signin($Me, $Router) {
+        if ($Me->isLogged()) 
+            $Router->redirect('Home/index');
+        
         $msg = null;
         if (isset($_POST['username']))
             $msg = $this->homeUtil->loginForm($_POST);
@@ -101,7 +95,7 @@ class Home {
     }
 
     /**
-     * Pokoje
+     * Oferta
      * @Route(/offert)
      */
     public function offert() {
@@ -141,7 +135,7 @@ class Home {
     }
 
     /**
-     * Pokoje
+     * Opis pokoju
      * @Route(/details)
      */
     public function details() {
@@ -150,7 +144,7 @@ class Home {
     }
 
     /**
-     * Pokoje
+     * Kontakt
      * @Route(/contact)
      */
     public function contact() {
@@ -167,7 +161,7 @@ class Home {
     }
 
     /**
-     * Pokoje
+     * Dojazd
      * @Route(/discover)
      */
     public function discover() {
@@ -175,7 +169,7 @@ class Home {
     }
 
     /**
-     * Register
+     * Rejestracja
      * @Route(/register)
      */
     public function register() {
@@ -197,7 +191,7 @@ class Home {
     }
 
     /**
-     * Reservation
+     * Reserwacja - krok 1
      * @Route(/reservation)
      */
     public function reservation() {
@@ -219,7 +213,7 @@ class Home {
     }
 
     /**
-     * Reservation
+     * Pobieranie dostępnych pokoi
      * @Route(/getrooms/{from}/{to}/{param})
      */
     public function getRooms($from = null, $to = null, $param = null) {
@@ -251,7 +245,7 @@ class Home {
     }
 
     /**
-     * Reservation Pay
+     * Szczegóły rezerwacji do opłacenia
      * @Route(/reservationpay)
      */
     public function reservationPay() {
@@ -319,7 +313,7 @@ class Home {
     }
 
     /**
-     * Reservation Pay
+     * Potwierdzona płatność za rezerwacje
      * @Route(/reservationpayconfirm/{id})
      */
     public function reservationPayConfirm($id = null) {
@@ -331,7 +325,7 @@ class Home {
     }
 
     /**
-     * Reservation Pay
+     * Błąd płatności za rezerwacje
      * @Route(/reservationpayerr/{id})
      */
     public function reservationPayErr($id = null) {
@@ -374,7 +368,7 @@ class Home {
     }
 
     /**
-     * Logout
+     * Wylogowanie
      * @Route("/logout")
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -382,17 +376,6 @@ class Home {
     public function logout($Me, $Router) {
         $Me->logout();
         $Router->redirect('Home/index');
-    }
-
-    /**
-     * @Route(/removeNotif)
-     */
-    public function removeNotif() {
-        $n = $this->em->getRepository('\Model\\Notification')->find($_POST['id']);
-        $this->em->remove($n);
-        $this->em->flush();
-
-        return array();
     }
 
     /**
