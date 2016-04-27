@@ -220,6 +220,9 @@ class Home {
         if ($from != null && $to != null) {
             $from = new \DateTime($from);
             $to = new \DateTime($to);
+            if ($from == $to)
+                $to->modify ('+1 day');
+            
             $qb = $this->em->createQueryBuilder();
             $reservations = $qb
                     ->select('rr.id')
@@ -283,8 +286,15 @@ class Home {
             // dodanie rezerwacji do BD
             $re = new \Model\Reservation();
             $date = explode(" - ", $_POST['date']);
-            $re->setFromDate(new \DateTime($date[0]));
-            $re->setToDate(new \DateTime($date[1]));
+            $from = new \DateTime($date[0]);
+            $to = new \DateTime($date[1]);
+            if ($from == $to) {
+                $to->modify('+1 day');
+                $date[1] = $to->format('Y-m-d');
+                $_POST['date'] = $date[0].' - '.$date[1];
+            }
+            $re->setFromDate($from);
+            $re->setToDate($to);
             $re->setReservationDate(new \DateTime());
             
             $allCost = 0;
@@ -297,8 +307,6 @@ class Home {
 
             $this->em->persist($re);
             $this->em->flush();
-
-            
 
             $tid = $this->globalUtil->getSettings()['tid'];
             $crc = $re->getId();
