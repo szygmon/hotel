@@ -52,7 +52,16 @@ class Home {
     }
 
     /**
-     * Ustawienia konta
+     * Pokoje
+     * @Route(/rooms_oldcopy)
+     */
+    public function rooms_oldcopy() {
+
+        return array();
+    }
+
+    /**
+     * Pokoje
      * @param \User\Me $Me
      * @param \Core\Router $Router
      * @Route(/account)
@@ -78,15 +87,12 @@ class Home {
     }
 
     /**
-     * Logowanie
+     * Pokoje
      * @param \User\Me $Me
      * @param \Core\Router $Router
      * @Route(/signin)
      */
-    public function signin($Me, $Router) {
-        if ($Me->isLogged()) 
-            $Router->redirect('Home/index');
-        
+    public function signin() {
         $msg = null;
         if (isset($_POST['username']))
             $msg = $this->homeUtil->loginForm($_POST);
@@ -95,7 +101,7 @@ class Home {
     }
 
     /**
-     * Oferta
+     * Pokoje
      * @Route(/offert)
      */
     public function offert() {
@@ -127,15 +133,14 @@ class Home {
     /**
      * Typografia - chwilowo
      * @Route(/tp)
-     * @param \Core\Router $Router
      */
-    public function tp($Router) {
-        var_dump($Router->getController());
+    public function tp() {
+
         return array();
     }
 
     /**
-     * Opis pokoju
+     * Pokoje
      * @Route(/details)
      */
     public function details() {
@@ -144,14 +149,15 @@ class Home {
     }
 
     /**
-     * Kontakt
-     * @Route(/contact)
+     * Pokoje
+     * @Route(/discover)
      */
-    public function contact() {
+    public function discover() {
         if (!isset($_POST['email']))
             return array();
 
-        if ($_POST['email'] != 'E-mail' && $_POST['name'] != 'Imię i nazwisko' && $_POST['content'] != "Wiadomość") {
+        if ($_POST['email'] != 'E-mail' && $_POST['name'] != 'Imię i nazwisko' 
+                && $_POST['content'] != "Wiadomość") {
             if ($_POST['phone'] == 'Telefon')
                 $_POST['phone'] = '';
 
@@ -161,15 +167,7 @@ class Home {
     }
 
     /**
-     * Dojazd
-     * @Route(/discover)
-     */
-    public function discover() {
-        return array();
-    }
-
-    /**
-     * Rejestracja
+     * Register
      * @Route(/register)
      */
     public function register() {
@@ -191,7 +189,7 @@ class Home {
     }
 
     /**
-     * Reserwacja - krok 1
+     * Reservation
      * @Route(/reservation)
      */
     public function reservation() {
@@ -213,7 +211,7 @@ class Home {
     }
 
     /**
-     * Pobieranie dostępnych pokoi
+     * Reservation
      * @Route(/getrooms/{from}/{to}/{param})
      */
     public function getRooms($from = null, $to = null, $param = null) {
@@ -245,7 +243,7 @@ class Home {
     }
 
     /**
-     * Szczegóły rezerwacji do opłacenia
+     * Reservation Pay
      * @Route(/reservationpay)
      */
     public function reservationPay() {
@@ -313,7 +311,7 @@ class Home {
     }
 
     /**
-     * Potwierdzona płatność za rezerwacje
+     * Reservation Pay
      * @Route(/reservationpayconfirm/{id})
      */
     public function reservationPayConfirm($id = null) {
@@ -325,7 +323,7 @@ class Home {
     }
 
     /**
-     * Błąd płatności za rezerwacje
+     * Reservation Pay
      * @Route(/reservationpayerr/{id})
      */
     public function reservationPayErr($id = null) {
@@ -368,7 +366,7 @@ class Home {
     }
 
     /**
-     * Wylogowanie
+     * Logout
      * @Route("/logout")
      * @param \User\Me $Me
      * @param \Core\Router $Router
@@ -376,6 +374,17 @@ class Home {
     public function logout($Me, $Router) {
         $Me->logout();
         $Router->redirect('Home/index');
+    }
+
+    /**
+     * @Route(/removeNotif)
+     */
+    public function removeNotif() {
+        $n = $this->em->getRepository('\Model\\Notification')->find($_POST['id']);
+        $this->em->remove($n);
+        $this->em->flush();
+
+        return array();
     }
 
     /**
