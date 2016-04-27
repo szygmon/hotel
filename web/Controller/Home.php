@@ -47,8 +47,9 @@ class Home {
      * @Route(/rooms)
      */
     public function rooms() {
-
-        return array();
+        $rooms = $this->em->getRepository('\Model\Room')->findBy(array('isActive' => 1));
+        
+        return array('rooms' => $rooms);
     }
 
     /**
@@ -132,10 +133,12 @@ class Home {
 
     /**
      * Typografia - chwilowo
-     * @Route(/tp)
+     * @Route(/tp/{id})
+     * @param \Core\Router $Router
      */
-    public function tp() {
+    public function tp($Router, $id) {
 
+        var_dump($Router->getParams());
         return array();
     }
 

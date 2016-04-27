@@ -12,10 +12,17 @@ class Twig {
 		Di::get('Template')->addTwigFunctions(array(
 			'getAvatar' => array($this, 'fnGetAvatar'),
 		));
+                Di::get('Template')->addTwigFunctions(array(
+			'getRoomImage' => array($this, 'fnGetRoomImage'),
+		));
 	}
 
 	public function fnGetAvatar($id) {
 		return $this->getFile('files/user/', $id);
+	}
+        
+        public function fnGetRoomImage($id) {
+		return $this->getFile('files/rooms/', $id);
 	}
 
 	public function getFile($path, $id) {

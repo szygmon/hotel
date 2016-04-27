@@ -9,139 +9,164 @@ define('NCORE', 'core/');
 
 class Upload {
 
-	private $allowed = array(
-		'png', 'jpg', 'jpeg', 'gif',
-		'mp4', 'webm', 'flv', 'avi', 'wmv', 'mpeg'
-	);
-	private $abspath;
-	private $status = 'error';
-	private $thumbnails = array(640, 612, 328);
-	private $name;
-	private $extension;
+    private $allowed = array(
+        'png', 'jpg', 'jpeg', 'gif',
+        'mp4', 'webm', 'flv', 'avi', 'wmv', 'mpeg'
+    );
+    private $abspath;
+    private $status = 'error';
+    private $thumbnails = array(640, 612, 328);
+    private $name;
+    private $extension;
 
-	public function __construct() {
-		require ABSPATH . NCORE . 'Kernel.php';
-		Kernel::init();
+    public function __construct() {
+        require ABSPATH . NCORE . 'Kernel.php';
+        Kernel::init();
 
-		if (isset($_FILES['upl']) && $_FILES['upl']['error'] == 0) {
-			$this->moveUserImage();
-		}
-		echo '{"status":"' . $this->status . '"}';
-	}
+        if (isset($_FILES['upl']) && $_FILES['upl']['error'] == 0) {
+            $this->moveUserImage();
+        }
+        if (isset($_FILES['roomImageUpl']) && $_FILES['roomImageUpl']['error'] == 0) {
+            $this->moveRoomImage($_POST['roomId']);
+        }
 
-	public function moveImage() {
-		$this->extension = pathinfo($_FILES['upl']['name'], PATHINFO_EXTENSION);
-		if (!in_array(strtolower($this->extension), $this->allowed))
-			return;
+        echo '{"status":"' . $this->status . '"}';
+    }
 
-		$this->name = uniqid(date('B_'));
-		$newFile = $this->abspath . '/files/tmp/' . $this->name . '.' . $this->extension;
+    public function moveImage() {
+        $this->extension = pathinfo($_FILES['upl']['name'], PATHINFO_EXTENSION);
+        if (!in_array(strtolower($this->extension), $this->allowed))
+            return;
 
-		if ($this->checkIsImage($this->extension) && extension_loaded('imagick')) {
-			list($width, $height) = $this->getImageSize($_FILES['upl']['tmp_name']);
+        $this->name = uniqid(date('B_'));
+        $newFile = $this->abspath . '/files/tmp/' . $this->name . '.' . $this->extension;
 
-			if ($width < MIN_WIDTH_ACCEPT) {
-				$this->status = 'error", "msg":"' . MIN_WIDTH_ERROR;
-				return 0;
-			}
+        if ($this->checkIsImage($this->extension) && extension_loaded('imagick')) {
+            list($width, $height) = $this->getImageSize($_FILES['upl']['tmp_name']);
 
-			$image = new Imagick();
-			$image->readImage($_FILES['upl']['tmp_name']);
+            if ($width < MIN_WIDTH_ACCEPT) {
+                $this->status = 'error", "msg":"' . MIN_WIDTH_ERROR;
+                return 0;
+            }
 
-			$bottom = new Imagick();
-			$bottom->newImage($width, 28, new ImagickPixel('#1b1b1b'));
+            $image = new Imagick();
+            $image->readImage($_FILES['upl']['tmp_name']);
 
-			$img = new Imagick();
-			$img->readImage($this->abspath . '/web/themes/repostuj/img/watermark.png');
-			$bottom->compositeimage($img, Imagick::COMPOSITE_COPY, $width - 160, 0);
+            $bottom = new Imagick();
+            $bottom->newImage($width, 28, new ImagickPixel('#1b1b1b'));
 
-			$newImage = new Imagick();
-			$newImage->newImage($width, $height + 28, new ImagickPixel('transparent'));
+            $img = new Imagick();
+            $img->readImage($this->abspath . '/web/themes/repostuj/img/watermark.png');
+            $bottom->compositeimage($img, Imagick::COMPOSITE_COPY, $width - 160, 0);
 
-			$newImage->compositeimage($image, Imagick::COMPOSITE_COPY, 0, 0);
-			$newImage->compositeImage($bottom, imagick::COMPOSITE_COPY, 0, $height);
-			$newImage->setImageFormat($image->getImageFormat());
-			file_put_contents($_FILES['upl']['tmp_name'], $newImage); // $newImage->writeImage($newFile);
-			$this->createThumbnails($image, $bottom);
-		}
+            $newImage = new Imagick();
+            $newImage->newImage($width, $height + 28, new ImagickPixel('transparent'));
 
-		move_uploaded_file($_FILES['upl']['tmp_name'], $newFile);
+            $newImage->compositeimage($image, Imagick::COMPOSITE_COPY, 0, 0);
+            $newImage->compositeImage($bottom, imagick::COMPOSITE_COPY, 0, $height);
+            $newImage->setImageFormat($image->getImageFormat());
+            file_put_contents($_FILES['upl']['tmp_name'], $newImage); // $newImage->writeImage($newFile);
+            $this->createThumbnails($image, $bottom);
+        }
 
-		$this->status = 'success", "name":"' . $this->name . '.' . $this->extension;
-	}
+        move_uploaded_file($_FILES['upl']['tmp_name'], $newFile);
 
-	private function checkIsImage($extension) {
-		return (in_array(strtolower($extension), array('png', 'jpg', 'jpeg')));
-	}
+        $this->status = 'success", "name":"' . $this->name . '.' . $this->extension;
+    }
 
-	private function createThumbnails($image, $bottom) {
-		foreach ($this->thumbnails as $size) {
-			if ($image->getImageWidth() != $size) {
-				$thumbnail = clone $image;
-				$thumbnail->scaleImage($size, 0);
+    private function checkIsImage($extension) {
+        return (in_array(strtolower($extension), array('png', 'jpg', 'jpeg')));
+    }
 
-				$newThumbnail = new Imagick();
-				$newThumbnail->newImage($size, $thumbnail->getImageHeight() + 28, new ImagickPixel('transparent'));
+    private function createThumbnails($image, $bottom) {
+        foreach ($this->thumbnails as $size) {
+            if ($image->getImageWidth() != $size) {
+                $thumbnail = clone $image;
+                $thumbnail->scaleImage($size, 0);
 
-				$newThumbnail->compositeimage($thumbnail, Imagick::COMPOSITE_COPY, 0, 0);
-				$newThumbnail->compositeImage($bottom, imagick::COMPOSITE_COPY, $thumbnail->getImageWidth() - $image->getImageWidth(), $thumbnail->getImageHeight());
+                $newThumbnail = new Imagick();
+                $newThumbnail->newImage($size, $thumbnail->getImageHeight() + 28, new ImagickPixel('transparent'));
 
-				$newThumbnail->setImageFormat($image->getImageFormat());
-				$newThumbnail->writeImage($this->abspath . '/files/tmp/' . $this->name . '_' . $size . '.' . $this->extension);
-			}
-		}
-	}
+                $newThumbnail->compositeimage($thumbnail, Imagick::COMPOSITE_COPY, 0, 0);
+                $newThumbnail->compositeImage($bottom, imagick::COMPOSITE_COPY, $thumbnail->getImageWidth() - $image->getImageWidth(), $thumbnail->getImageHeight());
 
-	public function moveUserImage() {
-		$user = Di::get('Me')->getModel();
-		$this->extension = pathinfo($_FILES['upl']['name'], PATHINFO_EXTENSION);
-		$this->name = md5($user->getId());
+                $newThumbnail->setImageFormat($image->getImageFormat());
+                $newThumbnail->writeImage($this->abspath . '/files/tmp/' . $this->name . '_' . $size . '.' . $this->extension);
+            }
+        }
+    }
 
-		$width = 128;
-		$height = 128;
+    public function moveUserImage() {
+        $user = Di::get('Me')->getModel();
+        $this->extension = pathinfo($_FILES['upl']['name'], PATHINFO_EXTENSION);
+        $this->name = md5($user->getId());
 
-		$newFile = ABSPATH . 'files/user/' . $this->name . '.' . $this->extension;
-		if ($this->checkIsImage($this->extension) && extension_loaded('imagick')) {
-			$image = new Imagick();
-			$image->readImage($_FILES['upl']['tmp_name']);
-			if ($image->getImageWidth() < $image->getImageHeight())
-				$image->scaleImage($width, 0);
-			else {
-				$image->scaleImage(0, $height);
-			}
+        $width = 128;
+        $height = 128;
 
-			$x = ceil(($image->getImageWidth() - $width) / 2);
-			$y = ceil(($image->getImageHeight() - $height) / 2);
+        $newFile = ABSPATH . 'files/user/' . $this->name . '.' . $this->extension;
+        if ($this->checkIsImage($this->extension) && extension_loaded('imagick')) {
+            $image = new Imagick();
+            $image->readImage($_FILES['upl']['tmp_name']);
+            if ($image->getImageWidth() < $image->getImageHeight())
+                $image->scaleImage($width, 0);
+            else {
+                $image->scaleImage(0, $height);
+            }
 
-			$image->cropImage($width, $height, $x, $y);
-			file_put_contents($_FILES['upl']['tmp_name'], $image);
-		}
+            $x = ceil(($image->getImageWidth() - $width) / 2);
+            $y = ceil(($image->getImageHeight() - $height) / 2);
 
-		$files = glob(ABSPATH . 'files/user/' . $this->name . '*');
-		foreach ($files as $file)
-			unlink($file);
+            $image->cropImage($width, $height, $x, $y);
+            file_put_contents($_FILES['upl']['tmp_name'], $image);
+        }
 
-		move_uploaded_file($_FILES['upl']['tmp_name'], $newFile);
-		$this->status = 'success", "name":"' . $this->name . '.' . $this->extension;
-	}
+        $files = glob(ABSPATH . 'files/user/' . $this->name . '*');
+        foreach ($files as $file)
+            unlink($file);
 
-	protected function getImageSize($file_path) {
-		if (extension_loaded('imagick')) {
-			$image = new \Imagick();
-			try {
-				if (@$image->pingImage($file_path)) {
-					$dimensions = array($image->getImageWidth(), $image->getImageHeight());
-					$image->destroy();
-					return $dimensions;
-				}
-				return false;
-			} catch (Exception $e) {
-				error_log($e->getMessage());
-			}
-		}
+        move_uploaded_file($_FILES['upl']['tmp_name'], $newFile);
+        $this->status = 'success", "name":"' . $this->name . '.' . $this->extension;
+    }
 
-		return @getimagesize($file_path);
-	}
+    
+    public function moveRoomImage($roomId ) {
+        $this->extension = pathinfo($_FILES['roomImageUpl']['name'], PATHINFO_EXTENSION);
+        $this->name = md5($roomId);
+
+        $newFile = ABSPATH . 'files/rooms/' . $this->name . '.' . $this->extension;
+        if ($this->checkIsImage($this->extension) && extension_loaded('imagick')) {
+            $image = new Imagick();
+            $image->readImage($_FILES['roomImageUpl']['tmp_name']);
+
+            file_put_contents($_FILES['roomImageUpl']['tmp_name'], $image);
+        }
+
+        $files = glob(ABSPATH . 'files/rooms/' . $this->name . '*');
+        foreach ($files as $file)
+            unlink($file);
+
+        move_uploaded_file($_FILES['roomImageUpl']['tmp_name'], $newFile);
+        $this->status = 'success", "name":"' . $this->name . '.' . $this->extension;
+    }
+
+    protected function getImageSize($file_path) {
+        if (extension_loaded('imagick')) {
+            $image = new \Imagick();
+            try {
+                if (@$image->pingImage($file_path)) {
+                    $dimensions = array($image->getImageWidth(), $image->getImageHeight());
+                    $image->destroy();
+                    return $dimensions;
+                }
+                return false;
+            } catch (Exception $e) {
+                error_log($e->getMessage());
+            }
+        }
+
+        return @getimagesize($file_path);
+    }
 
 }
 

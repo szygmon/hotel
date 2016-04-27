@@ -128,10 +128,11 @@ class Admin {
             $room->setUsers($_POST['users']);
             $room->setDescription($_POST['description']);
             $room->setCost($_POST['cost']);
-            $room->setBalcony($_POST['balcony']);
-            $room->setToilet($_POST['toilet']);
-            $room->setSmoking($_POST['smoking']);
-            $room->setDoubleBed($_POST['doubleBed']);
+            $room->setBalcony($_POST['balcony'] ? $_POST['balcony'] : 0);
+            $room->setToilet($_POST['toilet'] ? $_POST['toilet'] : 0);
+            $room->setSmoking($_POST['smoking'] ? $_POST['smoking'] : 0);
+            $room->setDoubleBed($_POST['doubleBed'] ? $_POST['doubleBed'] : 0);
+            $room->setPhoto($_POST['doubleBed'] ? $_POST['doubleBed'] : 0);
             $this->em->persist($room);
             $this->em->flush();
 
@@ -171,7 +172,7 @@ class Admin {
             $room = $this->em->getRepository('\Model\Room')->find($id);
         } else
             $room = null;
-
+        
         return array('room' => $room);
     }
 
