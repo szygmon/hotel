@@ -133,9 +133,10 @@ class Home {
     /**
      * Typografia - chwilowo
      * @Route(/tp)
+     * @param \Core\Router $Router
      */
-    public function tp() {
-
+    public function tp($Router) {
+        var_dump($Router->getController());
         return array();
     }
 
