@@ -41,8 +41,8 @@
                             </div>
                             <div class="form-group">
                                 <label>Role:</label><br />
-                                <input id="switch-offColor" name="roles[]" value="admin" type="checkbox" data-label-width="100" data-label-text="Administrator" data-off-color="danger" data-on-color="success" data-on-text="TAK" data-off-text="NIE" {% for role in user.roles %}{% if role.name == 'admin' %}checked{% endif %}{% endfor %} />
-                                <input id="switch-offColor" name="roles[]" value="receptionist" type="checkbox" data-label-width="100" data-label-text="Recepcjonista" data-off-color="danger" data-on-color="success" data-on-text="TAK" data-off-text="NIE" {% for role in user.roles %}{% if role.name == 'receptionist' %}checked{% endif %}{% endfor %}/>
+                                <input id="switch-offColor1" name="roles[]" value="admin" type="checkbox" data-label-width="100" data-label-text="Administrator" data-off-color="danger" data-on-color="success" data-on-text="TAK" data-off-text="NIE" {% for role in user.roles %}{% if role.name == 'admin' %}checked{% endif %}{% endfor %} />
+                                <input id="switch-offColor2" name="roles[]" value="receptionist" type="checkbox" data-label-width="100" data-label-text="Recepcjonista" data-off-color="danger" data-on-color="success" data-on-text="TAK" data-off-text="NIE" {% for role in user.roles %}{% if role.name == 'receptionist' %}checked{% endif %}{% endfor %}/>
                             </div>
                             
                         </div>

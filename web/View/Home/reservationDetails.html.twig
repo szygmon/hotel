@@ -67,7 +67,7 @@
                             <input type="hidden" name="telefon" value="{{ Me.getModel.phone }}" />
                             <input type="hidden" name="jezyk" value="pl" />
                             <input type="hidden" name="md5sum" value="{{ md5 }}">
-                            <input type="hidden" name="online" value="1">
+                            <input type="hidden" name="online" value="{{ settings.payment_online }}">
                             <input type="image" class="center-block" src="https://tpay.com/img/banners/tpaycom_zaplac-z-200x135.png" alt="Submit">
                         </form>
 

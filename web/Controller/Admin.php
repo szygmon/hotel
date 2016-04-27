@@ -65,7 +65,7 @@ class Admin {
             $Router->redirect('Admin/admin');
 
         $this->adminUtil->sendMail($_POST);
-        
+
         $users = $this->em->getRepository('\Model\User')->findBy(array('isActive' => 1));
         $reservationsConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 1')->getQuery()->getSingleScalarResult();
         $reservationsNotConfirm = $this->em->createQueryBuilder()->select('COUNT(r.id)')->from('\Model\Reservation', 'r')->where('r.paid = 0')->getQuery()->getSingleScalarResult();
@@ -187,12 +187,15 @@ class Admin {
 
         $tid = $this->em->getRepository('\Model\Setting')->find('tid');
         $tkey = $this->em->getRepository('\Model\Setting')->find('tkey');
+        $payment_online = $this->em->getRepository('\Model\Setting')->find('payment_online');
         if ($action == 'save') {
             $tid->setValue($_POST['tid']);
             $tkey->setValue($_POST['tkey']);
+            $payment_online->setValue($_POST['payment_online']);
             $this->em->flush();
 
             \Notify::success('Zapisano ustawienia tPay.com');
+            $Router->redirect('Admin/tpay');
         }
 
         return array('tid' => $tid->getValue(), 'tkey' => $tkey->getValue());
@@ -444,12 +447,16 @@ class Admin {
         $siteurl = $this->globalUtil->getSetting('siteurl');
         $email = $this->globalUtil->getSetting('email');
         $rules = $this->globalUtil->getSetting('rules');
-
+        $cron = $this->globalUtil->getSetting('cron');
+        $c_reservation_time = $this->globalUtil->getSetting('c_reservation_time');
+        
         if (isset($_POST['save'])) {
             $sitename->setValue($_POST['sitename']);
             $siteurl->setValue($_POST['siteurl']);
             $email->setValue($_POST['email']);
             $rules->setValue($_POST['rules']);
+            $cron->setValue($_POST['cron']);
+            $c_reservation_time->setValue($_POST['c_reservation_time']);
             $this->em->flush();
 
             \Notify::success('Zapisano ustawienia');
@@ -501,6 +508,41 @@ class Admin {
         $opinion = $this->em->getRepository('\Model\Opinion')->find($id);
 
         return array('opinion' => $opinion);
+    }
+
+    /**
+     * Cron
+     * @Route("/admin/cron")
+     * @param \User\Me $Me
+     * @param \Core\Router $Router
+     */
+    public function cron($Me, $Router) {
+        if (!$this->globalUtil->getSettings()['cron'])
+            die('Cron disabled');
+
+        $msg = 'Cron włączony<br />';
+        
+        // usuwanie starych rezerwacji 
+        if ($this->globalUtil->getSettings()['c_reservation_time']) {
+            $date = new \DateTime();
+            $date->modify($this->globalUtil->getSettings()['c_reservation_time']);
+            
+            $reservarions = $this->em->createQueryBuilder()
+                    ->select('r')
+                    ->from('\Model\Reservation', 'r')
+                    ->where('r.paid = 0 and r.reservationDate < :date')
+                    ->setParameter('date', $date)
+                    ->getQuery()
+                    ->getResult();
+                    
+            foreach ($reservarions as $res) {
+                $msg .= 'Usunięto rezerwację #'.$res->getId().'<br />';
+                $this->em->remove($res);
+            }
+            $this->em->flush();
+        }
+        die($msg);
+        return array();
     }
 
 }

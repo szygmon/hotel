@@ -64,7 +64,19 @@ class DevReset {
         $settings[5]->setName('siteurl');
         $settings[5]->setValue('');
         $this->em->persist($settings[5]);
-
+        $settings[6] = new \Model\Setting();
+        $settings[6]->setName('cron');
+        $settings[6]->setValue(0);
+        $this->em->persist($settings[6]);
+        $settings[7] = new \Model\Setting();
+        $settings[7]->setName('c_reservation_time');
+        $settings[7]->setValue('- 1 day');
+        $this->em->persist($settings[7]);
+        $settings[8] = new \Model\Setting();
+        $settings[8]->setName('payment_online');
+        $settings[8]->setValue(1);
+        $this->em->persist($settings[8]);
+        
         $this->em->flush();
 
         return $r;

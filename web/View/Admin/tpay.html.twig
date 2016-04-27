@@ -1,7 +1,9 @@
 {% extends './base.html.twig' %}
 
 {% block title %}{{ settings.sitename }} - ustawienia tpay.com{% endblock %}
-
+{% block head %}
+    <link href="{{ url('template') }}/css/bootstrap-switch.min.css" rel="stylesheet" type="text/css" />
+{% endblock %}
 {% block content %}
 
 
@@ -35,6 +37,11 @@
                             <input type="text" name="tkey" value="{{ tkey }}" class="form-control" />
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <input id="switch-offColor" name="payment_online" value="1" type="checkbox" data-label-width="150" data-label-text="Tylko płatności on-line" data-off-color="danger" data-on-color="success" data-on-text="TAK" data-off-text="NIE" {% if settings.payment_online == 1 %}checked{% endif %} />
+                        </div>
+                    </div>
                     <div class="box-footer clearfix no-border">
                         <input type="submit" name="save" value="Zapisz" class="btn btn-default pull-right" />
                     </div>
@@ -45,6 +52,9 @@
     </section><!-- /.Left col -->
 
 </div><!-- /.row (main row) -->
+<script src="{{ url('template') }}/js/bootstrap-switch.min.js" type="text/javascript"></script>
+<script src="{{ url('template') }}/js/highlight.js" type="text/javascript"></script>
+<script src="{{ url('template') }}/js/main.js" type="text/javascript"></script>
 <script type="text/javascript">
     $("#settings-category-sidebar, #tpay-sidebar").addClass("treeview active");
 </script>
