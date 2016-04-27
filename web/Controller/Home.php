@@ -150,26 +150,19 @@ class Home {
 
     /**
      * Pokoje
-     * @Route(/contact)
+     * @Route(/discover)
      */
-    public function contact() {
+    public function discover() {
         if (!isset($_POST['email']))
             return array();
 
-        if ($_POST['email'] != 'E-mail' && $_POST['name'] != 'Imię i nazwisko' && $_POST['content'] != "Wiadomość") {
+        if ($_POST['email'] != 'E-mail' && $_POST['name'] != 'Imię i nazwisko' 
+                && $_POST['content'] != "Wiadomość") {
             if ($_POST['phone'] == 'Telefon')
                 $_POST['phone'] = '';
 
             $this->homeUtil->AddContactMail($_POST);
         }
-        return array();
-    }
-
-    /**
-     * Pokoje
-     * @Route(/discover)
-     */
-    public function discover() {
         return array();
     }
 
