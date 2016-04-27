@@ -27,8 +27,9 @@ class UserUtil {
                     Notify::error('Hasła sie nie zgadzają');
                     return;
                 }
+                $user->setPassword($post['pass']);
             }
-            $user->setPassword($post['pass']);
+            
             Di::get('em')->flush();
         }
     }
