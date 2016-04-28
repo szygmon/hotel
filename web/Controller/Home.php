@@ -437,9 +437,10 @@ class Home {
     public function reservationDetails($id = null) {
         if ($id) {
             $reservation = $this->em->getRepository('\Model\Reservation')->find($id);
+            $nights = floor(strtotime($reservation->getToDate()->format('Y-m-d')) - strtotime($reservation->getFromDate()->format('Y-m-d'))) / (60 * 60 * 24);
             $cost = 0;
             foreach ($reservation->getRooms() as $room) {
-                $cost += $room->getCost();
+                $cost += ($room->getCost() * $nights);
             }
             $tid = $this->globalUtil->getSettings()['tid'];
             $crc = $reservation->getId();
