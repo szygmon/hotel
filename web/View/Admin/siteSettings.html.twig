@@ -19,6 +19,15 @@
         {{ Notify.r }}
         <div class="box box-primary">
             <div class="box-header">
+                <h3 class="box-title">Polecenie crona</h3>
+            </div><!-- /.box-header -->
+            <div class="box-body">
+                <p>wget -O - https://{{ settings.siteurl }}/admin/cron --no-check-certificate > /dev/null 2> /dev/null</p>
+            </div>
+        </div>
+
+        <div class="box box-primary">
+            <div class="box-header">
                 <i class="ion ion-clipboard"></i>
                 <h3 class="box-title">Ustawienia strony</h3>
             </div><!-- /.box-header -->
@@ -33,7 +42,7 @@
                                 <input type="text" name="sitename" value="{{ settings.sitename }}" class="form-control" />
                             </div>
                             <div class="form-group">
-                                <label>Adres strony:</label>
+                                <label>Adres strony (bez http):</label>
                                 <input type="text" name="siteurl" value="{{ settings.siteurl }}" class="form-control" />
                             </div>
                             <div class="form-group">
@@ -47,8 +56,11 @@
                                 <label>Czas trzymania nieopłaconej rezerwacji:</label>
                                 <select class="form-control" name="c_reservation_time">
                                     <option value="0">Wyłączone</option>
+                                    <option value="-1 hour" {% if settings.c_reservation_time == "-1 hour" %}selected{% endif %}>1 godzina</option>
+                                    <option value="-2 hours" {% if settings.c_reservation_time == "-2 hours" %}selected{% endif %}>2 godziny</option>
+                                    <option value="-6 hours" {% if settings.c_reservation_time == "-6 hours" %}selected{% endif %}>6 godzin</option>
                                     <option value="-1 day" {% if settings.c_reservation_time == "-1 day" %}selected{% endif %}>1 dzień</option>
-                                        <option value="-2 days" {% if settings.c_reservation_time == "-2 days" %}selected{% endif %}>2 dni</option>
+                                    <option value="-2 days" {% if settings.c_reservation_time == "-2 days" %}selected{% endif %}>2 dni</option>
                                 </select>
                             </div>
                         </div>
