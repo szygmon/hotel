@@ -84,12 +84,6 @@ class User {
         }
 
         $r[] = 'user';
-        if ($this instanceof \Model\Teacher)
-            $r[] = 'teacher';
-        if ($this instanceof \Model\Student)
-            $r[] = 'student';
-        if ($this instanceof \Model\Parents)
-            $r[] = 'parents';
 
         foreach ($this->roles as $role) {
             $r[] = $role->getName();

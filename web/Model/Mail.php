@@ -25,10 +25,10 @@ class Mail {
     /** @Column(type="string") */
     protected $email;
 
-    /** @Column(type="string") */
+    /** @Column(type="string", nullable=true) */
     protected $phone;
 
-    /** @Column(type="string") */
+    /** @Column(type="text") */
     protected $content;
 
     /** @Column(type="datetime") */
