@@ -132,7 +132,6 @@ class Admin {
             $room->setToilet($_POST['toilet'] ? $_POST['toilet'] : 0);
             $room->setSmoking($_POST['smoking'] ? $_POST['smoking'] : 0);
             $room->setDoubleBed($_POST['doubleBed'] ? $_POST['doubleBed'] : 0);
-            $room->setPhoto($_POST['doubleBed'] ? $_POST['doubleBed'] : 0);
             $this->em->persist($room);
             $this->em->flush();
 
