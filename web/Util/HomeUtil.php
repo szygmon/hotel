@@ -64,6 +64,8 @@ class HomeUtil {
         $login = $this->Me->login($_POST['username'], $_POST['password']);
 
         if ($login) {
+            if ($this->Me->getModel()->getIsActive() == 0)
+                return \Notify::error('Użytkownik nieaktywny');
             $this->Me->getModel()->setLastLogin(new DateTime);
             Di::get('em')->flush();
             if ($this->Me->auth('admin'))
@@ -103,11 +105,13 @@ class HomeUtil {
         }
         $newPassword = $this->GenerateRandomPassword(10);
         $user->setPassword($newPassword);
+        $user->setIsActive(1); // aktywny nawet jeśli był nieaktywny
         $this->em->flush();
         $headers = 'From: ' . $this->settings('email');
         mail($post['email'], "Przypomnienie hasła w hotelu", "Twoje nowe hasło dostępu w hotelu to " . $newPassword, $headers);
         $data->showGetMail = false;
         \Notify::success('Nowe hasło zostało wysłane na podanym adres email');
+        Di::get('Router')->redirect('Home/signin');
         return $data;
     }
 
