@@ -2291,3 +2291,7 @@ ul li:hover ul {
 .logo {
     min-width: 210px;
 }
+
+.calendar-date .available .glyphicon {
+    color: #000 !important;
+}
